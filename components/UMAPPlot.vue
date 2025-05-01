@@ -21,7 +21,7 @@
     if (!props.data || !props.data.length || !plot.value) return
   
     const trace = {
-      x: props.data.map(d => d.x),
+    x: props.data.map(d => d.x),
       y: props.data.map(d => d.y),
       text: props.data.map(d => d.cell_id),
       mode: 'markers',
