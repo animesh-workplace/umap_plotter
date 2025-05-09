@@ -1,55 +1,75 @@
 <template>
-    <div>
-      <div ref="plot"></div>
-    </div>
-  </template>
-  
-  <script setup>
-  import { ref, onMounted, watch } from 'vue'
-  
-  const props = defineProps({
-    data: {
-      type: Array,
-      required: true
+  <div>
+    <Skeleton class="mb-2" height="24rem" v-if="isLoading" />
+    <VChart ref="chart" class="w-[22rem] h-96 chart-container" :option="graph_options" :class="{ hidden: isLoading }" />
+  </div>
+</template>
+
+<script setup>
+const props = defineProps({
+  data: { type: Array, required: true }
+})
+const chart = useTemplateRef('chart')
+const graph_options = ref({
+  animation: true,
+  yAxis: {
+    type: 'value',
+    axisLabel: {
+      fontFamily: 'Averta',
+      fontWeight: 500,
+    },
+  },
+  xAxis: {
+    type: 'value',
+    axisLabel: {
+      fontFamily: 'Averta',
+      fontWeight: 500,
+    },
+  },
+  tooltip: {
+    trigger: 'item',
+    axisPointer: { type: 'cross' },
+    textStyle: {
+      fontFamily: 'Averta',
+      fontWeight: 500,
+    },
+    formatter: function (params) {
+      return `X: ${params.value[0]}<br/>Y: ${params.value[1]}<br/>Value: ${params.value[2]}`;
     }
-  })
-  
-  const plot = ref(null)
-  const PlotlyRef = ref(null)
-  
-  function renderPlot(Plotly) {
-    if (!props.data || !props.data.length || !plot.value) return
-  
-    const trace = {
-    x: props.data.map(d => d.x),
-      y: props.data.map(d => d.y),
-      text: props.data.map(d => d.cell_id),
-      mode: 'markers',
-      type: 'scatter',
-      marker: { size: 6 }
-    }
-  
-    const layout = {
-      title: 'UMAP Projection',
-      xaxis: { title: 'UMAP-1' },
-      yaxis: { title: 'UMAP-2' },
-      height: 800
-    }
-  
-    Plotly.newPlot(plot.value, [trace], layout)
+    // renderMode: 'richText',
+    // borderColor: '#fff',
+    // order: 'valueDesc',
+  },
+  // grid: {
+  //   left: '0%',
+  //   right: '0%',
+  //   bottom: '0%',
+  //   containLabel: true,
+  // },
+  series: [{ type: 'scatter', data: props.data, symbolSize: 5, itemStyle: { color: '#40a9ff' } }],
+  visualMap: {
+    calculable: false, top: 'center', right: 0, inRange: {
+      color: ['#40a9ff', '#002766']
+    },
   }
-  
-  onMounted(async () => {
-    if (process.client) {
-      PlotlyRef.value = await import('plotly.js-dist')
-      if (props.data?.length) renderPlot(PlotlyRef.value)
-    }
+})
+
+const isLoading = ref(true)
+
+onMounted(() => {
+  nextTick(() => {
+    setTimeout(() => {
+      isLoading.value = false
+      // chart.$forceUpdate()
+      console.log(chart)
+    }, 1000)
   })
-  
-  watch(() => props.data, () => {
-    if (process.client && PlotlyRef.value && props.data?.length) {
-      renderPlot(PlotlyRef.value)
-    }
-  })
-  </script>
-  
+})
+</script>
+
+<style scoped>
+.chart-container {
+  width: 50%;
+  height: 800px;
+}
+</style>
