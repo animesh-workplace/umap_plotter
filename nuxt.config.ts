@@ -2,8 +2,9 @@ import Aura from '@primeuix/themes/aura'
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
+  css: ['@/assets/css/main.css'],
   devtools: { enabled: true },
-  primevue: { options: { ripple: true, theme: { preset: Aura } } },
+  primevue: { options: { ripple: true, theme: { preset: Aura, options: { darkModeSelector: '.dark' } } } },
   modules: [
     '@nuxt/icon',
     '@nuxt/fonts',
@@ -11,6 +12,7 @@ export default defineNuxtConfig({
     'nuxt-echarts',
     '@nuxt/eslint',
     '@nuxt/scripts',
+    '@nuxtjs/tailwindcss',
     '@primevue/nuxt-module',
   ],
   echarts: {
