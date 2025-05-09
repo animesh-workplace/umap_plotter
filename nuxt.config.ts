@@ -7,7 +7,9 @@ export default defineNuxtConfig({
   primevue: { options: { ripple: true, theme: { preset: Aura, options: { darkModeSelector: '.dark' } } } },
   modules: [
     '@nuxt/icon',
+    'nuxt-lodash',
     '@nuxt/fonts',
+    '@pinia/nuxt',
     '@nuxt/image',
     'nuxt-echarts',
     '@nuxt/eslint',
