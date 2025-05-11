@@ -22,9 +22,18 @@ const selectedGene = ref(null)
 const geneExpressionData = ref(null)
 
 // Called when user types into the AutoComplete input
-const onSearch = (event) => {
-    const query = event.query.toLowerCase()
-    suggestions.value = store.filteredGenes(query).map(g => g)
+const onSearch = async (event) => {
+    try {
+        const res = await fetch(`http://localhost:8000/api/umap-gene/?gene=${event.query}`)
+        if (!res.ok) throw new Error('Failed to fetch')
+        suggestions.value = await res.json()
+    } catch (err) {
+        console.error('Error fetching gene options:', err)
+        this.allGenes = []
+    }
+
+    // const query = event.query.toLowerCase()
+    // suggestions.value = store.filteredGenes(query).map(g => g)
 }
 
 const searchExpression = async (gene) => {

@@ -95,6 +95,10 @@ watch(() => umapStore.geneExpression, () => {
     processedData.value = updateProcessedData()
     graph_options.value.series[0].data = processedData.value
     graph_options.value.visualMap = {
+      // For Piecewise Logic
+      // type: 'piecewise',
+      // splitNumber: expressionRange.value.max,
+      // For Continuous Logic
       right: 0,
       dimension: 3,
       top: 'center',
