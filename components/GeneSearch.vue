@@ -24,7 +24,7 @@ const geneExpressionData = ref(null)
 // Called when user types into the AutoComplete input
 const onSearch = async (event) => {
     try {
-        const res = await fetch(`http://localhost:8000/api/umap-gene/?gene=${event.query}`)
+        const res = await fetch(`http://localhost:8000/api/genes/autocomplete/?gene=${event.query}`)
         if (!res.ok) throw new Error('Failed to fetch')
         suggestions.value = await res.json()
     } catch (err) {
@@ -39,7 +39,7 @@ const onSearch = async (event) => {
 const searchExpression = async (gene) => {
     loading.value = true
     try {
-        const res = await fetch(`http://localhost:8000/api/umap-geneexp/?gene_name=${encodeURIComponent(gene.value)}`)
+        const res = await fetch(`http://localhost:8000/api/genes/single-expr/?gene_name=${encodeURIComponent(gene.value)}`)
         if (res.ok) {
             geneExpressionData.value = await res.json()
             // Update the store with the gene expression data
