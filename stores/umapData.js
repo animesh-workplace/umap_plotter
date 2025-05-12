@@ -8,7 +8,7 @@ export const useUmapDataStore = defineStore('umapData', {
     actions: {
         async fetchUmapData() {
             try {
-                const res = await fetch('http://localhost:8000/api/umap-embeddings/')
+                const res = await fetch('http://localhost:8000/api/umap/')
                 if (!res.ok) throw new Error(`HTTP error: ${res.statusText}`)
 
                 const data = await res.json()
