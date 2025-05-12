@@ -16,7 +16,7 @@ export const useGeneOptionsStore = defineStore('geneOptions', {
     actions: {
         async fetchGenes() {
             try {
-                const res = await fetch('http://localhost:8000/api/umap-gene/')
+                const res = await fetch('http://localhost:8000/api/genes/autocomplete/')
                 if (!res.ok) throw new Error('Failed to fetch')
                 this.allGenes = await res.json()
             } catch (err) {
