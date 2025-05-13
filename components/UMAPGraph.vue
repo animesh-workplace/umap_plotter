@@ -18,6 +18,17 @@ const searchGene = async (event) => {
   }
 };
 
+// Call the autocomplete API with the user's query and update the suggestions list
+const getFilterCellType = async () => {
+  const { get2DUmapCellType } = useGeneAPI();
+  try {
+    suggestions.value = (await get2DUmapCellType()) || [];
+  } catch (err) {
+    console.error("Error fetching 2D cell type names:", err);
+    suggestions.value = [];
+  }
+};
+
 // Fetches and updates the graph data with expression values for the selected gene
 const searchGeneExpression = async (event) => {
   const { getSingleGeneExpression } = useGeneAPI();
@@ -38,9 +49,9 @@ const searchGeneExpression = async (event) => {
 
 // Fetches embedding
 const getEmbedding = async () => {
-  const { getUmapEmbedding } = useGeneAPI();
+  const { get2DUmapEmbedding } = useGeneAPI();
   try {
-    const response = await getUmapEmbedding();
+    const response = await get2DUmapEmbedding();
 
     // Check if response exists and is an array before calling map
     if (response && Array.isArray(response)) {
@@ -241,6 +252,7 @@ onBeforeMount(async () => {
   try {
     await searchGene();
     await getEmbedding();
+    await getFilterCellType();
   } catch (err) {
     console.error("Error initializing component:", err);
   } finally {
