@@ -8,9 +8,13 @@
     </div>
 
     <div class="grid grid-cols-6 gap-10 min-w-full">
-      <UMAPGraph class="col-start-3 col-span-2" color-scheme="#d13034" />
+      <UMAPGraph class="col-start-3 col-span-2" />
     </div>
   </div>
 </template>
 
 <script setup></script>
+
+<!-- Blue Color #0284c7 -->
+<!-- Red Color #9d174d -->
+<!-- Yellow Color #ca8a04 -->
