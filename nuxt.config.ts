@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     'nuxt-echarts',
     '@nuxt/eslint',
     '@vueuse/nuxt',
+    // 'reka-ui/nuxt',
     'motion-v/nuxt',
     '@nuxtjs/tailwindcss',
     '@primevue/nuxt-module',
