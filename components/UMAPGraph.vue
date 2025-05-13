@@ -1,11 +1,18 @@
 <script setup>
 import { useGeneAPI } from "@/api/geneAPI";
 
+const props = defineProps({
+  colorScheme: { type: String, default: "#5470c6" },
+});
+
 const suggestions = ref([]);
 const isLoading = ref(true);
 const geneExpression = ref([]);
 const selectedGene = ref(null);
 const umapEmbedding = ref(null);
+const umapCellType = ref([]);
+const activate3DMode = ref(false);
+const activateFilterMode = ref(false);
 
 // Call the autocomplete API with the user's query and update the suggestions list
 const searchGene = async (event) => {
@@ -22,10 +29,14 @@ const searchGene = async (event) => {
 const getFilterCellType = async () => {
   const { get2DUmapCellType } = useGeneAPI();
   try {
-    suggestions.value = (await get2DUmapCellType()) || [];
+    const response = (await get2DUmapCellType()) || [];
+    umapCellType.value = response.map((item) => ({
+      name: item,
+      active: false,
+    }));
   } catch (err) {
     console.error("Error fetching 2D cell type names:", err);
-    suggestions.value = [];
+    umapCellType.value = [];
   }
 };
 
@@ -94,7 +105,7 @@ const clearGeneSelection = () => {
     name: "UMAP",
     itemStyle: {
       opacity: 0.8,
-      color: "#5470c6",
+      color: props.colorScheme,
     },
   };
 
@@ -156,7 +167,7 @@ const updateGraphWithExpression = () => {
         calculable: true,
         type: "continuous",
         orient: "vertical",
-        inRange: { color: ["#d3d3d3", "#5470c6"] },
+        inRange: { color: ["#d3d3d3", props.colorScheme] },
         text: [validMax.toFixed(2), validMin.toFixed(2)],
         textStyle: { fontFamily: "Averta", fontWeight: 500 },
       },
@@ -184,7 +195,7 @@ const updateGraphWithExpression = () => {
       // Restore default item color
       graph_options.value.series[0].itemStyle = {
         opacity: 0.8,
-        color: "#5470c6",
+        color: props.colorScheme,
       };
 
       updateChart();
@@ -242,7 +253,7 @@ const graph_options = ref({
       symbolSize: 4,
       itemStyle: {
         opacity: 0.8,
-        color: "#5470c6",
+        color: props.colorScheme,
       },
     },
   ],
@@ -263,7 +274,7 @@ onBeforeMount(async () => {
 
 <template>
   <div class="w-full">
-    <div class="mb-4 flex relative">
+    <div class="mb-2 flex relative">
       <AutoComplete
         dropdown
         class="w-full"
@@ -279,7 +290,41 @@ onBeforeMount(async () => {
       </button>
     </div>
 
-    <div class="w-full mt-4 flex justify-center">
+    <div class="flex gap-2 items-center justify-between">
+      <div class="flex gap-2 items-center">
+        <ToggleSwitch v-model="activate3DMode" />
+        <Icon
+          class="w-5 h-5 text-slate-500"
+          name="akar-icons:augmented-reality"
+        />
+        <div>3D Mode</div>
+      </div>
+
+      <div class="flex gap-2 items-center">
+        <ToggleSwitch v-model="activateFilterMode" />
+        <Icon
+          class="w-5 h-5 text-slate-500"
+          name="akar-icons:settings-horizontal"
+        />
+        <div>Activate filter</div>
+      </div>
+    </div>
+
+    <div
+      v-if="activateFilterMode"
+      class="flex gap-2 items-center mt-2 justify-center"
+    >
+      <Tag
+        rounded
+        :index="index"
+        :value="celltype.name"
+        class="cursor-pointer"
+        @click="console.log('Action1')"
+        v-for="(celltype, index) in umapCellType"
+        :severity="celltype.active ? 'danger' : 'false'"
+      />
+    </div>
+    <div class="w-full mt-3 flex justify-center">
       <Skeleton height="45rem" v-if="isLoading || umapEmbedding == null" />
       <VChart ref="chart" :option="graph_options" class="h-[45rem]" v-else />
     </div>
