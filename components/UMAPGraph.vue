@@ -1,4 +1,5 @@
 <script setup>
+import { motion } from "motion-v";
 import { useGeneAPI } from "@/api/geneAPI";
 
 const props = defineProps({
@@ -7,12 +8,13 @@ const props = defineProps({
 
 const suggestions = ref([]);
 const isLoading = ref(true);
-const geneExpression = ref([]);
+const geneExpression = ref(null);
 const selectedGene = ref(null);
 const umapEmbedding = ref(null);
 const umapCellType = ref([]);
 const activate3DMode = ref(false);
 const activateFilterMode = ref(false);
+const originalUmapEmbedding = ref(null);
 
 // Call the autocomplete API with the user's query and update the suggestions list
 const searchGene = async (event) => {
@@ -40,6 +42,35 @@ const getFilterCellType = async () => {
   }
 };
 
+const FilterCellType = (cellType, index) => {
+  umapCellType.value[index].active = !umapCellType.value[index].active;
+  applyFilters();
+};
+
+// Apply cell type filters to the UMAP data
+const applyFilters = () => {
+  if (!originalUmapEmbedding.value) return;
+
+  // Create a set of active cell types for faster lookup
+  const activeCellTypes = umapCellType.value
+    .filter((ct) => ct.active)
+    .map((ct) => ct.name);
+
+  // Filter the data to only include active cell types
+  umapEmbedding.value = originalUmapEmbedding.value.filter((point) => {
+    const prefix = point[2].split("_")[0];
+    return !activeCellTypes.includes(prefix);
+  });
+
+  // Update the chart
+  updateChart();
+
+  // If gene is selected, update expression coloring
+  if (selectedGene.value) {
+    updateGraphWithExpression();
+  }
+};
+
 // Fetches and updates the graph data with expression values for the selected gene
 const searchGeneExpression = async (event) => {
   const { getSingleGeneExpression } = useGeneAPI();
@@ -59,19 +90,21 @@ const searchGeneExpression = async (event) => {
 };
 
 // Fetches embedding
-const getEmbedding = async () => {
+const get2DEmbedding = async () => {
   const { get2DUmapEmbedding } = useGeneAPI();
   try {
     const response = await get2DUmapEmbedding();
 
     // Check if response exists and is an array before calling map
     if (response && Array.isArray(response)) {
-      umapEmbedding.value = response.map((item) => [
+      originalUmapEmbedding.value = response.map((item) => [
         item.x,
         item.y,
         item.cell_id,
         0,
       ]);
+
+      umapEmbedding.value = [...originalUmapEmbedding.value];
       // Update chart with the embedding data
       updateChart();
     } else {
@@ -89,7 +122,7 @@ const getEmbedding = async () => {
 // Clears the current gene selection and reverts the graph to default state
 const clearGeneSelection = () => {
   selectedGene.value = null;
-  geneExpression.value = [];
+  geneExpression.value = null;
 
   // Remove visualMap from chart options
   if (graph_options.value.visualMap) {
@@ -123,25 +156,21 @@ const clearGeneSelection = () => {
 
 // Updates the chart with the embedding data
 const updateChart = () => {
-  if (umapEmbedding.value && umapEmbedding.value.length > 0) {
-    // Make a copy of the data to ensure reactivity
-    graph_options.value.series[0].data = [...umapEmbedding.value];
-  }
+  // if (umapEmbedding.value && umapEmbedding.value.length > 0) {
+  // Make a copy of the data to ensure reactivity
+  graph_options.value.series[0].data = [...umapEmbedding.value];
+  // }
 };
 
 // Updates the chart with expression data when a gene is selected
 const updateGraphWithExpression = () => {
-  if (
-    umapEmbedding.value &&
-    geneExpression.value &&
-    geneExpression.value.length > 0
-  ) {
+  if (umapEmbedding.value && geneExpression.value && geneExpression.value) {
     // Update the embedding data with expression values
-    umapEmbedding.value = umapEmbedding.value.map((point, index) => {
+    umapEmbedding.value = umapEmbedding.value.map((point) => {
       const cellId = point[2];
       const expressionValue =
-        geneExpression.value[index] !== undefined
-          ? geneExpression.value[index]
+        geneExpression.value[cellId] !== undefined
+          ? geneExpression.value[cellId]
           : 0;
       return [point[0], point[1], cellId, expressionValue];
     });
@@ -205,11 +234,11 @@ const updateGraphWithExpression = () => {
 
 // Calculate min/max for visualMap when expression data is available
 const getExpressionRange = () => {
-  if (!geneExpression.value || !geneExpression.value.length) {
-    return [0, 0];
-  }
+  // if (!geneExpression.value || !geneExpression.value.length) {
+  //   return [0, 0];
+  // }
 
-  const values = geneExpression.value.map((item) => item.expression);
+  const values = Object.values(geneExpression.value);
   return [Math.min(...values), Math.max(...values)];
 };
 
@@ -262,7 +291,7 @@ const graph_options = ref({
 onBeforeMount(async () => {
   try {
     await searchGene();
-    await getEmbedding();
+    await get2DEmbedding();
     await getFilterCellType();
   } catch (err) {
     console.error("Error initializing component:", err);
@@ -306,24 +335,42 @@ onBeforeMount(async () => {
           class="w-5 h-5 text-slate-500"
           name="akar-icons:settings-horizontal"
         />
-        <div>Activate filter</div>
+        <div>Filter Mode</div>
       </div>
     </div>
 
     <div
       v-if="activateFilterMode"
-      class="flex gap-2 items-center mt-2 justify-center"
+      class="flex gap-3 items-center mt-2 justify-center"
     >
-      <Tag
-        rounded
+      <motion.div
         :index="index"
-        :value="celltype.name"
-        class="cursor-pointer"
-        @click="console.log('Action1')"
+        :while-hover="{ scale: 0.97 }"
         v-for="(celltype, index) in umapCellType"
-        :severity="celltype.active ? 'danger' : 'false'"
-      />
+      >
+        <Tag
+          rounded
+          :value="celltype.name"
+          class="cursor-pointer"
+          @click="FilterCellType(celltype.name, index)"
+          :severity="celltype.active ? 'danger' : 'false'"
+        >
+          <template #icon>
+            <Icon
+              v-if="celltype.active"
+              class="w-4 h-4 text-rose-500"
+              name="akar-icons:tetragon"
+            />
+            <Icon
+              v-else
+              class="w-4 h-4 text-green-500"
+              name="akar-icons:tetragon-fill"
+            />
+          </template>
+        </Tag>
+      </motion.div>
     </div>
+
     <div class="w-full mt-3 flex justify-center">
       <Skeleton height="45rem" v-if="isLoading || umapEmbedding == null" />
       <VChart ref="chart" :option="graph_options" class="h-[45rem]" v-else />
