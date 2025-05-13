@@ -7,11 +7,8 @@
       <p class="text-gray-500">Select a gene to visualize expression levels</p>
     </div>
 
-    <div class="grid grid-cols-4 gap-10 min-w-full">
-      <UMAPGraph />
-      <UMAPGraph />
-      <UMAPGraph />
-      <UMAPGraph />
+    <div class="grid grid-cols-6 gap-10 min-w-full">
+      <UMAPGraph class="col-start-3 col-span-2" />
     </div>
   </div>
 </template>
