@@ -38,9 +38,9 @@ const searchGeneExpression = async (event) => {
 
 // Fetches embedding
 const getEmbedding = async () => {
-  const { getUmapEmbedding } = useGeneAPI();
+  const { get2DUmapEmbedding } = useGeneAPI();
   try {
-    const response = await getUmapEmbedding();
+    const response = await get2DUmapEmbedding();
 
     // Check if response exists and is an array before calling map
     if (response && Array.isArray(response)) {
