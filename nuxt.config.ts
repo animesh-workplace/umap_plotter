@@ -1,34 +1,40 @@
-import Aura from '@primeuix/themes/aura'
+import Aura from "@primeuix/themes/aura";
 
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
-  css: ['@/assets/css/main.css'],
+  compatibilityDate: "2024-11-01",
+  css: ["@/assets/css/main.css"],
   devtools: { enabled: true },
-  primevue: { options: { ripple: true, theme: { preset: Aura, options: { darkModeSelector: '.dark' } } } },
+  icon: { clientBundle: { scan: true }, serverBundle:{collections: ['akar-icons']} },
+  primevue: {
+    options: {
+      ripple: true,
+      theme: { preset: Aura, options: { darkModeSelector: ".dark" } },
+    },
+  },
   modules: [
-    '@nuxt/icon',
-    '@nuxt/fonts',
-    '@pinia/nuxt',
-    'nuxt-echarts',
-    '@nuxt/eslint',
-    '@vueuse/nuxt',
+    "@nuxt/icon",
+    "@nuxt/fonts",
+    "@pinia/nuxt",
+    "nuxt-echarts",
+    "@nuxt/eslint",
+    "@vueuse/nuxt",
     // 'reka-ui/nuxt',
-    'motion-v/nuxt',
-    '@nuxtjs/tailwindcss',
-    '@primevue/nuxt-module',
+    "motion-v/nuxt",
+    "@nuxtjs/tailwindcss",
+    "@primevue/nuxt-module",
   ],
   echarts: {
     ssr: true,
-    renderer: ['canvas'],
-    charts: ['ScatterChart'],
-    features: ['UniversalTransition'],
+    renderer: ["canvas"],
+    charts: ["ScatterChart"],
+    features: ["UniversalTransition"],
     components: [
-      'GridComponent',
-      'TitleComponent',
-      'DatasetComponent',
-      'TooltipComponent',
-      'ToolboxComponent',
-      'VisualMapComponent'
+      "GridComponent",
+      "TitleComponent",
+      "DatasetComponent",
+      "TooltipComponent",
+      "ToolboxComponent",
+      "VisualMapComponent",
     ],
   },
-})
+});
