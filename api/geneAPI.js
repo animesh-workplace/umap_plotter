@@ -39,9 +39,25 @@ export function useGeneAPI() {
     }
   };
 
-  const getUmapEmbedding = async () => {
+  const get2DUmapEmbedding = async () => {
     try {
-      const { data, error } = await useFetch(`${BASEURL}/umap/`, {
+      const { data, error } = await useFetch(`${BASEURL}/umap/2d/`, {
+        method: "GET",
+      });
+
+      if (error.value) {
+        throw new Error(error.value || "An error occurred");
+      }
+      return data.value;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
+  const get2DUmapCellType = async () => {
+    try {
+      const { data, error } = await useFetch(`${BASEURL}/umap/2d/celltype/`, {
         method: "GET",
       });
 
@@ -56,7 +72,8 @@ export function useGeneAPI() {
   };
 
   return {
-    getUmapEmbedding,
+    get2DUmapCellType,
+    get2DUmapEmbedding,
     getGeneAutocomplete,
     getSingleGeneExpression,
   };
