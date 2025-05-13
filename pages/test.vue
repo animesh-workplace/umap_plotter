@@ -4,6 +4,7 @@ import { useGeneAPI } from "@/api/geneAPI";
 const suggestions = ref([]);
 const isLoading = ref(true);
 const geneExpression = ref([]);
+const selectedGene = ref(null);
 const umapEmbedding = ref(null);
 
 // Call the autocomplete API with the user's query and update the suggestions list
@@ -63,6 +64,41 @@ const getEmbedding = async () => {
   }
 };
 
+// Clears the current gene selection and reverts the graph to default state
+const clearGeneSelection = () => {
+  selectedGene.value = null;
+  geneExpression.value = [];
+
+  // Remove visualMap from chart options
+  if (graph_options.value.visualMap) {
+    const { visualMap, ...rest } = graph_options.value;
+    graph_options.value = rest;
+  }
+
+  // Restore default item color and styling
+  graph_options.value.series[0] = {
+    type: "scatter",
+    data: umapEmbedding.value ? [...umapEmbedding.value] : [],
+    symbolSize: 4,
+    name: "UMAP",
+    itemStyle: {
+      opacity: 0.8,
+      color: "#5470c6",
+    },
+  };
+
+  // Reset embedding data to remove expression values
+  if (umapEmbedding.value && umapEmbedding.value.length > 0) {
+    umapEmbedding.value = umapEmbedding.value.map((point) => [
+      point[0],
+      point[1],
+      point[2],
+      0,
+    ]);
+    updateChart();
+  }
+};
+
 // Updates the chart with the embedding data
 const updateChart = () => {
   if (umapEmbedding.value && umapEmbedding.value.length > 0) {
@@ -100,7 +136,7 @@ const updateGraphWithExpression = () => {
       ...graph_options.value,
       visualMap: {
         show: true,
-        right: -10,
+        right: -5,
         dimension: 3,
         top: "center",
         min: validMin,
@@ -144,9 +180,6 @@ const updateGraphWithExpression = () => {
     }
   }
 };
-
-// Track selected gene name for UI
-const selectedGene = ref(null);
 
 // Calculate min/max for visualMap when expression data is available
 const getExpressionRange = () => {
@@ -230,16 +263,23 @@ onBeforeMount(async () => {
       </p>
     </div>
 
-    <AutoComplete
-      dropdown
-      @complete="searchGene"
-      class="w-1/3 md:w-30rem mb-4"
-      :suggestions="suggestions"
-      @item-select="searchGeneExpression"
-      placeholder="Type gene name to search ... "
-    />
+    <div class="w-2/3 lg:w-1/3 md:w-30rem mb-4 flex relative">
+      <AutoComplete
+        dropdown
+        class="w-full"
+        v-model="selectedGene"
+        @complete="searchGene"
+        :suggestions="suggestions"
+        @item-select="searchGeneExpression"
+        placeholder="Type gene name to search ... "
+      />
 
-    <div class="w-1/3 mt-4 flex justify-center">
+      <button class="ml-2" v-if="selectedGene" @click="clearGeneSelection">
+        <Icon name="akar-icons:circle-x" class="w-5 h-5" />
+      </button>
+    </div>
+
+    <div class="w-2/3 lg:w-1/3 mt-4 flex justify-center">
       <Skeleton height="45rem" v-if="isLoading || umapEmbedding == null" />
       <VChart ref="chart" :option="graph_options" class="h-[45rem]" v-else />
     </div>
