@@ -145,7 +145,7 @@ const updateGraphWithExpression = () => {
         calculable: true,
         type: "continuous",
         orient: "vertical",
-        inRange: { color: ["#d3d3d3", "#3217fd"] },
+        inRange: { color: ["#d3d3d3", "#5470c6"] },
         text: [validMax.toFixed(2), validMin.toFixed(2)],
         textStyle: { fontFamily: "Averta", fontWeight: 500 },
       },
@@ -207,7 +207,7 @@ const graph_options = ref({
     textStyle: { fontFamily: "Averta", fontWeight: 500 },
     formatter: function (params) {
       const expressionText =
-        params.value[3] !== undefined
+        params.value[3] !== 0
           ? `<br/>Expression: ${params.value[3].toFixed(2)}`
           : "";
       return `X: ${params.value[0].toFixed(2)}<br/>Y: ${params.value[1].toFixed(
@@ -275,7 +275,7 @@ onBeforeMount(async () => {
       />
 
       <button class="ml-2" v-if="selectedGene" @click="clearGeneSelection">
-        <Icon name="akar-icons:circle-x" class="w-5 h-5" />
+        <Icon name="akar-icons:circle-x" class="w-5 h-5 text-red-500" />
       </button>
     </div>
 
