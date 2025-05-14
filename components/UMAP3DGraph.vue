@@ -61,7 +61,7 @@ const chartOption = ref({
 	grid3D: {
 		viewControl: {
 			distance: 220,
-			autoRotate: false,
+			autoRotate: true,
 			autoRotateSpeed: 5,
 		},
 		axisLabel: { show: true },
