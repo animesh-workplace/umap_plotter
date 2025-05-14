@@ -26,14 +26,24 @@ const props = defineProps({
 watch(
 	() => props.scatterData,
 	(newValue) => {
-		console.log('scatterData changed in component:')
-		console.log('First data point:', newValue[0])
+		updateChart()
 	},
 	{ deep: true },
 )
 
+watch(
+	() => props.colorByCluster,
+	(newValue, oldValue) => {
+		updateChart()
+	},
+)
+
+const updateChart = () => {
+	chartOption.value.series[0].data = [...props.scatterData]
+}
+
 // Chart options as a computed property
-const chartOption = computed(() => ({
+const chartOption = ref({
 	xAxis3D: { type: 'value' },
 	yAxis3D: { type: 'value' },
 	zAxis3D: { type: 'value' },
@@ -51,7 +61,7 @@ const chartOption = computed(() => ({
 	grid3D: {
 		viewControl: {
 			distance: 220,
-			autoRotate: true,
+			autoRotate: false,
 			autoRotateSpeed: 5,
 		},
 		axisLabel: { show: true },
@@ -89,5 +99,5 @@ const chartOption = computed(() => ({
 			},
 		},
 	],
-}))
+})
 </script>
