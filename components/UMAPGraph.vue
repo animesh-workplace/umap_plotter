@@ -95,7 +95,7 @@ const get2DEmbedding = async () => {
 
 		// Check if response exists and is an array before calling map
 		if (response && Array.isArray(response)) {
-			originalUmapEmbedding.value = response.map((item) => [item.x, item.y, item.cell_id, 0])
+			originalUmapEmbedding.value = response.map((item) => [item.x, item.y, item.cell_id, item.cluster, 0])
 
 			umapEmbedding.value = [...originalUmapEmbedding.value]
 			// Update chart with the embedding data
@@ -137,7 +137,7 @@ const clearGeneSelection = () => {
 
 	// Reset embedding data to remove expression values
 	if (umapEmbedding.value && umapEmbedding.value.length > 0) {
-		umapEmbedding.value = umapEmbedding.value.map((point) => [point[0], point[1], point[2], 0])
+		umapEmbedding.value = umapEmbedding.value.map((point) => [point[0], point[1], point[2], point[3], 0])
 		updateChart()
 	}
 }
@@ -157,7 +157,7 @@ const updateGraphWithExpression = () => {
 		umapEmbedding.value = umapEmbedding.value.map((point) => {
 			const cellId = point[2]
 			const expressionValue = geneExpression.value[cellId] !== undefined ? geneExpression.value[cellId] : 0
-			return [point[0], point[1], cellId, expressionValue]
+			return [point[0], point[1], cellId, point[3], expressionValue]
 		})
 
 		// Calculate expression range for visualMap
@@ -173,7 +173,7 @@ const updateGraphWithExpression = () => {
 			visualMap: {
 				show: true,
 				right: -5,
-				dimension: 3,
+				dimension: 4,
 				top: 'center',
 				min: validMin,
 				max: validMax,
