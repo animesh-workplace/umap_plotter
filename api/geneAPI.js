@@ -1,80 +1,97 @@
 export function useGeneAPI() {
-  // const config = useRuntimeConfig()
-  // const BASEURL = `${config.public.API_BASE_URL}`
-  const BASEURL = "http://localhost:8000/api";
+	// const config = useRuntimeConfig()
+	// const BASEURL = `${config.public.API_BASE_URL}`
+	const BASEURL = 'http://localhost:8000/api'
 
-  const getGeneAutocomplete = async (payload) => {
-    try {
-      const { data, error } = await useFetch(`${BASEURL}/genes/autocomplete/`, {
-        method: "GET",
-        query: { gene: payload },
-      });
+	const getGeneAutocomplete = async (payload) => {
+		try {
+			const { data, error } = await useFetch(`${BASEURL}/genes/autocomplete/`, {
+				method: 'GET',
+				query: { gene: payload },
+			})
 
-      if (error.value) {
-        throw new Error(error.value || "An error occurred");
-      }
+			if (error.value) {
+				throw new Error(error.value || 'An error occurred')
+			}
 
-      return data.value;
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
-  };
+			return data.value
+		} catch (err) {
+			console.error(err)
+			throw err
+		}
+	}
 
-  const getSingleGeneExpression = async (payload) => {
-    try {
-      const { data, error } = await useFetch(`${BASEURL}/genes/single-expr/`, {
-        method: "GET",
-        query: { gene_name: payload },
-      });
+	const getSingleGeneExpression = async (payload) => {
+		try {
+			const { data, error } = await useFetch(`${BASEURL}/genes/single-expr/`, {
+				method: 'GET',
+				query: { gene_name: payload },
+			})
 
-      if (error.value) {
-        throw new Error(error.value || "An error occurred");
-      }
+			if (error.value) {
+				throw new Error(error.value || 'An error occurred')
+			}
 
-      return data.value;
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
-  };
+			return data.value
+		} catch (err) {
+			console.error(err)
+			throw err
+		}
+	}
 
-  const get2DUmapEmbedding = async () => {
-    try {
-      const { data, error } = await useFetch(`${BASEURL}/umap/2d/`, {
-        method: "GET",
-      });
+	const get2DUmapEmbedding = async () => {
+		try {
+			const { data, error } = await useFetch(`${BASEURL}/umap/2d/`, {
+				method: 'GET',
+			})
 
-      if (error.value) {
-        throw new Error(error.value || "An error occurred");
-      }
-      return data.value;
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
-  };
+			if (error.value) {
+				throw new Error(error.value || 'An error occurred')
+			}
+			return data.value
+		} catch (err) {
+			console.error(err)
+			throw err
+		}
+	}
 
-  const get2DUmapCellType = async () => {
-    try {
-      const { data, error } = await useFetch(`${BASEURL}/umap/2d/celltype/`, {
-        method: "GET",
-      });
+	const get3DUmapEmbedding = async () => {
+		try {
+			const { data, error } = await useFetch(`${BASEURL}/umap/3d/`, {
+				method: 'GET',
+			})
 
-      if (error.value) {
-        throw new Error(error.value || "An error occurred");
-      }
-      return data.value;
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
-  };
+			if (error.value) {
+				throw new Error(error.value || 'An error occurred')
+			}
+			return data.value
+		} catch (err) {
+			console.error(err)
+			throw err
+		}
+	}
 
-  return {
-    get2DUmapCellType,
-    get2DUmapEmbedding,
-    getGeneAutocomplete,
-    getSingleGeneExpression,
-  };
+	const get2DUmapCellType = async () => {
+		try {
+			const { data, error } = await useFetch(`${BASEURL}/umap/2d/celltype/`, {
+				method: 'GET',
+			})
+
+			if (error.value) {
+				throw new Error(error.value || 'An error occurred')
+			}
+			return data.value
+		} catch (err) {
+			console.error(err)
+			throw err
+		}
+	}
+
+	return {
+		get2DUmapCellType,
+		get2DUmapEmbedding,
+		get3DUmapEmbedding,
+		getGeneAutocomplete,
+		getSingleGeneExpression,
+	}
 }
