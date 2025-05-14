@@ -31,10 +31,10 @@
 			/>
 		</div>
 
-		<div class="mt-4">
+		<!-- <div class="mt-4">
 			<button @click="refreshData" class="px-4 py-2 bg-blue-500 text-white rounded">Refresh Data</button>
 			<p class="mt-2">Data points loaded: {{ scatterData.length }}</p>
-		</div>
+		</div> -->
 	</div>
 </template>
 
@@ -73,11 +73,9 @@ const get3DEmbedding = async () => {
 	}
 }
 
-const refreshData = () => {
-	get3DEmbedding()
-}
-
 onMounted(async () => {
-	await get3DEmbedding()
+	nextTick(async () => {
+		await get3DEmbedding()
+	})
 })
 </script>
