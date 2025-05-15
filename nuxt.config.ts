@@ -10,7 +10,7 @@ export default defineNuxtConfig({
 			ripple: true,
 			theme: { preset: Aura, options: { darkModeSelector: '.dark' } },
 		},
-		components: { include: ['Skeleton', 'Button', 'ToggleSwitch', 'Autocomplete'] },
+		components: { include: ['Skeleton', 'Button', 'ToggleSwitch', 'Autocomplete', 'Select'] },
 	},
 	build: { transpile: ['echarts', 'echarts-gl', 'zrender'] },
 	modules: [
