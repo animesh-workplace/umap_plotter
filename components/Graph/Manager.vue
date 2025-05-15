@@ -60,7 +60,7 @@
 			</motion.div>
 		</div>
 
-		<div v-if="selectedFilterOption == 'Cluster'" class="">
+		<div v-if="selectedFilterOption == 'Cluster'">
 			<Carousel :value="umapCluster" :numVisible="6" :showIndicators="false">
 				<template #item="slotProp">
 					<motion.div :while-hover="{ scale: 0.95 }" class="py-2">
@@ -83,6 +83,22 @@
 					</motion.div>
 				</template>
 			</Carousel>
+		</div>
+
+		<div class="mb-2 flex relative" v-if="selectedColorOption == 'Gene'">
+			<AutoComplete
+				dropdown
+				class="w-full"
+				v-model="selectedGene"
+				@complete="searchGene"
+				:suggestions="suggestions"
+				@item-select="searchGeneExpression"
+				placeholder="Type gene name to search ... "
+			/>
+
+			<button class="ml-2" v-if="selectedGene" @click="clearGeneSelection">
+				<Icon name="akar-icons:circle-x" class="w-5 h-5 text-red-500" />
+			</button>
 		</div>
 
 		<Skeleton height="45rem" v-if="isLoading" />
@@ -110,18 +126,66 @@ const props = defineProps({
 const selectedColorOption = ref()
 const selectedFilterOption = ref()
 const filterMethods = ref(['Source', 'Cluster'])
-const colorMethods = ref(['Source', 'Gene', 'Cluster'])
+const colorMethods = ref(['Source', 'Cluster', 'Gene'])
 
+const suggestions = ref([])
 const isLoading = ref(true)
 const umapCluster = ref([])
 const umapCellType = ref([])
 const UMAP2DGraph = ref(null)
 const UMAP3DGraph = ref(null)
+const selectedGene = ref(null)
 const umap2DEmbedding = ref([])
 const umap3DEmbedding = ref([])
+const geneExpression = ref(null)
 const activate3DMode = ref(false)
 const original2DUmapEmbedding = ref(null)
 const original3DUmapEmbedding = ref(null)
+
+// Call the autocomplete API with the user's query and update the suggestions list
+const searchGene = async (event) => {
+	const { getGeneAutocomplete } = useGeneAPI()
+	try {
+		suggestions.value = (await getGeneAutocomplete(event?.query)) || []
+	} catch (err) {
+		console.error('Error fetching gene autocomplete:', err)
+		suggestions.value = []
+	}
+}
+
+// Fetches and updates the graph data with expression values for the selected gene
+const searchGeneExpression = async (event) => {
+	const { getSingleGeneExpression } = useGeneAPI()
+	try {
+		isLoading.value = true
+		selectedGene.value = event?.value || null
+		geneExpression.value = (await getSingleGeneExpression(event?.value)) || []
+
+		// Update the graph with expression values and update visualMap
+		updateGraphWithExpression()
+	} catch (err) {
+		console.error('Error fetching gene expression:', err)
+		geneExpression.value = []
+	} finally {
+		isLoading.value = false
+	}
+}
+
+const getExpressionRange = () => {
+	const values = Object.values(geneExpression.value)
+	return [Math.min(...values), Math.max(...values)]
+}
+
+// Updates the chart with expression data when a gene is selected
+const updateGraphWithExpression = () => {
+	if (umap2DEmbedding.value && geneExpression.value && geneExpression.value) {
+		// Update the embedding data with expression values
+		umap2DEmbedding.value = umap2DEmbedding.value.map(([x, y, cellID, source, cluster, _]) => {
+			const expressionValue = geneExpression.value[cellID] !== undefined ? geneExpression.value[cellID] : 0
+			return [x, y, cellID, source, cluster, expressionValue]
+		})
+	}
+}
 
 const get2DEmbedding = async () => {
 	const { get2DUmapEmbedding } = useGeneAPI()
@@ -247,6 +311,7 @@ const applyFilters = (appliedFilters) => {
 onBeforeMount(() => {
 	nextTick(async () => {
 		try {
+			await searchGene()
 			await get2DEmbedding()
 			await get3DEmbedding()
 			await getFilterCellType()
