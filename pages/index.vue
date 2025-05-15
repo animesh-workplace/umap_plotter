@@ -4,13 +4,17 @@
 			<h2 class="text-xl font-semibold mb-1">Gene Expression UMAP Visualization</h2>
 			<p class="text-gray-500">Select a gene to visualize expression levels</p>
 		</div>
-		<div class="grid lg:grid-cols-6 md:grid-cols-2 min-w-full">
+		<SelectButton v-model="selection" :options="options" class="min-w-full justify-center" />
+		<div class="grid lg:grid-cols-6 md:grid-cols-2 min-w-full mt-2">
 			<GraphManager class="col-span-2 lg:col-start-3" />
 		</div>
 	</div>
 </template>
 
-<script setup></script>
+<script setup>
+const selection = ref('UMAP')
+const options = ref(['UMAP', 't-SNE'])
+</script>
 
 <!-- Blue Color #0284c7 -->
 <!-- Red Color #9d174d -->
