@@ -1,6 +1,6 @@
 <template>
 	<div class="w-full mt-3 flex justify-center">
-		<VChart ref="chart" :option="chartOption" class="h-[45rem]" />
+		<VChart ref="chart" :option="chartOption" class="h-[40rem]" />
 	</div>
 </template>
 
@@ -46,18 +46,15 @@ const chartOption = ref({
 		axisPointer: { type: 'cross' },
 		textStyle: { fontFamily: 'Averta', fontWeight: 500 },
 		formatter: function (params) {
-			if (!params) {
-				return ''
-			}
 			const expressionText = params.value[5] !== 0 ? `Expression: ${params.value[5].toFixed(2)}` : ''
 			return (
 				`X: ${params.value[0].toFixed(2)}<br/>` +
 				`Y: ${params.value[1].toFixed(2)}<br/>` +
 				`Cell: ${params.value[2]}<br/>` +
+				`Cluster: ${params.value[4]}<br/>` +
 				`${expressionText}`
 			)
 		},
-		borderColor: '#fff',
 	},
 	grid: {
 		top: '0%',
