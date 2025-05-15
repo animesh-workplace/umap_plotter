@@ -17,8 +17,8 @@ import { Grid3DComponent } from 'echarts-gl/components'
 use([Grid3DComponent, Scatter3DChart, TooltipComponent, CanvasRenderer])
 
 const props = defineProps({
+	colorBy: { type: String, default: '' },
 	colorScheme: { type: String, default: '#5470c6' },
-	colorByCluster: { type: Boolean, default: false },
 	scatterData: { type: Array, required: true, default: () => [] },
 })
 
@@ -32,7 +32,7 @@ watch(
 )
 
 watch(
-	() => props.colorByCluster,
+	() => props.colorBy,
 	(newValue, oldValue) => {
 		updateChart()
 	},
@@ -54,14 +54,16 @@ const chartOption = ref({
 				`Y: ${params.data[1].toFixed(2)}<br/>` +
 				`Z: ${params.data[2].toFixed(2)}<br/>` +
 				`Cell ID: ${params.data[3]}<br/>` +
-				`Cluster: ${params.data[4]}`
+				`Cluster: ${params.data[5]}`
 			)
 		},
 	},
 	grid3D: {
 		viewControl: {
+			alpha: 20,
+			beta: 40,
 			distance: 220,
-			autoRotate: true,
+			autoRotate: false,
 			autoRotateSpeed: 5,
 		},
 		axisLabel: { show: true },
@@ -73,7 +75,7 @@ const chartOption = ref({
 	},
 	series: [
 		{
-			symbolSize: 5,
+			symbolSize: 4,
 			animation: true,
 			type: 'scatter3D',
 			data: props.scatterData,
@@ -82,7 +84,16 @@ const chartOption = ref({
 			itemStyle: {
 				opacity: 0.8,
 				color: (params) => {
-					const groupColors = {
+					const sourceColors = {
+						Kurten: '#b91c1c',
+						Choi: '#c2410c',
+						Peng: '#a16207',
+						Puram2017: '#4d7c0f',
+						Puram2023: '#047857',
+						Kurkalang: '#6d28d9',
+					}
+
+					const clusterColors = {
 						'CAF-1': '#F08080',
 						'CAF-2': '#32CD32',
 						'CAF-3': '#A0522D',
@@ -93,8 +104,14 @@ const chartOption = ref({
 						'CAF-8': '#008080',
 						'CAF-9': '#9B1B30',
 					}
-					const cluster_id = params.data[4]
-					return props.colorByCluster ? groupColors[cluster_id] : props.colorScheme
+					if (props.colorBy == 'Source') {
+						const source_id = params.data[4]
+						return sourceColors[source_id]
+					} else if (props.colorBy == 'Cluster') {
+						const cluster_id = params.data[5]
+						return clusterColors[cluster_id]
+					}
+					return props.colorScheme
 				},
 			},
 		},
