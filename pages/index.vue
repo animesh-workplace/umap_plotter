@@ -4,7 +4,8 @@
 			<h2 class="text-xl font-semibold mb-1">Gene Expression UMAP Visualization</h2>
 			<p class="text-gray-500">Select a gene to visualize expression levels</p>
 		</div>
-		<SelectButton v-model="selection" :options="options" class="min-w-full justify-center" />
+		<Skeleton height="3rem" v-if="isLoading" />
+		<SelectButton v-model="selection" :options="options" class="min-w-full justify-center" v-else />
 		<div class="grid lg:grid-cols-6 md:grid-cols-2 min-w-full mt-2">
 			<GraphManager class="col-span-2 lg:col-start-3" />
 		</div>
@@ -12,8 +13,15 @@
 </template>
 
 <script setup>
+const isLoading = ref(true)
 const selection = ref('UMAP')
 const options = ref(['UMAP', 't-SNE'])
+
+onBeforeMount(() => {
+	nextTick(() => {
+		isLoading.value = false
+	})
+})
 </script>
 
 <!-- Blue Color #0284c7 -->
