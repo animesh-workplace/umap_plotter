@@ -10,11 +10,11 @@
 import { use } from 'echarts/core'
 import { Scatter3DChart } from 'echarts-gl/charts'
 import { CanvasRenderer } from 'echarts/renderers'
-import { TooltipComponent } from 'echarts/components'
 import { Grid3DComponent } from 'echarts-gl/components'
+import { TooltipComponent, VisualMapComponent } from 'echarts/components'
 
 // Register the components
-use([Grid3DComponent, Scatter3DChart, TooltipComponent, CanvasRenderer])
+use([Grid3DComponent, Scatter3DChart, VisualMapComponent, TooltipComponent, CanvasRenderer])
 
 const props = defineProps({
 	colorBy: { type: String, default: '' },
