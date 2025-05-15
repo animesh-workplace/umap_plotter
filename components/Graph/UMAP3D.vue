@@ -100,4 +100,8 @@ const chartOption = ref({
 		},
 	],
 })
+
+defineExpose({
+	updateChart,
+})
 </script>
