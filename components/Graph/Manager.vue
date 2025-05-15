@@ -14,11 +14,11 @@
 					fluid
 					showClear
 					size="small"
-					inputId="on_label"
+					inputId="Color-Filter"
 					:options="colorMethods"
 					v-model="selectedColorOption"
 				/>
-				<label for="on_label" class="flex items-center gap-2">
+				<label for="Color-Filter" class="flex items-center gap-2">
 					<Icon class="w-4 h-4 text-slate-500" name="tabler:color-filter" /> Color by
 				</label>
 			</FloatLabel>
@@ -28,14 +28,61 @@
 					fluid
 					showClear
 					size="small"
-					inputId="on_label"
+					inputId="Data-Filter"
 					:options="filterMethods"
+					@value-change="resetFilter"
 					v-model="selectedFilterOption"
 				/>
-				<label for="on_label" class="flex items-center gap-2">
+				<label for="Data-Filter" class="flex items-center gap-2">
 					<Icon class="w-4 h-4 text-slate-500" name="akar-icons:filter" /> Filter by
 				</label>
 			</FloatLabel>
+		</div>
+
+		<div v-if="selectedFilterOption == 'Source'" class="flex gap-3 items-center mt-2 justify-center">
+			<motion.div :index="celltype.index" :while-hover="{ scale: 0.97 }" v-for="celltype in umapCellType">
+				<Tag
+					rounded
+					:value="celltype.name"
+					class="cursor-pointer"
+					@click="FilterCellType(celltype.index)"
+					:severity="celltype.active ? 'success' : 'danger'"
+				>
+					<template #icon>
+						<Icon
+							v-if="celltype.active"
+							class="w-4 h-4 text-green-500"
+							name="akar-icons:tetragon-fill"
+						/>
+						<Icon v-else class="w-4 h-4 text-rose-500" name="akar-icons:tetragon" />
+					</template>
+				</Tag>
+			</motion.div>
+		</div>
+
+		<div v-if="selectedFilterOption == 'Cluster'" class="">
+			<Carousel :value="umapCluster" :numVisible="6" :showIndicators="false">
+				<template #item="slotProp">
+					<motion.div :while-hover="{ scale: 0.95 }" class="py-2">
+						<Tag
+							rounded
+							class="cursor-pointer"
+							:value="slotProp.data.name"
+							@click="FilterCluster(slotProp.data.index)"
+							:severity="slotProp.data.active ? 'success' : 'danger'"
+						>
+							<template #icon>
+								<Icon
+									v-if="slotProp.data.active"
+									class="w-4 h-4 text-green-500"
+									name="akar-icons:tetragon-fill"
+								/>
+								<Icon v-else class="w-4 h-4 text-rose-500" name="akar-icons:tetragon" />
+							</template>
+						</Tag>
+					</motion.div>
+				</template>
+			</Carousel>
 		</div>
 
 		<Skeleton height="45rem" v-if="isLoading" />
@@ -62,10 +109,11 @@ const props = defineProps({
 
 const selectedColorOption = ref()
 const selectedFilterOption = ref()
-const colorMethods = ref(['Source', 'Gene', 'Cluster'])
 const filterMethods = ref(['Source', 'Cluster'])
+const colorMethods = ref(['Source', 'Gene', 'Cluster'])
 
 const isLoading = ref(true)
+const umapCluster = ref([])
 const umapCellType = ref([])
 const UMAP2DGraph = ref(null)
 const UMAP3DGraph = ref(null)
@@ -144,16 +192,56 @@ const get3DEmbedding = async () => {
 // Call the autocomplete API with the user's query and update the suggestions list
 const getFilterCellType = async () => {
 	const { get2DUmapCellType } = useGeneAPI()
+	const cluster = ['CAF-1', 'CAF-2', 'CAF-3', 'CAF-4', 'CAF-5', 'CAF-6', 'CAF-7', 'CAF-8', 'CAF-9']
 	try {
 		const response = (await get2DUmapCellType()) || []
-		umapCellType.value = response.map((item) => ({
+		umapCellType.value = response.map((item, index) => ({
 			name: item,
-			active: false,
+			index: index,
+			active: true,
+		}))
+		umapCluster.value = cluster.map((item, index) => ({
+			name: item,
+			index: index,
+			active: true,
 		}))
 	} catch (err) {
 		console.error('Error fetching 2D cell type names:', err)
 		umapCellType.value = []
 	}
+}
+
+const FilterCellType = (index) => {
+	umapCellType.value[index].active = !umapCellType.value[index].active
+	applyFilters(umapCellType)
+}
+
+const FilterCluster = (index) => {
+	umapCluster.value[index].active = !umapCluster.value[index].active
+	applyFilters(umapCluster)
+}
+
+const resetFilter = (value) => {
+	umap2DEmbedding.value = [...original2DUmapEmbedding.value]
+	umap3DEmbedding.value = [...original3DUmapEmbedding.value]
+	umapCellType.value.forEach((item) => (item.active = true))
+	umapCluster.value.forEach((item) => (item.active = true))
+}
+
+// Apply cell type filters to the UMAP data
+const applyFilters = (appliedFilters) => {
+	const activeFilters = appliedFilters.value.filter((ct) => ct.active).map((ct) => ct.name)
+
+	// Filter the data to only include active cell types
+	umap2DEmbedding.value = original2DUmapEmbedding.value.filter((point) => {
+		const prefix = point[selectedFilterOption.value == 'Source' ? 3 : 4]
+		return activeFilters.includes(prefix)
+	})
+
+	umap3DEmbedding.value = original3DUmapEmbedding.value.filter((point) => {
+		const prefix = point[selectedFilterOption.value == 'Source' ? 4 : 5]
+		return activeFilters.includes(prefix)
+	})
 }
 
 onBeforeMount(() => {
