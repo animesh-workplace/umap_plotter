@@ -15,7 +15,28 @@ const props = defineProps({
 watch(
 	() => props.scatterData,
 	(newValue) => {
-		updateChart()
+		if (newValue == 'Gene') {
+			chartOption.value = {
+				...chartOption.value,
+				visualMap: {
+					show: true,
+					right: -5,
+					dimension: 5,
+					top: 'center',
+					min: 10,
+					max: 0,
+					hoverLink: false,
+					calculable: true,
+					type: 'continuous',
+					orient: 'vertical',
+					inRange: { color: ['#d3d3d3', props.colorScheme] },
+					textStyle: { fontFamily: 'Averta', fontWeight: 500 },
+				},
+			}
+			chartOption.value.series[0].data = [...props.scatterData]
+		} else {
+			updateChart()
+		}
 	},
 	{ deep: true },
 )
@@ -23,7 +44,28 @@ watch(
 watch(
 	() => props.colorBy,
 	(newValue, oldValue) => {
-		updateChart()
+		if (newValue == 'Gene') {
+			chartOption.value = {
+				...chartOption.value,
+				visualMap: {
+					show: true,
+					right: -5,
+					dimension: 4,
+					top: 'center',
+					min: 10,
+					max: 0,
+					hoverLink: false,
+					calculable: true,
+					type: 'continuous',
+					orient: 'vertical',
+					inRange: { color: ['#d3d3d3', props.colorScheme] },
+					textStyle: { fontFamily: 'Averta', fontWeight: 500 },
+				},
+			}
+			chartOption.value.series[0].data = [...props.scatterData]
+		} else {
+			updateChart()
+		}
 	},
 )
 
@@ -107,6 +149,31 @@ const chartOption = ref({
 
 defineExpose({
 	updateChart,
+})
+
+onUpdated(() => {
+	nextTick(() => {
+		if (newValue == 'Gene') {
+			chartOption.value = {
+				...chartOption.value,
+				visualMap: {
+					show: true,
+					right: -5,
+					dimension: 5,
+					top: 'center',
+					min: 4,
+					max: 0,
+					hoverLink: false,
+					calculable: true,
+					type: 'continuous',
+					orient: 'vertical',
+					inRange: { color: ['#d3d3d3', props.colorScheme] },
+					textStyle: { fontFamily: 'Averta', fontWeight: 500 },
+				},
+			}
+			chartOption.value.series[0].data = [...props.scatterData]
+		}
+	})
 })
 </script>
 
