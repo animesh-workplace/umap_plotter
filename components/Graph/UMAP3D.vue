@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<client-only>
-			<VChart :option="chartOption" class="w-full h-[45rem]" />
+			<VChart :option="chartOption" class="w-full h-[40rem]" />
 		</client-only>
 	</div>
 </template>
@@ -48,6 +48,7 @@ const chartOption = ref({
 	yAxis3D: { type: 'value' },
 	zAxis3D: { type: 'value' },
 	tooltip: {
+		textStyle: { fontFamily: 'Averta', fontWeight: 500 },
 		formatter: (params) => {
 			return (
 				`X: ${params.data[0].toFixed(2)}<br/>` +
@@ -59,6 +60,10 @@ const chartOption = ref({
 		},
 	},
 	grid3D: {
+		top: '0%',
+		left: '0%',
+		right: '0%',
+		bottom: '0%',
 		viewControl: {
 			alpha: 20,
 			beta: 40,
