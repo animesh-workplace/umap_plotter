@@ -6,8 +6,8 @@
 
 <script setup>
 const props = defineProps({
+	colorBy: { type: String, default: '' },
 	colorScheme: { type: String, default: '#5470c6' },
-	colorByCluster: { type: Boolean, default: false },
 	scatterData: { type: Array, required: true, default: () => [] },
 })
 
@@ -21,7 +21,7 @@ watch(
 )
 
 watch(
-	() => props.colorByCluster,
+	() => props.colorBy,
 	(newValue, oldValue) => {
 		updateChart()
 	},
@@ -32,7 +32,7 @@ const updateChart = () => {
 }
 
 const chartOption = ref({
-	animation: true,
+	animation: false,
 	yAxis: {
 		type: 'value',
 		axisLabel: { fontFamily: 'Averta', fontWeight: 500 },
@@ -49,7 +49,7 @@ const chartOption = ref({
 			if (!params) {
 				return ''
 			}
-			const expressionText = params.value[4] !== 0 ? `Expression: ${params.value[4].toFixed(2)}` : ''
+			const expressionText = params.value[5] !== 0 ? `Expression: ${params.value[5].toFixed(2)}` : ''
 			return (
 				`X: ${params.value[0].toFixed(2)}<br/>` +
 				`Y: ${params.value[1].toFixed(2)}<br/>` +
@@ -74,7 +74,16 @@ const chartOption = ref({
 			itemStyle: {
 				opacity: 0.8,
 				color: (params) => {
-					const groupColors = {
+					const sourceColors = {
+						Kurten: '#b91c1c',
+						Choi: '#c2410c',
+						Peng: '#a16207',
+						Puram2017: '#4d7c0f',
+						Puram2023: '#047857',
+						Kurkalang: '#6d28d9',
+					}
+
+					const clusterColors = {
 						'CAF-1': '#F08080',
 						'CAF-2': '#32CD32',
 						'CAF-3': '#A0522D',
@@ -85,8 +94,14 @@ const chartOption = ref({
 						'CAF-8': '#008080',
 						'CAF-9': '#9B1B30',
 					}
-					const cluster_id = params.data[3]
-					return props.colorByCluster ? groupColors[cluster_id] : props.colorScheme
+					if (props.colorBy == 'Source') {
+						const source_id = params.data[3]
+						return sourceColors[source_id]
+					} else if (props.colorBy == 'Cluster') {
+						const cluster_id = params.data[4]
+						return clusterColors[cluster_id]
+					}
+					return props.colorScheme
 				},
 			},
 		},
