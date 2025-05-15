@@ -4,8 +4,8 @@
 			<h2 class="text-xl font-semibold mb-1">Gene Expression UMAP Visualization</h2>
 			<p class="text-gray-500">Select a gene to visualize expression levels</p>
 		</div>
-		<div class="grid grid-cols-6 min-w-full">
-			<GraphManager class="col-span-2 col-start-3" />
+		<div class="grid lg:grid-cols-6 md:grid-cols-2 min-w-full">
+			<GraphManager class="col-span-2 lg:col-start-3" />
 		</div>
 	</div>
 </template>
