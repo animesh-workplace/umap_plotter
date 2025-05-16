@@ -5,6 +5,12 @@
 </template>
 
 <script setup>
+import { use } from 'echarts/core'
+import { ScatterGLChart } from 'echarts-gl/charts'
+
+// Register the components
+use([ScatterGLChart])
+
 const props = defineProps({
 	colorBy: { type: String, default: '' },
 	colorScheme: { type: String, default: '#5470c6' },
@@ -99,7 +105,7 @@ const chartOption = ref({
 	series: [
 		{
 			symbolSize: 4,
-			type: 'scatter',
+			type: 'scatterGL',
 			data: props.scatterData,
 			itemStyle: {
 				opacity: 0.8,
