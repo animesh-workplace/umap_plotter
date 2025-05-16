@@ -39,7 +39,7 @@
 			</FloatLabel>
 		</div>
 
-		<div v-if="selectedFilterOption == 'Source'" class="flex gap-3 items-center mt-2 justify-center">
+		<div v-if="selectedFilterOption == 'Source'" class="flex gap-3 items-center mb-4 mt-2 justify-center px-4">
 			<motion.div :index="celltype.index" :while-hover="{ scale: 0.97 }" v-for="celltype in umapCellType">
 				<Tag
 					rounded
@@ -93,7 +93,7 @@
 				@complete="searchGene"
 				:suggestions="suggestions"
 				@item-select="searchGeneExpression"
-				placeholder="Type gene name to search ... "
+				placeholder="Type gene name to search ..."
 			/>
 
 			<button class="ml-2" v-if="selectedGene" @click="clearGeneSelection">
@@ -101,7 +101,7 @@
 			</button>
 		</div>
 
-		<Skeleton height="45rem" v-if="isLoading" />
+		<Skeleton height="40rem" v-if="isLoading" />
 
 		<div v-else>
 			<GraphUMAP3D
@@ -171,11 +171,6 @@ const searchGeneExpression = async (event) => {
 	}
 }
 
-const getExpressionRange = () => {
-	const values = Object.values(geneExpression.value)
-	return [Math.min(...values), Math.max(...values)]
-}
-
 // Updates the chart with expression data when a gene is selected
 const updateGraphWithExpression = () => {
 	if (umap2DEmbedding.value && geneExpression.value && geneExpression.value) {
@@ -184,7 +179,16 @@ const updateGraphWithExpression = () => {
 			const expressionValue = geneExpression.value[cellID] !== undefined ? geneExpression.value[cellID] : 0
 			return [x, y, cellID, source, cluster, expressionValue]
 		})
+		original2DUmapEmbedding.value = [...umap2DEmbedding.value]
 	}
+}
+
+const clearGeneSelection = () => {
+	selectedGene.value = null
+	original2DUmapEmbedding.value = original2DUmapEmbedding.value.map(([x, y, cellID, source, cluster, _]) => {
+		return [x, y, cellID, source, cluster, 0]
+	})
+	umap2DEmbedding.value = [...original2DUmapEmbedding.value]
 }
 
 const get2DEmbedding = async () => {
