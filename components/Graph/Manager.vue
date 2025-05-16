@@ -174,43 +174,52 @@ const searchGeneExpression = async (event) => {
 // Updates the chart with expression data when a gene is selected
 const updateGraphWithExpression = () => {
 	// Update the 2D embedding data with expression values
-	umap2DEmbedding.value = umap2DEmbedding.value.map(([x, y, cellID, source, cluster, _]) => {
+	original2DUmapEmbedding.value = original2DUmapEmbedding.value.map(([x, y, cellID, source, cluster, _]) => {
 		const expressionValue = geneExpression.value[cellID] !== undefined ? geneExpression.value[cellID] : 0
 		return [x, y, cellID, source, cluster, expressionValue]
 	})
-	original2DUmapEmbedding.value = [...umap2DEmbedding.value]
-
 	// Update the 3D embedding data with expression values
-	umap3DEmbedding.value = umap3DEmbedding.value.map(([x, y, z, cellID, source, cluster, _]) => {
+	original3DUmapEmbedding.value = original3DUmapEmbedding.value.map(([x, y, z, cellID, source, cluster, _]) => {
 		const expressionValue = geneExpression.value[cellID] !== undefined ? geneExpression.value[cellID] : 0
 		return [x, y, z, cellID, source, cluster, expressionValue]
 	})
-	original3DUmapEmbedding.value = [...umap3DEmbedding.value]
+
+	if (selectedFilterOption.value == 'Source') {
+		applyFilters(umapCellType)
+	} else if (selectedFilterOption.value == 'Cluster') {
+		applyFilters(umapCluster)
+	} else {
+		umap2DEmbedding.value = [...original2DUmapEmbedding.value]
+		umap3DEmbedding.value = [...original3DUmapEmbedding.value]
+	}
 }
 
 const clearGeneSelection = () => {
 	selectedGene.value = null
-	if (selectedFilterOption) {
-		umap2DEmbedding.value = umap2DEmbedding.value.map(([x, y, cellID, source, cluster, _]) => {
+	if (selectedFilterOption.value) {
+		original2DUmapEmbedding.value = original2DUmapEmbedding.value.map(([x, y, cellID, source, cluster, _]) => {
 			return [x, y, cellID, source, cluster, 0]
 		})
+		umap3DEmbedding.value = umap3DEmbedding.value.map(([x, y, z, cellID, source, cluster, _]) => {
+			return [x, y, z, cellID, source, cluster, 0]
+		})
+		if (selectedFilterOption.value == 'Source') {
+			applyFilters(umapCellType)
+		} else if (selectedFilterOption.value == 'Cluster') {
+			applyFilters(umapCluster)
+		}
 	} else {
 		original2DUmapEmbedding.value = original2DUmapEmbedding.value.map(([x, y, cellID, source, cluster, _]) => {
 			return [x, y, cellID, source, cluster, 0]
 		})
-		umap2DEmbedding.value = [...original2DUmapEmbedding.value]
-	}
-	if (selectedFilterOption) {
-		umap3DEmbedding.value = umap3DEmbedding.value.map(([x, y, z, cellID, source, cluster, _]) => {
-			return [x, y, z, cellID, source, cluster, 0]
-		})
-	} else {
+
 		original3DUmapEmbedding.value = original3DUmapEmbedding.value.map(
 			([x, y, z, cellID, source, cluster, _]) => {
 				return [x, y, z, cellID, source, cluster, 0]
 			},
 		)
 		umap3DEmbedding.value = [...original3DUmapEmbedding.value]
+		umap2DEmbedding.value = [...original2DUmapEmbedding.value]
 	}
 }
 
