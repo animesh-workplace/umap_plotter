@@ -90,9 +90,9 @@ const chartOption = ref({
 				opacity: 0.8,
 				color: (params) => {
 					const sourceColors = {
+						Choi: '#c026d3',
+						Peng: '#451a03',
 						Kurten: '#b91c1c',
-						Choi: '#c2410c',
-						Peng: '#a16207',
 						Puram2017: '#4d7c0f',
 						Puram2023: '#047857',
 						Kurkalang: '#6d28d9',
