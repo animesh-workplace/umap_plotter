@@ -7,9 +7,10 @@
 <script setup>
 import { use } from 'echarts/core'
 import { ScatterGLChart } from 'echarts-gl/charts'
+import { TooltipComponent } from 'echarts/components'
 
 // Register the components
-use([ScatterGLChart])
+use([ScatterGLChart, TooltipComponent])
 
 const props = defineProps({
 	colorBy: { type: String, default: '' },
@@ -72,6 +73,12 @@ const updateChart = () => {
 
 const chartOption = ref({
 	animation: true,
+	dataZoom: [
+		{ type: 'inside', xAxisIndex: [0] },
+		{ type: 'inside', yAxisIndex: [0] },
+		{ type: 'slider', xAxisIndex: [0], show: false },
+		{ type: 'slider', yAxisIndex: [0], show: false },
+	],
 	yAxis: {
 		type: 'value',
 		axisLabel: { fontFamily: 'Averta', fontWeight: 500 },
@@ -81,7 +88,6 @@ const chartOption = ref({
 		axisLabel: { fontFamily: 'Averta', fontWeight: 500 },
 	},
 	tooltip: {
-		show: true,
 		trigger: 'item',
 		axisPointer: { type: 'cross' },
 		textStyle: { fontFamily: 'Averta', fontWeight: 500 },
@@ -106,7 +112,7 @@ const chartOption = ref({
 	series: [
 		{
 			symbolSize: 4,
-			type: 'scatterGL',
+			type: 'scatter',
 			data: props.scatterData,
 			itemStyle: {
 				opacity: 0.8,
