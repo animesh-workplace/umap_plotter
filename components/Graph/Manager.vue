@@ -142,6 +142,15 @@ const activate3DMode = ref(false)
 const original2DUmapEmbedding = ref(null)
 const original3DUmapEmbedding = ref(null)
 
+// watch(
+// 	() => selectedColorOption,
+// 	(newValue, oldValue) => {
+// 		if (oldValue == 'Gene') {
+// 			clearGeneSelection()
+// 		}
+// 	},
+// )
+
 // Call the autocomplete API with the user's query and update the suggestions list
 const searchGene = async (event) => {
 	const { getGeneAutocomplete } = useGeneAPI()
@@ -173,14 +182,19 @@ const searchGeneExpression = async (event) => {
 
 // Updates the chart with expression data when a gene is selected
 const updateGraphWithExpression = () => {
-	if (umap2DEmbedding.value && geneExpression.value && geneExpression.value) {
-		// Update the embedding data with expression values
-		umap2DEmbedding.value = umap2DEmbedding.value.map(([x, y, cellID, source, cluster, _]) => {
-			const expressionValue = geneExpression.value[cellID] !== undefined ? geneExpression.value[cellID] : 0
-			return [x, y, cellID, source, cluster, expressionValue]
-		})
-		original2DUmapEmbedding.value = [...umap2DEmbedding.value]
-	}
+	// Update the 2D embedding data with expression values
+	umap2DEmbedding.value = umap2DEmbedding.value.map(([x, y, cellID, source, cluster, _]) => {
+		const expressionValue = geneExpression.value[cellID] !== undefined ? geneExpression.value[cellID] : 0
+		return [x, y, cellID, source, cluster, expressionValue]
+	})
+	original2DUmapEmbedding.value = [...umap2DEmbedding.value]
+
+	// Update the 3D embedding data with expression values
+	umap3DEmbedding.value = umap3DEmbedding.value.map(([x, y, z, cellID, source, cluster, _]) => {
+		const expressionValue = geneExpression.value[cellID] !== undefined ? geneExpression.value[cellID] : 0
+		return [x, y, z, cellID, source, cluster, expressionValue]
+	})
+	original3DUmapEmbedding.value = [...umap3DEmbedding.value]
 }
 
 const clearGeneSelection = () => {
@@ -189,6 +203,10 @@ const clearGeneSelection = () => {
 		return [x, y, cellID, source, cluster, 0]
 	})
 	umap2DEmbedding.value = [...original2DUmapEmbedding.value]
+	original3DUmapEmbedding.value = original3DUmapEmbedding.value.map(([x, y, z, cellID, source, cluster, _]) => {
+		return [x, y, z, cellID, source, cluster, 0]
+	})
+	umap3DEmbedding.value = [...original3DUmapEmbedding.value]
 }
 
 const get2DEmbedding = async () => {
