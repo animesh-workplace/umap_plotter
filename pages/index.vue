@@ -2,7 +2,6 @@
 	<div class="p-4 grid grid-cols-1 justify-items-center">
 		<div class="mb-2 text-center">
 			<h2 class="text-xl font-semibold mb-1">Gene Expression UMAP Visualization</h2>
-			<p class="text-gray-500">Select a gene to visualize expression levels</p>
 		</div>
 		<Skeleton height="3rem" v-if="isLoading" />
 		<SelectButton v-model="selection" :options="options" class="min-w-full justify-center" v-else />
