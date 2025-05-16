@@ -38,7 +38,40 @@ watch(
 	},
 )
 
+const getExpressionRange = () => {
+	const values = props.scatterData.map((item) => item[6])
+	return [Math.min(...values), Math.ceil(Math.max(...values))]
+}
+
 const updateChart = () => {
+	if (props.colorBy == 'Gene') {
+		// Calculate expression range for visualMap
+		const [min, max] = getExpressionRange()
+		// Make sure min and max are valid numbers and not the same value
+		const validMin = isFinite(min) ? min : 0
+		const validMax = isFinite(max) && max > validMin ? max : validMin + 1
+
+		chartOption.value = {
+			...chartOption.value,
+			visualMap: {
+				show: true,
+				right: -6,
+				dimension: 6,
+				top: 'center',
+				min: validMin,
+				max: validMax,
+				hoverLink: false,
+				calculable: true,
+				type: 'continuous',
+				orient: 'vertical',
+				inRange: { color: ['#d3d3d3', props.colorScheme] },
+				textStyle: { fontFamily: 'Averta', fontWeight: 500 },
+			},
+		}
+	} else {
+		const { visualMap, ...rest } = chartOption.value
+		chartOption.value = rest
+	}
 	chartOption.value.series[0].data = [...props.scatterData]
 }
 
@@ -65,10 +98,10 @@ const chartOption = ref({
 		right: '0%',
 		bottom: '0%',
 		viewControl: {
-			alpha: 20,
 			beta: 40,
+			alpha: 20,
 			distance: 220,
-			autoRotate: false,
+			autoRotate: true,
 			autoRotateSpeed: 5,
 		},
 		axisLabel: { show: true },
@@ -121,6 +154,12 @@ const chartOption = ref({
 			},
 		},
 	],
+})
+
+onMounted(() => {
+	nextTick(() => {
+		updateChart()
+	})
 })
 
 defineExpose({
