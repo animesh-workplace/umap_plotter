@@ -158,21 +158,21 @@ const activate3DMode = ref(false)
 const selectedColorOption = ref()
 const selectedFilterOption = ref()
 const selectedVisualizationType = ref('UMAP')
-const visualizationTypes = ref(['UMAP', 't-SNE'])
 const filterMethods = ref(['Source', 'Cluster'])
+const visualizationTypes = ref(['UMAP', 't-SNE'])
 const colorMethods = ref(['Source', 'Cluster', 'Gene'])
 
 // Gene search
-const selectedGene = ref(null)
 const suggestions = ref([])
+const selectedGene = ref(null)
 const geneExpression = ref(null)
 
 // Loading state
 const isLoading = ref(true)
 
 // Data for filters
-const cellTypes = ref([])
 const clusters = ref([])
+const cellTypes = ref([])
 
 // Graph components references
 const UMAP2DGraph = ref(null)
