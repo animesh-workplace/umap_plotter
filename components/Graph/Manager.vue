@@ -190,14 +190,28 @@ const updateGraphWithExpression = () => {
 
 const clearGeneSelection = () => {
 	selectedGene.value = null
-	original2DUmapEmbedding.value = original2DUmapEmbedding.value.map(([x, y, cellID, source, cluster, _]) => {
-		return [x, y, cellID, source, cluster, 0]
-	})
-	umap2DEmbedding.value = [...original2DUmapEmbedding.value]
-	original3DUmapEmbedding.value = original3DUmapEmbedding.value.map(([x, y, z, cellID, source, cluster, _]) => {
-		return [x, y, z, cellID, source, cluster, 0]
-	})
-	umap3DEmbedding.value = [...original3DUmapEmbedding.value]
+	if (selectedFilterOption) {
+		umap2DEmbedding.value = umap2DEmbedding.value.map(([x, y, cellID, source, cluster, _]) => {
+			return [x, y, cellID, source, cluster, 0]
+		})
+	} else {
+		original2DUmapEmbedding.value = original2DUmapEmbedding.value.map(([x, y, cellID, source, cluster, _]) => {
+			return [x, y, cellID, source, cluster, 0]
+		})
+		umap2DEmbedding.value = [...original2DUmapEmbedding.value]
+	}
+	if (selectedFilterOption) {
+		umap3DEmbedding.value = umap3DEmbedding.value.map(([x, y, z, cellID, source, cluster, _]) => {
+			return [x, y, z, cellID, source, cluster, 0]
+		})
+	} else {
+		original3DUmapEmbedding.value = original3DUmapEmbedding.value.map(
+			([x, y, z, cellID, source, cluster, _]) => {
+				return [x, y, z, cellID, source, cluster, 0]
+			},
+		)
+		umap3DEmbedding.value = [...original3DUmapEmbedding.value]
+	}
 }
 
 const get2DEmbedding = async () => {
