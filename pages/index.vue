@@ -3,10 +3,18 @@
 		<div class="mb-2 text-center">
 			<h2 class="text-xl font-semibold mb-1">Gene Expression UMAP Visualization</h2>
 		</div>
-		<Skeleton height="3rem" v-if="isLoading" />
-		<SelectButton v-model="selection" :options="options" class="min-w-full justify-center" v-else />
-		<div class="grid lg:grid-cols-6 md:grid-cols-2 min-w-full mt-2">
-			<GraphManager class="col-span-2 lg:col-start-3" />
+		<div class="grid gap-4 lg:grid-cols-6 md:grid-cols-2 min-w-full mt-2">
+			<Skeleton height="3rem" v-if="isLoading" class="col-span-4 col-start-2" />
+			<SelectButton
+				v-else
+				v-model="selection"
+				:options="options"
+				class="justify-center col-span-4 col-start-2"
+			/>
+		</div>
+		<div class="grid gap-4 lg:grid-cols-6 md:grid-cols-2 min-w-full mt-2">
+			<GraphManager class="col-span-2 col-start-2" />
+			<GraphManager class="col-span-2" />
 		</div>
 	</div>
 </template>
