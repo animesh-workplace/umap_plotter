@@ -71,7 +71,7 @@ const updateChart = () => {
 }
 
 const chartOption = ref({
-	animation: false,
+	animation: true,
 	yAxis: {
 		type: 'value',
 		axisLabel: { fontFamily: 'Averta', fontWeight: 500 },
@@ -81,6 +81,7 @@ const chartOption = ref({
 		axisLabel: { fontFamily: 'Averta', fontWeight: 500 },
 	},
 	tooltip: {
+		show: true,
 		trigger: 'item',
 		axisPointer: { type: 'cross' },
 		textStyle: { fontFamily: 'Averta', fontWeight: 500 },
