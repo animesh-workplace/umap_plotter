@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<client-only>
-			<VChart :option="chartOption" class="w-full h-[40rem]" />
+			<VChart :option="chartOption" class="w-full h-[40rem]" autoresize />
 		</client-only>
 	</div>
 </template>
