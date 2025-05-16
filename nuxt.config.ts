@@ -47,6 +47,7 @@ export default defineNuxtConfig({
 			'DatasetComponent',
 			'TooltipComponent',
 			'ToolboxComponent',
+			'DataZoomComponent',
 			'VisualMapComponent',
 		],
 	},
