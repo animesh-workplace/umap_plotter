@@ -142,15 +142,6 @@ const activate3DMode = ref(false)
 const original2DUmapEmbedding = ref(null)
 const original3DUmapEmbedding = ref(null)
 
-// watch(
-// 	() => selectedColorOption,
-// 	(newValue, oldValue) => {
-// 		if (oldValue == 'Gene') {
-// 			clearGeneSelection()
-// 		}
-// 	},
-// )
-
 // Call the autocomplete API with the user's query and update the suggestions list
 const searchGene = async (event) => {
 	const { getGeneAutocomplete } = useGeneAPI()
