@@ -15,61 +15,49 @@ const props = defineProps({
 watch(
 	() => props.scatterData,
 	(newValue) => {
-		if (newValue == 'Gene') {
-			chartOption.value = {
-				...chartOption.value,
-				visualMap: {
-					show: true,
-					right: -5,
-					dimension: 5,
-					top: 'center',
-					min: 10,
-					max: 0,
-					hoverLink: false,
-					calculable: true,
-					type: 'continuous',
-					orient: 'vertical',
-					inRange: { color: ['#d3d3d3', props.colorScheme] },
-					textStyle: { fontFamily: 'Averta', fontWeight: 500 },
-				},
-			}
-			chartOption.value.series[0].data = [...props.scatterData]
-		} else {
-			updateChart()
-		}
+		updateChart()
 	},
 	{ deep: true },
 )
 
 watch(
 	() => props.colorBy,
-	(newValue, oldValue) => {
-		if (newValue == 'Gene') {
-			chartOption.value = {
-				...chartOption.value,
-				visualMap: {
-					show: true,
-					right: -5,
-					dimension: 4,
-					top: 'center',
-					min: 10,
-					max: 0,
-					hoverLink: false,
-					calculable: true,
-					type: 'continuous',
-					orient: 'vertical',
-					inRange: { color: ['#d3d3d3', props.colorScheme] },
-					textStyle: { fontFamily: 'Averta', fontWeight: 500 },
-				},
-			}
-			chartOption.value.series[0].data = [...props.scatterData]
-		} else {
-			updateChart()
-		}
+	(newValue) => {
+		updateChart()
 	},
 )
 
+const getExpressionRange = () => {
+	const values = props.scatterData.map((item) => item[5])
+	return [Math.min(...values), Math.ceil(Math.max(...values))]
+}
+
 const updateChart = () => {
+	if (props.colorBy == 'Gene') {
+		// Calculate expression range for visualMap
+		const [min, max] = getExpressionRange()
+		// Make sure min and max are valid numbers and not the same value
+		const validMin = isFinite(min) ? min : 0
+		const validMax = isFinite(max) && max > validMin ? max : validMin + 1
+
+		chartOption.value = {
+			...chartOption.value,
+			visualMap: {
+				show: true,
+				right: -6,
+				dimension: 5,
+				top: 'center',
+				min: validMin,
+				max: validMax,
+				hoverLink: false,
+				calculable: true,
+				type: 'continuous',
+				orient: 'vertical',
+				inRange: { color: ['#d3d3d3', props.colorScheme] },
+				textStyle: { fontFamily: 'Averta', fontWeight: 500 },
+			},
+		}
+	}
 	chartOption.value.series[0].data = [...props.scatterData]
 }
 
@@ -114,9 +102,9 @@ const chartOption = ref({
 				opacity: 0.8,
 				color: (params) => {
 					const sourceColors = {
+						Choi: '#c026d3',
+						Peng: '#451a03',
 						Kurten: '#b91c1c',
-						Choi: '#c2410c',
-						Peng: '#a16207',
 						Puram2017: '#4d7c0f',
 						Puram2023: '#047857',
 						Kurkalang: '#6d28d9',
@@ -147,33 +135,14 @@ const chartOption = ref({
 	],
 })
 
-defineExpose({
-	updateChart,
+onMounted(() => {
+	nextTick(() => {
+		updateChart()
+	})
 })
 
-onUpdated(() => {
-	nextTick(() => {
-		if (newValue == 'Gene') {
-			chartOption.value = {
-				...chartOption.value,
-				visualMap: {
-					show: true,
-					right: -5,
-					dimension: 5,
-					top: 'center',
-					min: 4,
-					max: 0,
-					hoverLink: false,
-					calculable: true,
-					type: 'continuous',
-					orient: 'vertical',
-					inRange: { color: ['#d3d3d3', props.colorScheme] },
-					textStyle: { fontFamily: 'Averta', fontWeight: 500 },
-				},
-			}
-			chartOption.value.series[0].data = [...props.scatterData]
-		}
-	})
+defineExpose({
+	updateChart,
 })
 </script>
 
