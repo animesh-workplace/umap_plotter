@@ -57,6 +57,9 @@ const updateChart = () => {
 				textStyle: { fontFamily: 'Averta', fontWeight: 500 },
 			},
 		}
+	} else {
+		const { visualMap, ...rest } = chartOption.value
+		chartOption.value = rest
 	}
 	chartOption.value.series[0].data = [...props.scatterData]
 }
