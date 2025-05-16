@@ -71,6 +71,38 @@ export function useGeneAPI() {
 		}
 	}
 
+	const get2DTsneEmbedding = async () => {
+		try {
+			const { data, error } = await useFetch(`${BASEURL}/tsne/2d/`, {
+				method: 'GET',
+			})
+
+			if (error.value) {
+				throw new Error(error.value || 'An error occurred')
+			}
+			return data.value
+		} catch (err) {
+			console.error(err)
+			throw err
+		}
+	}
+
+	const get3DTsneEmbedding = async () => {
+		try {
+			const { data, error } = await useFetch(`${BASEURL}/tsne/3d/`, {
+				method: 'GET',
+			})
+
+			if (error.value) {
+				throw new Error(error.value || 'An error occurred')
+			}
+			return data.value
+		} catch (err) {
+			console.error(err)
+			throw err
+		}
+	}
+
 	const get2DUmapCellType = async () => {
 		try {
 			const { data, error } = await useFetch(`${BASEURL}/umap/2d/celltype/`, {
@@ -91,6 +123,8 @@ export function useGeneAPI() {
 		get2DUmapCellType,
 		get2DUmapEmbedding,
 		get3DUmapEmbedding,
+		get2DTsneEmbedding,
+		get3DTsneEmbedding,
 		getGeneAutocomplete,
 		getSingleGeneExpression,
 	}
