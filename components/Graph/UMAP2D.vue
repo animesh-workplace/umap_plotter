@@ -1,6 +1,6 @@
 <template>
 	<div class="w-full mt-3 flex justify-center">
-		<VChart ref="chart" :option="chartOption" class="h-[40rem]" />
+		<VChart ref="chart" :option="chartOption" class="h-[40rem]" autoresize />
 	</div>
 </template>
 
