@@ -4,7 +4,7 @@ export default defineNuxtConfig({
 	devtools: { enabled: true },
 	compatibilityDate: '2024-11-01',
 	css: ['@/assets/css/main.css'],
-	icon: { clientBundle: { scan: true }, serverBundle: { collections: ['akar-icons', 'tabler'] } },
+	icon: { clientBundle: { scan: true }, serverBundle: { collections: ['akar-icons', 'tabler', 'solar'] } },
 	primevue: {
 		options: {
 			ripple: true,
@@ -14,6 +14,7 @@ export default defineNuxtConfig({
 			include: [
 				'Select',
 				'Button',
+				'Menubar',
 				'Carousel',
 				'Skeleton',
 				'FloatLabel',
