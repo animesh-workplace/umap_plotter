@@ -3,22 +3,29 @@
 		<div class="flex justify-center">
 			<Menubar
 				:model="navItems"
-				class="drop-shadow-lg fixed top-3 bg-slate-100/70 backdrop-blur-sm z-50 rounded-full pr-4"
+				class="drop-shadow-lg fixed top-3 bg-slate-100/70 backdrop-blur-sm"
+				:pt="{
+					itemLink: 'p-2',
+					root: 'rounded-full z-50 pr-4',
+					itemContent: 'py-2 px-3 hover:!bg-[#186aa5ce] hover:!text-white !rounded-full group/item',
+				}"
 			>
 				<template #start>
-					<div class="flex justify-center items-center px-4">
+					<NuxtLink class="flex justify-center items-center px-4 cursor-pointer" to="/">
 						<img src="@/assets/images/logo.png" alt="Logo" width="35" />
-						<div class="text-[#186aa5] text-xl font-semibold">FibroHub</div>
-					</div>
+						<div class="text-[#186aa5ce] text-xl font-semibold">FibroHub</div>
+					</NuxtLink>
 				</template>
 
-				<template #item="{ item, props, hasSubmenu }" class="ml-4">
-					<router-link v-slot="{ href, navigate }" :to="item.route" custom>
-						<a v-ripple :href="href" v-bind="props.action" @click="navigate">
-							<Icon class="w-5 h-5 text-slate-500" :name="item.icon" />
-							<span>{{ item.label }}</span>
-						</a>
-					</router-link>
+				<template #item="{ item }">
+					<NuxtLink :to="item.route">
+						<div class="flex justify-center items-center gap-1">
+							<Icon class="w-5 h-5 text-slate-500 group-hover/item:text-white" :name="item.icon" />
+							<span class="text-slate-600 font-medium group-hover/item:text-white">
+								{{ item.label }}
+							</span>
+						</div>
+					</NuxtLink>
 				</template>
 			</Menubar>
 		</div>
@@ -32,7 +39,7 @@
 			width="16"
 			height="16"
 			aria-hidden="true"
-			class="pointer-events-none fill-neutral-400/60 absolute inset-0 size-full"
+			class="pointer-events-none fill-neutral-400/70 absolute inset-0 size-full [mask-image:radial-gradient(1700px_circle_at_center,white,transparent)]"
 		>
 			<defs>
 				<pattern
@@ -63,31 +70,21 @@ const navItems = ref([
 	{
 		label: 'Gene Expression',
 		icon: 'solar:dna-line-duotone',
-		route: '/',
+		route: '/gene_expression',
 	},
 	{
 		label: 'Gene Co-expression',
 		icon: 'tabler:dna-2',
-		route: '/test',
+		route: '/gene_coexpression',
 	},
 	{
 		label: 'Spatial Localization',
 		icon: 'tabler:image-in-picture',
-		route: '/',
-	},
-	{
-		label: 'Gene vs Cell Info',
-		icon: 'solar:command-bold-duotone',
-		route: '/',
+		route: '/test',
 	},
 	{
 		label: 'Violin Plots',
 		icon: 'solar:graph-up-bold-duotone',
-		route: '/',
-	},
-	{
-		label: 'Bubble Plots',
-		icon: 'tabler:chart-bubble-filled',
 		route: '/',
 	},
 ])
