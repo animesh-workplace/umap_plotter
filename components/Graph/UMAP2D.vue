@@ -112,7 +112,7 @@ const chartOption = ref({
 	series: [
 		{
 			symbolSize: 4,
-			type: 'scatterGL',
+			type: 'scatter',
 			data: props.scatterData,
 			itemStyle: {
 				opacity: 0.8,
