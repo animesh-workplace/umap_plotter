@@ -1,3 +1,4 @@
+<!-- itemContent: 'py-2 px-3 hover:!bg-[#186aa5ce] hover:!text-white !rounded-full group/item', -->
 <template>
 	<div class="relative">
 		<div class="flex justify-center">
@@ -7,21 +8,40 @@
 				:pt="{
 					itemLink: 'p-2',
 					root: 'rounded-full z-50 pr-4',
-					itemContent: 'py-2 px-3 hover:!bg-[#186aa5ce] hover:!text-white !rounded-full group/item',
+					itemContent: ({ context }) => ({
+						class: [
+							'py-2 px-3 !rounded-full group/item transition-colors duration-200 cursor-pointer',
+							{
+								'!bg-[#186aa5ce] !text-white': context.item.label === navBarPosition,
+								'hover:!bg-[#186aa5ce] hover:!text-white': context.item.label !== navBarPosition,
+							},
+						],
+					}),
 				}"
 			>
 				<template #start>
-					<NuxtLink class="flex justify-center items-center px-4 cursor-pointer" to="/">
+					<NuxtLink
+						to="/"
+						@click="generalDataStore.updateNavBarPosition('')"
+						class="flex justify-center items-center px-4 cursor-pointer"
+					>
 						<img src="@/assets/images/logo.png" alt="Logo" width="35" />
 						<div class="text-[#186aa5ce] text-xl font-semibold">FibroHub</div>
 					</NuxtLink>
 				</template>
 
 				<template #item="{ item }">
-					<NuxtLink :to="item.route">
+					<NuxtLink :to="item.route" @click="generalDataStore.updateNavBarPosition(item.label)">
 						<div class="flex justify-center items-center gap-1">
-							<Icon class="w-5 h-5 text-slate-500 group-hover/item:text-white" :name="item.icon" />
-							<span class="text-slate-600 font-medium group-hover/item:text-white">
+							<Icon
+								:name="item.icon"
+								:class="{ 'text-white': item.label == navBarPosition }"
+								class="w-5 h-5 text-slate-500 group-hover/item:text-white"
+							/>
+							<span
+								:class="{ 'text-white': item.label == navBarPosition }"
+								class="text-slate-600 font-medium group-hover/item:text-white"
+							>
 								{{ item.label }}
 							</span>
 						</div>
@@ -66,6 +86,11 @@
 </template>
 
 <script setup>
+import { useGeneralDataStore } from '@/stores/generalData'
+
+const generalDataStore = useGeneralDataStore()
+const navBarPosition = computed(() => generalDataStore.navBarPosition)
+
 const navItems = ref([
 	{
 		label: 'Gene Expression',
