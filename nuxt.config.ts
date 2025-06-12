@@ -39,8 +39,8 @@ export default defineNuxtConfig({
 	echarts: {
 		ssr: true,
 		renderer: ['canvas'],
-		charts: ['ScatterChart'],
 		features: ['UniversalTransition'],
+		charts: ['ScatterChart', 'HeatmapChart'],
 		components: [
 			'GridComponent',
 			'TitleComponent',
