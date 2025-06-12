@@ -1,23 +1,10 @@
-<!-- itemContent: 'py-2 px-3 hover:!bg-[#186aa5ce] hover:!text-white !rounded-full group/item', -->
 <template>
 	<div class="relative">
 		<div class="flex justify-center">
 			<Menubar
 				:model="navItems"
-				class="drop-shadow-lg fixed top-3 bg-slate-100/70 backdrop-blur-sm"
-				:pt="{
-					itemLink: 'p-2',
-					root: 'rounded-full z-50 pr-4',
-					itemContent: ({ context }) => ({
-						class: [
-							'py-2 px-3 !rounded-full group/item transition-colors duration-200 cursor-pointer',
-							{
-								'!bg-[#186aa5ce] !text-white': context.item.label === navBarPosition,
-								'hover:!bg-[#186aa5ce] hover:!text-white': context.item.label !== navBarPosition,
-							},
-						],
-					}),
-				}"
+				class="drop-shadow-lg fixed top-3 bg-slate-400/20 backdrop-blur-lg"
+				:pt="{ root: 'rounded-full z-50 pr-4', itemContent: '!bg-transparent' }"
 			>
 				<template #start>
 					<NuxtLink
@@ -31,8 +18,11 @@
 				</template>
 
 				<template #item="{ item }">
-					<NuxtLink :to="item.route" @click="generalDataStore.updateNavBarPosition(item.label)">
-						<div class="flex justify-center items-center gap-1">
+					<NuxtLink class="" :to="item.route" @click="generalDataStore.updateNavBarPosition(item.label)">
+						<div
+							:class="{ '!bg-[#186aa5ce] !text-white': item.label === navBarPosition }"
+							class="flex justify-center items-center gap-1 px-3 py-2 hover:!bg-[#186aa5ce] hover:!text-white rounded-full group/item transition-colors duration-200"
+						>
 							<Icon
 								:name="item.icon"
 								:class="{ 'text-white': item.label == navBarPosition }"
