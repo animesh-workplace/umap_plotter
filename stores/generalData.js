@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 export const useGeneralDataStore = defineStore('GeneralDataStore', {
 	state: () => ({
-		navBarPosition: 'Spatial Localization',
+		navBarPosition: '',
 	}),
 	actions: {
 		updateNavBarPosition(position) {
