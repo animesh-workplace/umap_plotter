@@ -12,6 +12,15 @@
 	</div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useGeneralDataStore } from '@/stores/generalData'
+
+onMounted(() => {
+	nextTick(() => {
+		const generalDataStore = useGeneralDataStore()
+		generalDataStore.updateNavBarPosition('Gene Expression')
+	})
+})
+</script>
 
 <style></style>
