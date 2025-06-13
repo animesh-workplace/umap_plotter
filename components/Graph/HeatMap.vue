@@ -1,11 +1,12 @@
 <template>
-	<div>
-		<Skeleton height="400px" />
-		<VChart :option="chartOption" :style="{ height: '400px', width: '400px' }" autoresize />
+	<div class="w-full mt-3 flex justify-center">
+		<Skeleton height="25rem" v-if="isLoading" />
+		<VChart :option="chartOption" class="h-[25rem]" autoresize v-else />
 	</div>
 </template>
 
 <script setup>
+const isLoading = ref(true)
 const colorGrid = ref([])
 
 // Initialize the heatmap with four corner colors
@@ -13,9 +14,9 @@ const initializeHeatmap = () => {
 	const grid = []
 
 	// Define corner colors
-	const bottomRight = '#FFFF00'
-	const bottomLeft = '#00FF00'
-	const topRight = '#FF0000'
+	const bottomRight = '#ca8a04'
+	const bottomLeft = '#0284c7'
+	const topRight = '#9d174d'
 	const topLeft = '#808080'
 
 	for (let y = 0; y < 10; y++) {
@@ -113,24 +114,27 @@ const chartOption = ref({
 
 // Initialize on mount
 onMounted(() => {
-	initializeHeatmap()
+	nextTick(() => {
+		isLoading.value = false
+		initializeHeatmap()
 
-	const data = []
-	for (let y = 0; y < 10; y++) {
-		for (let x = 0; x < 10; x++) {
-			data.push({
-				// [x, y, value]
-				value: [x, y, 1],
-				itemStyle: {
-					borderWidth: 0,
-					borderColor: '#fff',
-					color: colorGrid.value[y][x],
-				},
-			})
+		const data = []
+		for (let y = 0; y < 10; y++) {
+			for (let x = 0; x < 10; x++) {
+				data.push({
+					// [x, y, value]
+					value: [x, y, 1],
+					itemStyle: {
+						borderWidth: 0,
+						borderColor: '#fff',
+						color: colorGrid.value[y][x],
+					},
+				})
+			}
 		}
-	}
 
-	chartOption.value.series[0].data = data
+		chartOption.value.series[0].data = data
+	})
 })
 </script>
 
