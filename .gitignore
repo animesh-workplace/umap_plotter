@@ -23,3 +23,4 @@ logs
 .env.*
 !.env.example
 bash_script_git
+git_bash
