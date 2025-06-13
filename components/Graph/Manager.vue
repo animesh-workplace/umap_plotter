@@ -121,26 +121,35 @@
 			<!-- UMAP 3D -->
 			<GraphUMAP3D
 				ref="UMAP3DGraph"
-				v-if="activate3DMode && selectedVisualizationType === 'UMAP'"
+				:colorScheme="colorScheme"
 				:scatterData="umap3DEmbedding"
 				:colorBy="selectedColorOption"
+				v-if="activate3DMode && selectedVisualizationType === 'UMAP'"
 			/>
 			<!-- UMAP 2D -->
 			<GraphUMAP2D
-				v-else-if="!activate3DMode && selectedVisualizationType === 'UMAP'"
 				ref="UMAP2DGraph"
+				:colorScheme="colorScheme"
 				:scatterData="umap2DEmbedding"
 				:colorBy="selectedColorOption"
+				v-else-if="!activate3DMode && selectedVisualizationType === 'UMAP'"
 			/>
 			<!-- t-SNE 3D -->
 			<GraphUMAP3D
 				ref="TSNE3DGraph"
-				v-else-if="activate3DMode && selectedVisualizationType === 't-SNE'"
+				:colorScheme="colorScheme"
 				:scatterData="tsne3DEmbedding"
 				:colorBy="selectedColorOption"
+				v-else-if="activate3DMode && selectedVisualizationType === 't-SNE'"
 			/>
 			<!-- t-SNE 2D -->
-			<GraphUMAP2D v-else ref="TSNE2DGraph" :scatterData="tsne2DEmbedding" :colorBy="selectedColorOption" />
+			<GraphUMAP2D
+				v-else
+				ref="TSNE2DGraph"
+				:colorScheme="colorScheme"
+				:scatterData="tsne2DEmbedding"
+				:colorBy="selectedColorOption"
+			/>
 		</div>
 	</div>
 </template>
