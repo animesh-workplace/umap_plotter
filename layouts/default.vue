@@ -4,7 +4,7 @@
 			<Menubar
 				:model="navItems"
 				class="drop-shadow-lg fixed top-3 bg-slate-400/20 backdrop-blur-lg"
-				:pt="{ root: 'rounded-full z-50 pr-4', itemContent: '!bg-transparent' }"
+				:pt="{ root: '!rounded-full z-50 pr-4', itemContent: '!bg-transparent' }"
 			>
 				<template #start>
 					<NuxtLink
