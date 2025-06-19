@@ -1,17 +1,18 @@
-<!-- const imageWidth = 778
-const imageHeight = 768 -->
-
 <template>
-	<div class="p-4 grid grid-cols-1 justify-items-center">
+	<div class="p-4 grid grid-cols-3 gap-4 justify-items-center">
+		<Skeleton height="40rem" v-if="isLoading" class="col-start-2" />
 		<VChart
+			v-else
 			autoresize
+			ref="chartRef"
 			:option="chartOption"
-			class="h-[calc(778px/1)] w-[calc(768px/1)] backdrop-blur rounded-lg"
+			class="h-[40rem] backdrop-blur rounded-lg col-start-2"
 		/>
 	</div>
 </template>
 
 <script setup>
+const isLoading = ref(false)
 // const metadata = ref({
 // 	spot_diameter_fullres: 188.13785316285677,
 // 	tissue_hires_scalef: 0.08828852,
@@ -76,6 +77,8 @@ const imageHeight = 768 -->
 //     }
 // 	],
 // })
+
+const chartRef = ref(null)
 
 // Spot positions are in full-resolution coordinates
 const rawPoints = [
@@ -84959,6 +84962,44 @@ const SCALE = 0.026486559
 const imageWidth = 778
 const imageHeight = 768
 
+// Original image dimensions
+const ORIGINAL_IMAGE_WIDTH = 778
+const ORIGINAL_IMAGE_HEIGHT = 768
+const currentImageWidth = ref(ORIGINAL_IMAGE_WIDTH)
+const currentImageHeight = ref(ORIGINAL_IMAGE_HEIGHT)
+
+// Function to calculate responsive dimensions
+const calculateDimensions = () => {
+	if (!chartRef.value) return
+
+	const chartContainer = chartRef.value.$el
+	const containerWidth = chartContainer.clientWidth
+	const containerHeight = chartContainer.clientHeight
+	console.log('container size', containerWidth, containerHeight)
+
+	// Calculate aspect ratio of original image
+	const aspectRatio = ORIGINAL_IMAGE_WIDTH / ORIGINAL_IMAGE_HEIGHT
+
+	// Calculate scaled dimensions to fit container while maintaining aspect ratio
+	let scaledWidth = containerWidth
+	let scaledHeight = containerWidth / aspectRatio
+
+	// If height exceeds container, scale by height instead
+	if (scaledHeight > containerHeight) {
+		scaledHeight = containerHeight
+		scaledWidth = containerHeight * aspectRatio
+	}
+
+	// Apply some padding (90% of available space)
+	scaledWidth *= 0.9
+	scaledHeight *= 0.9
+
+	currentImageWidth.value = containerWidth
+	currentImageHeight.value = containerHeight
+
+	return { scaledWidth, scaledHeight }
+}
+
 // Scale the points
 const scaledPoints = rawPoints
 	.filter((p) => p.a == '1')
@@ -84967,7 +85008,7 @@ const scaledPoints = rawPoints
 		value: [p.y * SCALE, p.x * SCALE, p['CAF-1']],
 	}))
 
-const chartOption = {
+const chartOption = ref({
 	// title: {
 	// 	top: 10,
 	// 	left: 'center',
@@ -84975,7 +85016,7 @@ const chartOption = {
 	// },
 	visualMap: {
 		show: false,
-		right: -6,
+		right: 0,
 		dimension: 2,
 		top: 'center',
 		min: validMin,
@@ -85011,7 +85052,7 @@ const chartOption = {
 		show: false,
 		type: 'value',
 		splitNumber: 40,
-		max: imageWidth * 0.75,
+		max: imageWidth * 0.77,
 		inverse: false,
 		axisLabel: {
 			lineStyle: { color: 'red' },
@@ -85041,6 +85082,15 @@ const chartOption = {
 			width: imageWidth,
 			height: imageHeight,
 		},
+		// clipPath: {
+		// 	type: 'rect',
+		// 	shape: {
+		// 		x: 50, // start x within image
+		// 		y: 50, // start y within image
+		// 		width: 300, // crop width
+		// 		height: 400, // crop height
+		// 	},
+		// },
 	},
 	tooltip: {
 		formatter: (p) =>
@@ -85049,12 +85099,48 @@ const chartOption = {
 	series: [
 		{
 			type: 'scatter',
-			symbolSize: 10, // adjusted for 778px image
+			symbolSize: 8, // adjusted for 778px image
 			data: scaledPoints,
 			itemStyle: {
 				color: 'green',
 			},
 		},
 	],
+})
+
+const updateChart = () => {
+	console.log('calulating Dimesnionsss', calculateDimensions())
+	console.log(currentImageWidth.value, currentImageHeight.value)
+	chartOption.value.graphic.style.width = currentImageWidth
+	chartOption.value.graphic.style.height = currentImageHeight
+	if (chartRef.value) {
+		chartRef.value.setOption(chartOption.value, true)
+	}
 }
+
+let resizeObserver = null
+
+onMounted(() => {
+	// Initial calculation
+	setTimeout(() => {
+		updateChart()
+	}, 500) // Small delay to ensure DOM is ready
+	// Set up resize observer
+	if (chartRef.value) {
+		resizeObserver = new ResizeObserver(() => {
+			updateChart()
+		})
+		resizeObserver.observe(chartRef.value.$el)
+	}
+
+	// Also listen to window resize as fallback
+	window.addEventListener('resize', updateChart)
+})
+
+onUnmounted(() => {
+	if (resizeObserver) {
+		resizeObserver.disconnect()
+	}
+	window.removeEventListener('resize', updateChart)
+})
 </script>
