@@ -119,13 +119,51 @@ export function useGeneAPI() {
 		}
 	}
 
+	const getSpatialExpression = async (payload) => {
+		try {
+			const { data, error } = await useFetch(`${BASEURL}/spatial/expression/`, {
+				method: 'GET',
+				query: { sample_name: payload },
+			})
+
+			if (error.value) {
+				throw new Error(error.value || 'An error occurred')
+			}
+
+			return data.value
+		} catch (err) {
+			console.error(err)
+			throw err
+		}
+	}
+
+	const getSpatialPosition = async (payload) => {
+		try {
+			const { data, error } = await useFetch(`${BASEURL}/spatial/position/`, {
+				method: 'GET',
+				query: { sample_name: payload },
+			})
+
+			if (error.value) {
+				throw new Error(error.value || 'An error occurred')
+			}
+
+			return data.value
+		} catch (err) {
+			console.error(err)
+			throw err
+		}
+	}
+
 	return {
 		get2DUmapCellType,
 		get2DUmapEmbedding,
 		get3DUmapEmbedding,
 		get2DTsneEmbedding,
 		get3DTsneEmbedding,
+		getSpatialPosition,
 		getGeneAutocomplete,
+		getSpatialExpression,
 		getSingleGeneExpression,
 	}
 }
