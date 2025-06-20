@@ -95,7 +95,7 @@ const navItems = ref([
 	{
 		label: 'Spatial Localization',
 		icon: 'tabler:image-in-picture',
-		route: '/test',
+		route: '/spatial_localization',
 	},
 	{
 		label: 'Violin Plots',
