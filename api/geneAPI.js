@@ -1,7 +1,7 @@
 export function useGeneAPI() {
 	// const config = useRuntimeConfig()
 	// const BASEURL = `${config.public.API_BASE_URL}`
-	const BASEURL = 'http://localhost:8000/api'
+	const BASEURL = 'http://10.10.6.80/fibrohub/api'
 
 	const getGeneAutocomplete = async (payload) => {
 		try {
