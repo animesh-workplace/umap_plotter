@@ -63,7 +63,7 @@ import { useGeneralDataStore } from '@/stores/generalData'
 
 const scatterData = ref([])
 const spatialExpression = ref([])
-const selectedImageOption = ref('/fibrohub/media/s1.webp')
+const selectedImageOption = ref('')
 const clusterOptions = ref([
 	{ name: 'CAF-1', active: false, option_name: 'caf_1', index: 0 },
 	{ name: 'CAF-2', active: false, option_name: 'caf_2', index: 1 },
@@ -106,13 +106,14 @@ const FilterCluster = (index) => {
 
 		scatterData.value = scatterData.value.map((p) => ({
 			...p,
-			value: [p.value[0], p.value[1], spatialExpression.value[p.cell_id]?.[selectedOption] ?? null],
+			expression: spatialExpression.value[p.cell_id]?.[selectedOption] ?? 0,
+			value: [p.value[0], p.value[1], spatialExpression.value[p.cell_id]?.[selectedOption] ?? 0],
 		}))
 	} else {
 		// If no cluster is active, reset the 3rd dimension (optional)
 		scatterData.value = scatterData.value.map((p) => ({
 			...p,
-			value: [p.value[0], p.value[1], null],
+			value: [p.value[0], p.value[1], 0],
 		}))
 	}
 }
@@ -132,6 +133,7 @@ const getImagePosition = async () => {
 		const response = (await getSpatialPosition(query)) || []
 		scatterData.value = response.map((p) => ({
 			...p,
+			expression: 0,
 			value: [p.x * SCALE, p.y * SCALE, 0],
 		}))
 		const selectedIndex = clusterOptions.value.findIndex((opt) => opt.active)
