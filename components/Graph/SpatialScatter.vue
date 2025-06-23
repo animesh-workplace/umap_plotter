@@ -68,8 +68,8 @@ const updateChart = () => {
 	chartOption.value = {
 		...chartOption.value,
 		visualMap: {
-			show: true,
 			right: 5,
+			show: false,
 			dimension: 2,
 			top: 'center',
 			min: validMin,
@@ -108,7 +108,7 @@ const updateChart = () => {
 const chartOption = ref({
 	visualMap: {
 		right: 5,
-		show: true,
+		show: false,
 		dimension: 2,
 		top: 'center',
 		min: validMin,
@@ -169,8 +169,7 @@ const chartOption = ref({
 		},
 	},
 	tooltip: {
-		formatter: (p) =>
-			`${p.data.cell}<br/>x: ${p.data.x}, y: ${p.data.y}, a: ${p.data.a}, expression: ${p.data.expression}`,
+		formatter: (p) => `${p.data.cell_id}<br/>x: ${p.data.x}, y: ${p.data.y}, expression: ${p.data.expression}`,
 	},
 	series: [
 		{
