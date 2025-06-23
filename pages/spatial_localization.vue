@@ -8,12 +8,12 @@
 				<FloatLabel class="w-full" variant="on">
 					<Select
 						fluid
-						showClear
 						size="small"
 						optionLabel="name"
 						optionValue="image"
 						inputId="Image-Select"
 						:options="imageOptions"
+						@change="getSpatialInfo"
 						v-model="selectedImageOption"
 					/>
 					<label for="Image-Select" class="flex items-center gap-2">
@@ -21,7 +21,7 @@
 					</label>
 				</FloatLabel>
 
-				<div>
+				<div class="my-2">
 					<Carousel :value="clusterOptions" :numVisible="6" :showIndicators="false">
 						<template #item="slotProp">
 							<motion.div :while-hover="{ scale: 0.95 }" class="my-2 w-24">
@@ -58,19 +58,22 @@
 
 <script setup>
 import { motion } from 'motion-v'
+import { useGeneAPI } from '@/api/geneAPI'
 import { useGeneralDataStore } from '@/stores/generalData'
 
-const selectedImageOption = ref()
+const scatterData = ref([])
+const spatialExpression = ref([])
+const selectedImageOption = ref('/fibrohub/media/s1.webp')
 const clusterOptions = ref([
-	{ name: 'CAF-1', active: false, index: 0 },
-	{ name: 'CAF-2', active: false, index: 1 },
-	{ name: 'CAF-3', active: false, index: 2 },
-	{ name: 'CAF-4', active: false, index: 3 },
-	{ name: 'CAF-5', active: false, index: 4 },
-	{ name: 'CAF-6', active: false, index: 5 },
-	{ name: 'CAF-7', active: false, index: 6 },
-	{ name: 'CAF-8', active: false, index: 7 },
-	{ name: 'CAF-9', active: false, index: 8 },
+	{ name: 'CAF-1', active: false, option_name: 'caf_1', index: 0 },
+	{ name: 'CAF-2', active: false, option_name: 'caf_2', index: 1 },
+	{ name: 'CAF-3', active: false, option_name: 'caf_3', index: 2 },
+	{ name: 'CAF-4', active: false, option_name: 'caf_4', index: 3 },
+	{ name: 'CAF-5', active: false, option_name: 'caf_5', index: 4 },
+	{ name: 'CAF-6', active: false, option_name: 'caf_6', index: 5 },
+	{ name: 'CAF-7', active: false, option_name: 'caf_7', index: 6 },
+	{ name: 'CAF-8', active: false, option_name: 'caf_8', index: 7 },
+	{ name: 'CAF-9', active: false, option_name: 'caf_9', index: 8 },
 ])
 const imageOptions = ref([
 	{ name: 'Sample 1', image: '/fibrohub/media/s1.webp' },
@@ -87,7 +90,68 @@ const imageOptions = ref([
 	{ name: 'Sample 12', image: '/fibrohub/media/s12.webp' },
 ])
 
-const scatterData = ref([])
+const FilterCluster = (index) => {
+	const currentState = clusterOptions.value[index]?.active
+
+	// Toggle the selected cluster's active state and deactivate others
+	clusterOptions.value = clusterOptions.value.map((d, i) => ({
+		...d,
+		active: i === index ? !currentState : false,
+	}))
+
+	// If the cluster is now active, update scatterData
+	if (!currentState) {
+		const selectedOption = clusterOptions.value[index]?.option_name
+
+		scatterData.value = scatterData.value.map((p) => ({
+			...p,
+			value: [p.value[0], p.value[1], spatialExpression.value[p.cell_id]?.[selectedOption] ?? null],
+		}))
+	} else {
+		// If no cluster is active, reset the 3rd dimension (optional)
+		scatterData.value = scatterData.value.map((p) => ({
+			...p,
+			value: [p.value[0], p.value[1], null],
+		}))
+	}
+}
+
+const getSpatialInfo = async () => {
+	getSpatialExpression()
+	getImagePosition()
+}
+
+const getImagePosition = async () => {
+	const SCALE = 0.026486559
+	const { getSpatialPosition } = useGeneAPI()
+	const query = imageOptions.value
+		.filter((d) => d.image == selectedImageOption.value)[0]
+		.name.replace(/\s+/g, '')
+	try {
+		const response = (await getSpatialPosition(query)) || []
+		scatterData.value = response.map((p) => ({
+			...p,
+			value: [p.x * SCALE, p.y * SCALE, spatialExpression.value[p.cell_id]?.caf_1],
+		}))
+	} catch (err) {
+		console.error('Error fetching spatial position:', err)
+		scatterData.value = []
+	}
+}
+
+const getSpatialExpression = async () => {
+	const { getSpatialExpression } = useGeneAPI()
+	const query = imageOptions.value
+		.filter((d) => d.image == selectedImageOption.value)[0]
+		.name.replace(/\s+/g, '')
+	try {
+		const response = (await getSpatialExpression(query)) || []
+		spatialExpression.value = Object.fromEntries(response.map((d) => [d.cell_id, { ...d }]))
+	} catch (err) {
+		console.error('Error fetching spatial position:', err)
+		scatterData.value = []
+	}
+}
 
 onMounted(() => {
 	nextTick(() => {
