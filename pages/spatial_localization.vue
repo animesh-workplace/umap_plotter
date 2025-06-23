@@ -74,6 +74,7 @@ const clusterOptions = ref([
 	{ name: 'CAF-7', active: false, option_name: 'caf_7', index: 6 },
 	{ name: 'CAF-8', active: false, option_name: 'caf_8', index: 7 },
 	{ name: 'CAF-9', active: false, option_name: 'caf_9', index: 8 },
+	{ name: 'CAF-10', active: false, option_name: 'caf_10', index: 9 },
 ])
 const imageOptions = ref([
 	{ name: 'Sample 1', image: '/fibrohub/media/s1.webp' },
@@ -131,8 +132,13 @@ const getImagePosition = async () => {
 		const response = (await getSpatialPosition(query)) || []
 		scatterData.value = response.map((p) => ({
 			...p,
-			value: [p.x * SCALE, p.y * SCALE, spatialExpression.value[p.cell_id]?.caf_1],
+			value: [p.x * SCALE, p.y * SCALE, 0],
 		}))
+		const selectedIndex = clusterOptions.value.findIndex((opt) => opt.active)
+
+		if (selectedIndex !== -1) {
+			FilterCluster(selectedIndex)
+		}
 	} catch (err) {
 		console.error('Error fetching spatial position:', err)
 		scatterData.value = []
