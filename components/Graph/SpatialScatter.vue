@@ -45,7 +45,7 @@ watch(
 
 const getExpressionRange = () => {
 	const values = props.scatterData.map((item) => item[2])
-	return [Math.min(...values), Math.ceil(Math.max(...values))]
+	return [Math.min(...values), Math.max(...values)]
 }
 
 const calculateDimensions = () => {
