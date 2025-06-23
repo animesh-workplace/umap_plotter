@@ -27,13 +27,13 @@ const props = defineProps({
 	scatterData: { type: Array, required: true, default: () => [] },
 })
 
-// watch(
-// 	() => props.scatterData,
-// 	(newValue) => {
-// 		updateChart()
-// 	},
-// 	{ deep: true },
-// )
+watch(
+	() => props.scatterData,
+	(newValue) => {
+		updateChart()
+	},
+	{ deep: true },
+)
 
 watch(
 	() => props.imageURL,
@@ -44,7 +44,7 @@ watch(
 )
 
 const getExpressionRange = () => {
-	const values = props.scatterData.map((item) => item[5])
+	const values = props.scatterData.map((item) => item[2])
 	return [Math.min(...values), Math.ceil(Math.max(...values))]
 }
 
@@ -70,7 +70,7 @@ const updateChart = () => {
 		visualMap: {
 			show: true,
 			right: 5,
-			dimension: 5,
+			dimension: 2,
 			top: 'center',
 			min: validMin,
 			max: validMax,
@@ -95,7 +95,9 @@ const updateChart = () => {
 			textStyle: { fontFamily: 'Averta', fontWeight: 500 },
 		},
 	}
-	chartOption.value.series[0].data = [...props.scatterData]
+	chartOption.value.xAxis.max = currentImageWidth.value
+	chartOption.value.yAxis.max = currentImageHeight.value * 0.956
+	chartOption.value.series[0].data = props.scatterData
 	chartOption.value.graphic.style = {
 		image: props.imageURL,
 		width: currentImageWidth.value,
@@ -143,7 +145,8 @@ const chartOption = ref({
 		type: 'value',
 		inverse: false,
 		splitNumber: 40,
-		max: originalImageWidth * 0.77,
+		max: originalImageWidth,
+		splitLine: { lineStyle: { color: 'red' } },
 	},
 	yAxis: {
 		min: 0,
@@ -151,7 +154,8 @@ const chartOption = ref({
 		type: 'value',
 		inverse: true, // Top-down coordinate system
 		splitNumber: 40,
-		max: originalImageHeight * 0.795,
+		max: originalImageHeight,
+		splitLine: { lineStyle: { color: 'red' } },
 	},
 	graphic: {
 		z: -10,
