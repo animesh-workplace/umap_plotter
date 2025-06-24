@@ -1,5 +1,5 @@
 <template>
-	<div class="p-4 grid grid-cols-1 justify-items-center z-50 bg-white">
+	<div class="p-4 grid grid-cols-1 justify-items-center z-50">
 		<div class="mb-2 text-center">
 			<h2 class="text-xl font-semibold mb-1">Gene Co-expression Visualization</h2>
 		</div>
