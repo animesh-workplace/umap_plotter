@@ -1,10 +1,12 @@
 <template>
-	<div class="p-4 grid grid-cols-1 justify-items-center z-50 bg-white">
+	<div class="p-4 grid grid-cols-1 justify-items-center z-50">
 		<div class="mb-2 text-center">
 			<h2 class="text-xl font-semibold mb-1">Spatial Localization</h2>
 		</div>
 		<div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 min-w-full mt-2">
-			<div class="xl:col-start-3 col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2">
+			<div
+				class="xl:col-start-3 col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
+			>
 				<FloatLabel class="w-full" variant="on">
 					<Select
 						fluid
@@ -49,7 +51,7 @@
 				<GraphSpatialScatter
 					:scatterData="scatterData"
 					:imageURL="selectedImageOption"
-					class="backdrop-blur rounded-lg"
+					:clusterSelected="isClusterFilterActive"
 				/>
 			</div>
 		</div>
@@ -90,6 +92,10 @@ const imageOptions = ref([
 	{ name: 'Sample 11', image: '/fibrohub/media/s11.webp' },
 	{ name: 'Sample 12', image: '/fibrohub/media/s12.webp' },
 ])
+
+const isClusterFilterActive = computed(() => {
+	return clusterOptions.value.some((opt) => opt.active)
+})
 
 const FilterCluster = (index) => {
 	const currentState = clusterOptions.value[index]?.active
