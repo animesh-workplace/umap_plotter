@@ -6,7 +6,7 @@
 			autoresize
 			ref="chartRef"
 			:option="chartOption"
-			class="h-[40rem] backdrop-blur rounded-lg"
+			class="h-[40rem] backdrop-blur rounded-lg font-[Averta]"
 		/>
 	</div>
 </template>
@@ -22,6 +22,7 @@ const currentImageWidth = ref(0)
 const currentImageHeight = ref(0)
 
 const props = defineProps({
+	clusterSelected: { type: Boolean },
 	imageURL: { type: String, default: '' },
 	colorScheme: { type: String, default: '#5470c6' },
 	scatterData: { type: Array, required: true, default: () => [] },
@@ -44,7 +45,7 @@ watch(
 )
 
 const getExpressionRange = () => {
-	const values = props.scatterData.map((item) => item[2])
+	const values = props.scatterData.map((item) => item.expression)
 	return [Math.min(...values), Math.max(...values)]
 }
 
@@ -64,48 +65,72 @@ const updateChart = () => {
 	// Make sure min and max are valid numbers and not the same value
 	const validMin = isFinite(min) ? min : 0
 	const validMax = isFinite(max) && max > validMin ? max : validMin + 1
-
-	chartOption.value = {
-		...chartOption.value,
-		visualMap: {
-			right: 5,
-			show: false,
-			dimension: 2,
-			top: 'center',
-			min: validMin,
-			max: validMax,
-			hoverLink: false,
-			calculable: true,
-			type: 'continuous',
-			orient: 'vertical',
-			inRange: {
-				color: [
-					'#000004',
-					'#1B0C41',
-					'#4F116F',
-					'#812581',
-					'#B5367A',
-					'#E55063',
-					'#FB8861',
-					'#FEC287',
-					'#F6F1B5',
-					'#FCFDBF',
-				],
+	if (props.clusterSelected) {
+		chartOption.value = {
+			...chartOption.value,
+			visualMap: {
+				right: 5,
+				show: false,
+				dimension: 2,
+				top: 'center',
+				min: validMin,
+				max: validMax,
+				hoverLink: false,
+				calculable: true,
+				type: 'continuous',
+				orient: 'vertical',
+				inRange: {
+					color: [
+						'#000004',
+						'#1B0C41',
+						'#4F116F',
+						'#812581',
+						'#B5367A',
+						'#E55063',
+						'#FB8861',
+						'#FEC287',
+						'#F6F1B5',
+						'#FCFDBF',
+					],
+				},
+				textStyle: { fontFamily: 'Averta', fontWeight: 500 },
 			},
-			textStyle: { fontFamily: 'Averta', fontWeight: 500 },
-		},
+			series: [
+				{
+					symbolSize: 8,
+					type: 'scatter',
+					data: props.scatterData,
+					itemStyle: { color: 'green' },
+				},
+			],
+		}
+	} else {
+		chartOption.value = {
+			...chartOption.value,
+			visualMap: undefined,
+			series: undefined,
+		}
 	}
+
 	chartOption.value.xAxis.max = currentImageWidth.value
 	chartOption.value.yAxis.max = currentImageHeight.value * 0.956
-	chartOption.value.series[0].data = props.scatterData
-	chartOption.value.graphic.style = {
-		image: props.imageURL,
-		width: currentImageWidth.value,
-		height: currentImageHeight.value,
+	if (props.imageURL != '') {
+		chartOption.value.graphic = {
+			z: -10,
+			top: 0,
+			left: 0,
+			type: 'image',
+			style: {
+				image: props.imageURL,
+				width: currentImageWidth.value,
+				height: currentImageHeight.value,
+			},
+		}
 	}
 }
 
 const chartOption = ref({
+	animation: true,
 	visualMap: {
 		right: 5,
 		show: false,
@@ -159,13 +184,14 @@ const chartOption = ref({
 	},
 	graphic: {
 		z: -10,
-		top: 0,
-		left: 0,
-		type: 'image',
+		type: 'text',
+		top: 'center',
+		left: 'center',
 		style: {
-			image: props.imageURL,
-			width: originalImageWidth,
-			height: originalImageHeight,
+			textAlign: 'center',
+			font: 'bold 20px Averta',
+			text: 'Please Select Image',
+			textVerticalAlign: 'middle',
 		},
 	},
 	tooltip: {
