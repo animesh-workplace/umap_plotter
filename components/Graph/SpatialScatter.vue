@@ -12,8 +12,6 @@
 </template>
 
 <script setup>
-const validMin = ref(0)
-const validMax = ref(1)
 const chartRef = ref(null)
 const isLoading = ref(true)
 const originalImageWidth = 778
@@ -28,43 +26,66 @@ const props = defineProps({
 	scatterData: { type: Array, required: true, default: () => [] },
 })
 
-watch(
-	() => props.scatterData,
-	(newValue) => {
-		updateChart()
+const chartOption = ref({
+	animation: true,
+	grid: {
+		top: '0%',
+		left: '0%',
+		right: '0%',
+		bottom: '0%',
 	},
-	{ deep: true },
-)
+	xAxis: {
+		min: 0,
+		type: 'value',
+		inverse: false,
+		show: false,
+		splitNumber: 40,
+		max: originalImageWidth,
+	},
+	yAxis: {
+		min: 0,
+		type: 'value',
+		inverse: true,
+		show: false,
+		splitNumber: 40,
+		max: originalImageHeight,
+	},
+	tooltip: {
+		formatter: (p) => `${p.data.cell_id}<br/>x: ${p.data.x}, y: ${p.data.y}, expression: ${p.data.expression}`,
+	},
+	graphic: {
+		z: -10,
+		type: 'text',
+		top: 'center',
+		left: 'center',
+		style: {
+			text: 'Please Select Image',
+			textAlign: 'center',
+			textVerticalAlign: 'middle',
+			font: 'bold 20px Averta',
+		},
+	},
+})
 
-watch(
-	() => props.imageURL,
-	(newValue) => {
-		updateChart()
-	},
-	{ deep: true },
-)
+const calculateDimensions = () => {
+	if (!chartRef.value?.$el) return
+	currentImageWidth.value = chartRef.value.$el.clientWidth
+	currentImageHeight.value = chartRef.value.$el.clientHeight
+}
 
 const getExpressionRange = () => {
 	const values = props.scatterData.map((item) => item.expression)
-	return [Math.min(...values), Math.max(...values)]
-}
-
-const calculateDimensions = () => {
-	if (!chartRef.value) return
-
-	const chartContainer = chartRef.value.$el
-	currentImageWidth.value = chartContainer.clientWidth
-	currentImageHeight.value = chartContainer.clientHeight
+	const min = Math.min(...values)
+	const max = Math.max(...values)
+	return [isFinite(min) ? min : 0, isFinite(max) && max > min ? max : min + 1]
 }
 
 const updateChart = () => {
-	// Calculate expression range for visualMap
-	const [min, max] = getExpressionRange()
-	// Calculate the dimensions of the image
+	if (!props.scatterData.length) return
+
 	calculateDimensions()
-	// Make sure min and max are valid numbers and not the same value
-	const validMin = isFinite(min) ? min : 0
-	const validMax = isFinite(max) && max > validMin ? max : validMin + 1
+	const [min, max] = getExpressionRange()
+
 	if (props.clusterSelected) {
 		chartOption.value = {
 			...chartOption.value,
@@ -73,8 +94,8 @@ const updateChart = () => {
 				show: false,
 				dimension: 2,
 				top: 'center',
-				min: validMin,
-				max: validMax,
+				min,
+				max,
 				hoverLink: false,
 				calculable: true,
 				type: 'continuous',
@@ -93,7 +114,10 @@ const updateChart = () => {
 						'#FCFDBF',
 					],
 				},
-				textStyle: { fontFamily: 'Averta', fontWeight: 500 },
+				textStyle: {
+					fontFamily: 'Averta',
+					fontWeight: 500,
+				},
 			},
 			series: [
 				{
@@ -114,7 +138,8 @@ const updateChart = () => {
 
 	chartOption.value.xAxis.max = currentImageWidth.value
 	chartOption.value.yAxis.max = currentImageHeight.value * 0.956
-	if (props.imageURL != '') {
+
+	if (props.imageURL) {
 		chartOption.value.graphic = {
 			z: -10,
 			top: 0,
@@ -129,94 +154,14 @@ const updateChart = () => {
 	}
 }
 
-const chartOption = ref({
-	animation: true,
-	visualMap: {
-		right: 5,
-		show: false,
-		dimension: 2,
-		top: 'center',
-		min: validMin,
-		max: validMax,
-		hoverLink: false,
-		calculable: true,
-		type: 'continuous',
-		orient: 'vertical',
-		inRange: {
-			color: [
-				'#000004',
-				'#1B0C41',
-				'#4F116F',
-				'#812581',
-				'#B5367A',
-				'#E55063',
-				'#FB8861',
-				'#FEC287',
-				'#F6F1B5',
-				'#FCFDBF',
-			],
-		},
-		textStyle: { fontFamily: 'Averta', fontWeight: 500 },
-	},
-	grid: {
-		top: '0%',
-		left: '0%',
-		right: '0%',
-		bottom: '0%',
-	},
-	xAxis: {
-		min: 0,
-		show: false,
-		type: 'value',
-		inverse: false,
-		splitNumber: 40,
-		max: originalImageWidth,
-		splitLine: { lineStyle: { color: 'red' } },
-	},
-	yAxis: {
-		min: 0,
-		show: false,
-		type: 'value',
-		inverse: true, // Top-down coordinate system
-		splitNumber: 40,
-		max: originalImageHeight,
-		splitLine: { lineStyle: { color: 'red' } },
-	},
-	graphic: {
-		z: -10,
-		type: 'text',
-		top: 'center',
-		left: 'center',
-		style: {
-			textAlign: 'center',
-			font: 'bold 20px Averta',
-			text: 'Please Select Image',
-			textVerticalAlign: 'middle',
-		},
-	},
-	tooltip: {
-		formatter: (p) => `${p.data.cell_id}<br/>x: ${p.data.x}, y: ${p.data.y}, expression: ${p.data.expression}`,
-	},
-	series: [
-		{
-			symbolSize: 8,
-			type: 'scatter',
-			data: props.scatterData,
-			itemStyle: { color: 'green' },
-		},
-	],
+watchEffect(() => {
+	updateChart()
 })
 
 onMounted(() => {
 	nextTick(() => {
-		try {
-			isLoading.value = false
-			setTimeout(() => {
-				updateChart()
-			}, 50)
-		} catch (err) {
-			console.log(err)
-		}
+		isLoading.value = false
+		setTimeout(updateChart, 50)
 	})
 })
 </script>
