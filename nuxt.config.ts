@@ -54,7 +54,7 @@ export default defineNuxtConfig({
 		ssr: true,
 		renderer: ['canvas'],
 		features: ['UniversalTransition'],
-		charts: ['ScatterChart', 'HeatmapChart'],
+		charts: ['ScatterChart', 'HeatmapChart', 'CustomChart', 'ThemeRiverChart', 'BoxplotChart'],
 		components: [
 			'GridComponent',
 			'TitleComponent',
@@ -65,6 +65,7 @@ export default defineNuxtConfig({
 			'ToolboxComponent',
 			'DataZoomComponent',
 			'VisualMapComponent',
+			'SingleAxisComponent',
 		],
 	},
 })
