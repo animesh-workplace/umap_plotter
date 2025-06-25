@@ -7,7 +7,6 @@
 			<GraphManager
 				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-start-3 xl:col-span-2 backdrop-blur rounded-lg"
 			/>
-			<!-- <GraphManager class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg" /> -->
 		</div>
 	</div>
 </template>
