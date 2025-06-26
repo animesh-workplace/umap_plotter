@@ -1,56 +1,58 @@
 <template>
 	<div class="min-w-full">
-		<Skeleton height="3rem" v-if="isLoading" class="mb-4 mt-2" />
+		<div v-if="!noFilter">
+			<Skeleton height="3rem" v-if="isLoading && !noFilter" class="mb-4 mt-2" />
 
-		<div class="flex gap-1 items-center justify-between mb-4 mt-2 px-4" v-else>
-			<div class="flex gap-2 items-center">
-				<ToggleSwitch v-model="activate3DMode" />
-				<Icon class="w-5 h-5 text-slate-500" name="akar-icons:augmented-reality" />
-				<div>3D Mode</div>
+			<div class="flex gap-1 items-center justify-between mb-4 px-4" v-else>
+				<div class="flex gap-2 items-center">
+					<ToggleSwitch v-model="activate3DMode" />
+					<Icon class="w-5 h-5 text-slate-500" name="akar-icons:augmented-reality" />
+					<div>3D Mode</div>
+				</div>
+
+				<FloatLabel class="w-32" variant="on">
+					<Select
+						fluid
+						size="small"
+						inputId="Visualization-Type"
+						:options="visualizationTypes"
+						v-model="selectedVisualizationType"
+						@value-change="handleVisualizationChange"
+					/>
+					<label for="Visualization-Type" class="flex items-center gap-2">
+						<Icon class="w-4 h-4 text-slate-500" name="tabler:chart-dots" /> Plot type
+					</label>
+				</FloatLabel>
+
+				<FloatLabel class="w-32" variant="on">
+					<Select
+						fluid
+						showClear
+						size="small"
+						inputId="Color-Filter"
+						:options="colorMethods"
+						v-model="selectedColorOption"
+					/>
+					<label for="Color-Filter" class="flex items-center gap-2">
+						<Icon class="w-4 h-4 text-slate-500" name="tabler:color-filter" /> Color by
+					</label>
+				</FloatLabel>
+
+				<FloatLabel class="w-32" variant="on">
+					<Select
+						fluid
+						showClear
+						size="small"
+						inputId="Data-Filter"
+						:options="filterMethods"
+						@value-change="resetFilter"
+						v-model="selectedFilterOption"
+					/>
+					<label for="Data-Filter" class="flex items-center gap-2">
+						<Icon class="w-4 h-4 text-slate-500" name="akar-icons:filter" /> Filter by
+					</label>
+				</FloatLabel>
 			</div>
-
-			<FloatLabel class="w-32" variant="on">
-				<Select
-					fluid
-					size="small"
-					inputId="Visualization-Type"
-					:options="visualizationTypes"
-					v-model="selectedVisualizationType"
-					@value-change="handleVisualizationChange"
-				/>
-				<label for="Visualization-Type" class="flex items-center gap-2">
-					<Icon class="w-4 h-4 text-slate-500" name="tabler:chart-dots" /> Plot type
-				</label>
-			</FloatLabel>
-
-			<FloatLabel class="w-32" variant="on">
-				<Select
-					fluid
-					showClear
-					size="small"
-					inputId="Color-Filter"
-					:options="colorMethods"
-					v-model="selectedColorOption"
-				/>
-				<label for="Color-Filter" class="flex items-center gap-2">
-					<Icon class="w-4 h-4 text-slate-500" name="tabler:color-filter" /> Color by
-				</label>
-			</FloatLabel>
-
-			<FloatLabel class="w-32" variant="on">
-				<Select
-					fluid
-					showClear
-					size="small"
-					inputId="Data-Filter"
-					:options="filterMethods"
-					@value-change="resetFilter"
-					v-model="selectedFilterOption"
-				/>
-				<label for="Data-Filter" class="flex items-center gap-2">
-					<Icon class="w-4 h-4 text-slate-500" name="akar-icons:filter" /> Filter by
-				</label>
-			</FloatLabel>
 		</div>
 
 		<div v-if="selectedFilterOption == 'Source'" class="flex gap-3 items-center mb-4 mt-2 justify-center px-4">
@@ -99,7 +101,7 @@
 			</Carousel>
 		</div>
 
-		<div class="mb-2 flex relative" v-if="selectedColorOption == 'Gene'">
+		<div class="mb-2 flex relative" v-if="geneSearch && selectedColorOption == 'Gene'">
 			<AutoComplete
 				dropdown
 				class="w-full"
@@ -115,7 +117,7 @@
 			</button>
 		</div>
 
-		<Skeleton height="40rem" v-if="isLoading" />
+		<Skeleton height="30rem" v-if="isLoading" />
 
 		<div v-else>
 			<!-- UMAP 3D -->
@@ -144,11 +146,11 @@
 			/>
 			<!-- t-SNE 2D -->
 			<GraphUMAP2D
-				v-else
 				ref="TSNE2DGraph"
 				:colorScheme="colorScheme"
 				:scatterData="tsne2DEmbedding"
 				:colorBy="selectedColorOption"
+				v-else-if="!activate3DMode && selectedVisualizationType === 't-SNE'"
 			/>
 		</div>
 	</div>
@@ -159,6 +161,8 @@ import { motion } from 'motion-v'
 import { useGeneAPI } from '@/api/geneAPI'
 
 const props = defineProps({
+	noFilter: { type: Boolean, default: false },
+	geneSearch: { type: Boolean, default: true },
 	colorScheme: { type: String, default: '#5470c6' },
 })
 
@@ -597,6 +601,17 @@ onBeforeMount(() => {
 			})
 		}
 	})
+})
+
+defineExpose({
+	searchGene,
+	suggestions,
+	selectedGene,
+	activate3DMode,
+	clearGeneSelection,
+	selectedColorOption,
+	searchGeneExpression,
+	selectedVisualizationType,
 })
 </script>
 
