@@ -1,6 +1,6 @@
 <template>
-	<div class="w-full mt-3 flex justify-center">
-		<VChart ref="chart" :option="chartOption" class="h-[40rem]" autoresize />
+	<div class="w-full flex justify-center">
+		<VChart ref="chart" :option="chartOption" class="h-[30rem]" autoresize />
 	</div>
 </template>
 
@@ -51,15 +51,15 @@ const updateChart = () => {
 			...chartOption.value,
 			visualMap: {
 				show: true,
-				right: -6,
+				bottom: 10,
 				dimension: 5,
-				top: 'center',
 				min: validMin,
 				max: validMax,
+				left: 'center',
 				hoverLink: false,
 				calculable: true,
 				type: 'continuous',
-				orient: 'vertical',
+				orient: 'horizontal',
 				inRange: { color: ['#d3d3d3', props.colorScheme] },
 				textStyle: { fontFamily: 'Averta', fontWeight: 500 },
 			},
