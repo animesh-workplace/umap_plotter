@@ -207,9 +207,12 @@ const originalTsne3DEmbedding = ref([])
 
 // Handle visualization type change
 const handleVisualizationChange = (value) => {
+	isLoading.value = true
 	if (value === 't-SNE' && (tsne2DEmbedding.value.length === 0 || tsne3DEmbedding.value.length === 0)) {
 		// Load t-SNE data if it hasn't been loaded yet
-		loadTSNEData()
+		setTimeout(async () => {
+			await loadTSNEData()
+		}, 50)
 	}
 }
 
@@ -475,7 +478,6 @@ const loadTSNEData = async () => {
 		console.error('Error loading t-SNE data:', err)
 	} finally {
 		isLoading.value = false
-
 		// Update the appropriate graph based on the current mode
 		nextTick(() => {
 			if (activate3DMode.value && selectedVisualizationType.value === 't-SNE') {
@@ -604,6 +606,7 @@ onBeforeMount(() => {
 })
 
 defineExpose({
+	isLoading,
 	searchGene,
 	suggestions,
 	selectedGene,
