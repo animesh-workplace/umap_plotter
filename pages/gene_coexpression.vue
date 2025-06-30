@@ -8,7 +8,7 @@
 			<Skeleton height="3rem" v-if="isLoading" class="mb-4 mt-2" />
 
 			<div
-				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-3 xl:col-start-4 grid grid-cols-2 xl:grid-cols-3 gap-1 items-center justify-between mb-4 px-2 xl:px-4"
+				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-3 xl:col-start-4 grid grid-cols-2 xl:grid-cols-3 gap-1 items-center justify-between mb-2 px-2 xl:px-4 backdrop-blur rounded-lg"
 				v-else
 			>
 				<div class="flex gap-2 items-center justify-center">
@@ -48,11 +48,60 @@
 			</div>
 		</div>
 
+		<div
+			v-if="selectedFilterOption == 'Source'"
+			class="flex gap-3 items-center mb-2 mt-2 justify-center px-4 backdrop-blur rounded-lg"
+		>
+			<motion.div :index="celltype.index" :while-hover="{ scale: 0.97 }" v-for="celltype in cellTypes">
+				<Tag
+					rounded
+					:value="celltype.name"
+					class="cursor-pointer"
+					@click="FilterCellType(celltype.index)"
+					:severity="celltype.active ? 'success' : 'danger'"
+				>
+					<template #icon>
+						<Icon
+							v-if="celltype.active"
+							class="w-4 h-4 text-green-500"
+							name="akar-icons:tetragon-fill"
+						/>
+						<Icon v-else class="w-4 h-4 text-rose-500" name="akar-icons:tetragon" />
+					</template>
+				</Tag>
+			</motion.div>
+		</div>
+
+		<div v-if="selectedFilterOption == 'Cluster'">
+			<Carousel :value="clusters" :numVisible="6" :showIndicators="false" class="backdrop-blur rounded-lg">
+				<template #item="slotProp">
+					<motion.div :while-hover="{ scale: 0.95 }" class="py-2">
+						<Tag
+							rounded
+							class="cursor-pointer"
+							:value="slotProp.data.name"
+							@click="FilterCluster(slotProp.data.index)"
+							:severity="slotProp.data.active ? 'success' : 'danger'"
+						>
+							<template #icon>
+								<Icon
+									v-if="slotProp.data.active"
+									class="w-4 h-4 text-green-500"
+									name="akar-icons:tetragon-fill"
+								/>
+								<Icon v-else class="w-4 h-4 text-rose-500" name="akar-icons:tetragon" />
+							</template>
+						</Tag>
+					</motion.div>
+				</template>
+			</Carousel>
+		</div>
+
 		<div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 min-w-full mt-2 mx-4">
 			<Skeleton height="3rem" v-if="isLoading" class="mb-4 mt-2" />
 
 			<div
-				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-3 xl:col-start-3 grid grid-cols-2 gap-2 items-center justify-between mb-4 px-2 xl:px-4"
+				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-3 xl:col-start-3 grid grid-cols-2 gap-2 items-center justify-between px-2 xl:px-4 backdrop-blur rounded-lg"
 				v-else
 			>
 				<div class="mb-2 flex relative">
@@ -66,26 +115,26 @@
 						placeholder="Type gene name to search ..."
 					/>
 
-					<button class="ml-2" v-if="selectedGene1" @click="clearGeneSelection">
+					<button class="ml-2" v-if="selectedGene1" @click="clearGeneSelection1">
 						<Icon name="akar-icons:circle-x" class="w-5 h-5 text-red-500" />
 					</button>
 				</div>
 
-				<!-- <div class="mb-2 flex relative">
+				<div class="mb-2 flex relative">
 					<AutoComplete
 						dropdown
 						class="w-full"
-						v-model="selectedGene"
-						@complete="searchGene"
-						:suggestions="suggestions"
-						@item-select="searchGeneExpression"
+						v-model="selectedGene2"
+						@complete="handleGeneSearch2"
+						@item-select="searchGeneExpression2"
+						:suggestions="suggestions_for_graph2"
 						placeholder="Type gene name to search ..."
 					/>
 
-					<button class="ml-2" v-if="selectedGene" @click="clearGeneSelection">
+					<button class="ml-2" v-if="selectedGene2" @click="clearGeneSelection2">
 						<Icon name="akar-icons:circle-x" class="w-5 h-5 text-red-500" />
 					</button>
-				</div> -->
+				</div>
 			</div>
 		</div>
 
@@ -118,14 +167,18 @@
 </template>
 
 <script setup>
+import { motion } from 'motion-v'
+import { useGeneAPI } from '@/api/geneAPI'
 import { useGeneralDataStore } from '@/stores/generalData'
 
 const graph1 = ref(null)
 const graph2 = ref(null)
 const graph3 = ref(null)
+const clusters = ref([])
+const cellTypes = ref([])
+const isLoading = ref(false)
 const selectedGene1 = ref('')
 const selectedGene2 = ref('')
-const isLoading = ref(false)
 const activate3DMode = ref(false)
 const selectedFilterOption = ref()
 const selectedVisualizationType = ref('UMAP')
@@ -136,13 +189,12 @@ const resetFilter = () => {
 	console.log('resetFilter')
 }
 
+// For gene1
 const suggestions_for_graph1 = computed(() => {
 	return graph1.value?.suggestions || []
 })
 
-// Handle gene search - this will be called when user types
 const handleGeneSearch1 = async (event) => {
-	// Call searchGene on all graph components
 	if (graph1.value) {
 		await graph1.value.searchGene(event)
 	}
@@ -155,22 +207,83 @@ const searchGeneExpression1 = async (event) => {
 	}
 }
 
+const clearGeneSelection1 = async () => {
+	if (graph1.value) {
+		await graph1.value.clearGeneSelection()
+		selectedGene1.value = ''
+		graph1.value.selectedColorOption = ''
+	}
+}
+
+// For gene2
+const suggestions_for_graph2 = computed(() => {
+	return graph2.value?.suggestions || []
+})
+
+const handleGeneSearch2 = async (event) => {
+	if (graph2.value) {
+		await graph2.value.searchGene(event)
+	}
+}
+
+const searchGeneExpression2 = async (event) => {
+	if (graph2.value) {
+		graph2.value.selectedColorOption = 'Gene'
+		await graph2.value.searchGeneExpression(event)
+	}
+}
+
+const clearGeneSelection2 = async () => {
+	if (graph2.value) {
+		await graph2.value.clearGeneSelection()
+		selectedGene2.value = ''
+		graph2.value.selectedColorOption = ''
+	}
+}
+
+// Handle 3D Mode Changes
 const handle3DModeChange = (changeValue) => {
 	graph1.value.activate3DMode = changeValue
 	graph2.value.activate3DMode = changeValue
 	graph3.value.activate3DMode = changeValue
 }
-
-const handlePlotChange = (changeValue) => {
+// Handle Plot Changes
+const handlePlotChange = async (changeValue) => {
 	graph1.value.selectedVisualizationType = changeValue
 	graph2.value.selectedVisualizationType = changeValue
 	graph3.value.selectedVisualizationType = changeValue
 }
 
+const loadFilterOptions = async () => {
+	const { get2DUmapCellType } = useGeneAPI()
+	const clusterNames = ['CAF-1', 'CAF-2', 'CAF-3', 'CAF-4', 'CAF-5', 'CAF-6', 'CAF-7', 'CAF-8', 'CAF-9']
+
+	try {
+		const response = (await get2DUmapCellType()) || []
+
+		cellTypes.value = response.map((item, index) => ({
+			name: item,
+			index: index,
+			active: true,
+		}))
+
+		clusters.value = clusterNames.map((item, index) => ({
+			name: item,
+			index: index,
+			active: true,
+		}))
+	} catch (err) {
+		console.error('Error fetching cell type names:', err)
+		cellTypes.value = []
+		clusters.value = []
+	}
+}
+
 onMounted(() => {
-	nextTick(() => {
+	nextTick(async () => {
 		const generalDataStore = useGeneralDataStore()
 		generalDataStore.updateNavBarPosition('Gene Co-expression')
+		await loadFilterOptions()
 	})
 })
 </script>
