@@ -48,7 +48,7 @@
 					</Carousel>
 				</div>
 
-				<GraphSpatialScatter
+				<PlotsSpatialScatter
 					:scatterData="scatterData"
 					:imageURL="selectedImageOption"
 					:clusterSelected="isClusterFilterActive"
