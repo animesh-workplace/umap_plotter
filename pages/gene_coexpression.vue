@@ -141,27 +141,27 @@
 		<div
 			class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 min-w-full mt-2 px-2 xl:px-8"
 		>
-			<GraphManager
+			<InteractiveGraph
 				noFilter
 				ref="graph1"
 				:geneSearch="false"
 				colorScheme="#0284c7"
 				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
 			/>
-			<GraphManager
+			<InteractiveGraph
 				noFilter
 				ref="graph2"
 				:geneSearch="false"
 				colorScheme="#9d174d"
 				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
 			/>
-			<GraphManager
+			<InteractiveGraph
 				noFilter
 				ref="graph3"
 				colorScheme="#ca8a04"
 				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
 			/>
-			<GraphHeatMap class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg" />
+			<PlotsHeatMap class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg" />
 		</div>
 	</div>
 </template>
