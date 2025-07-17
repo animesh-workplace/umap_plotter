@@ -3,14 +3,24 @@
 		<div v-if="!noFilter">
 			<Skeleton height="3rem" v-if="isLoading && !noFilter" class="mb-4 mt-2" />
 
-			<div class="flex gap-1 items-center justify-between mb-4 px-4" v-else>
+			<div
+				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-3 grid grid-cols-2 gap-1 items-center justify-between mb-2 px-2 xl:px-4 backdrop-blur rounded-lg"
+				:class="{
+					'xl:grid-cols-3 xl:col-start-4': noColorBy,
+					'xl:grid-cols-4 xl:col-start-3': !noColorBy,
+				}"
+				v-else
+			>
 				<div class="flex gap-2 items-center">
-					<ToggleSwitch :model-value="activate3DMode" @update:model-value="$emit('update:activate3DMode', $event)" />
+					<ToggleSwitch
+						:model-value="activate3DMode"
+						@update:model-value="$emit('update:activate3DMode', $event)"
+					/>
 					<Icon class="w-5 h-5 text-slate-500" name="akar-icons:augmented-reality" />
-					<div>3D Mode</div>
+					<div class="text-sm">3D Mode</div>
 				</div>
 
-				<FloatLabel class="w-32" variant="on">
+				<FloatLabel variant="on">
 					<Select
 						fluid
 						size="small"
@@ -25,7 +35,7 @@
 					</label>
 				</FloatLabel>
 
-				<FloatLabel class="w-32" variant="on">
+				<FloatLabel variant="on" v-if="!noColorBy">
 					<Select
 						fluid
 						showClear
@@ -40,7 +50,7 @@
 					</label>
 				</FloatLabel>
 
-				<FloatLabel class="w-32" variant="on">
+				<FloatLabel variant="on">
 					<Select
 						fluid
 						showClear
@@ -64,10 +74,11 @@
 const props = defineProps({
 	noFilter: { type: Boolean, default: false },
 	isLoading: { type: Boolean, default: false },
+	noColorBy: { type: Boolean, default: false },
 	activate3DMode: { type: Boolean, default: false },
-	selectedVisualizationType: { type: String, default: 'UMAP' },
 	selectedColorOption: { type: String, default: null },
 	selectedFilterOption: { type: String, default: null },
+	selectedVisualizationType: { type: String, default: 'UMAP' },
 })
 
 const filterMethods = ref(['Source', 'Cluster'])
@@ -83,11 +94,11 @@ const resetFilter = () => {
 }
 
 const emit = defineEmits([
-    'visualization-changed',
-    'filter-reset',
-    'update:activate3DMode',
-    'update:selectedVisualizationType',
-    'update:selectedColorOption',
-    'update:selectedFilterOption'
+	'visualization-changed',
+	'filter-reset',
+	'update:activate3DMode',
+	'update:selectedVisualizationType',
+	'update:selectedColorOption',
+	'update:selectedFilterOption',
 ])
 </script>
