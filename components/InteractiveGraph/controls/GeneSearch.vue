@@ -3,12 +3,12 @@
 		<AutoComplete
 			dropdown
 			class="w-full"
-			:model-value="modelValue"
-			@update:model-value="$emit('update:modelValue', $event)"
 			@complete="searchGene"
+			:model-value="modelValue"
 			:suggestions="suggestions"
 			@item-select="searchGeneExpression"
 			placeholder="Type gene name to search ..."
+			@update:model-value="$emit('update:modelValue', $event)"
 		/>
 
 		<button class="ml-2" v-if="modelValue" @click="clearGeneSelection">
@@ -21,9 +21,9 @@
 import { useGeneAPI } from '@/api/geneAPI'
 
 const props = defineProps({
+	modelValue: { type: String, default: null },
 	geneSearch: { type: Boolean, default: true },
 	selectedColorOption: { type: String, default: null },
-	modelValue: { type: String, default: null },
 })
 
 const suggestions = ref([])
