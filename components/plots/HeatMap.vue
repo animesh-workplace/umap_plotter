@@ -113,6 +113,7 @@ const chartOption = ref({
 })
 
 // Initialize on mount
+defineExpose({ colorGrid })
 onMounted(() => {
 	nextTick(() => {
 		isLoading.value = false
