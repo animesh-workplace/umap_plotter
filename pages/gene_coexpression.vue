@@ -159,17 +159,16 @@ const handleSearchGene2 = async (changeValue) => {
 const updateGraph3Colors = async () => {
 	const gene1Data = graph1.value.geneExpression
 	const gene2Data = graph2.value.geneExpression
-	console.log(gene1Data, gene2Data)
 	const colorGrid = heatmap.value.colorGrid
 
 	if (gene1Data && gene2Data && colorGrid) {
 		const colors = []
-		for (let i = 0; i < gene1Data.length; i++) {
-			const x = Math.floor(gene1Data[i] * 9)
-			const y = Math.floor(gene2Data[i] * 9)
-			colors.push(colorGrid[y][x])
+		const keys = Object.keys(gene1Data)
+		for (let i = 0; i < keys.length; i++) {
+			const x = Math.ceil(gene1Data[keys[i]])
+			const y = Math.ceil(gene2Data[keys[i]])
+			colors.push(colorGrid[x][y])
 		}
-		console.log(colors)
 		graph3.value.updatePointColors(colors)
 	}
 }
