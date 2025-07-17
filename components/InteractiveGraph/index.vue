@@ -3,42 +3,42 @@
 		<InteractiveGraphControlsToolbar
 			:noFilter="noFilter"
 			:isLoading="isLoading"
+			@filter-reset="resetFilter"
 			:activate3DMode="activate3DMode"
-			:selectedVisualizationType="selectedVisualizationType"
 			:selectedColorOption="selectedColorOption"
 			:selectedFilterOption="selectedFilterOption"
 			@update:activate3DMode="activate3DMode = $event"
-			@update:selectedVisualizationType="selectedVisualizationType = $event"
+			@visualization-changed="handleVisualizationChange"
+			:selectedVisualizationType="selectedVisualizationType"
 			@update:selectedColorOption="selectedColorOption = $event"
 			@update:selectedFilterOption="selectedFilterOption = $event"
-			@visualization-changed="handleVisualizationChange"
-			@filter-reset="resetFilter"
+			@update:selectedVisualizationType="selectedVisualizationType = $event"
 		/>
 		<InteractiveGraphControlsGeneSearch
 			v-model="selectedGene"
 			:geneSearch="geneSearch"
-			:selectedColorOption="selectedColorOption"
-			@gene-selected="searchGeneExpression"
 			@gene-cleared="clearGeneSelection"
+			@gene-selected="searchGeneExpression"
+			:selectedColorOption="selectedColorOption"
 		/>
 		<InteractiveGraphControlsFilterControls
-			:selectedFilterOption="selectedFilterOption"
-			:cellTypes="cellTypes"
 			:clusters="clusters"
-			@cell-type-filtered="FilterCellType"
+			:cellTypes="cellTypes"
 			@cluster-filtered="FilterCluster"
+			@cell-type-filtered="FilterCellType"
+			:selectedFilterOption="selectedFilterOption"
 		/>
 		<InteractiveGraphViewer
+			ref="viewer"
 			:isLoading="isLoading"
 			:colorScheme="colorScheme"
 			:activate3DMode="activate3DMode"
-			:selectedColorOption="selectedColorOption"
-			:selectedVisualizationType="selectedVisualizationType"
 			:umap2DEmbedding="umap2DEmbedding"
 			:umap3DEmbedding="umap3DEmbedding"
 			:tsne2DEmbedding="tsne2DEmbedding"
 			:tsne3DEmbedding="tsne3DEmbedding"
-			ref="viewer"
+			:selectedColorOption="selectedColorOption"
+			:selectedVisualizationType="selectedVisualizationType"
 		/>
 	</div>
 </template>
@@ -99,8 +99,8 @@ const handleVisualizationChange = (value) => {
 			await loadTSNEData()
 		}, 50)
 	} else {
-        isLoading.value = false
-    }
+		isLoading.value = false
+	}
 }
 
 // Get gene expression data and update visualizations
