@@ -23,6 +23,7 @@
 		"echarts": "^5.5.1",
 		"echarts-gl": "^2.0.9",
 		"eslint": "^9.0.0",
+		"fast-kde": "^0.2.2",
 		"motion-v": "^1.1.0-alpha.1",
 		"nuxt": "^3.17.1",
 		"nuxt-echarts": "^0.3.0",
