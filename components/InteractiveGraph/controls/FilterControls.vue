@@ -24,11 +24,11 @@
 		<div v-if="selectedFilterOption == 'Cluster'">
 			<Carousel :value="clusters" :numVisible="6" :showIndicators="false">
 				<template #item="slotProp">
-					<motion.div :while-hover="{ scale: 0.95 }" class="py-2">
+					<motion.div :while-hover="{ scale: 0.95 }" class="py-2 px-2">
 						<Tag
 							rounded
-							class="cursor-pointer"
 							:value="slotProp.data.name"
+							class="cursor-pointer w-full px-2"
 							@click="FilterCluster(slotProp.data.index)"
 							:severity="slotProp.data.active ? 'success' : 'danger'"
 						>
@@ -52,9 +52,9 @@
 import { motion } from 'motion-v'
 
 const props = defineProps({
-	selectedFilterOption: { type: String, default: null },
-	cellTypes: { type: Array, default: () => [] },
 	clusters: { type: Array, default: () => [] },
+	cellTypes: { type: Array, default: () => [] },
+	selectedFilterOption: { type: String, default: null },
 })
 
 const FilterCellType = (index) => {
