@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-if="!noFilter">
 		<div v-if="selectedFilterOption == 'Source'" class="flex gap-3 items-center mb-4 mt-2 justify-center px-4">
 			<motion.div :index="celltype.index" :while-hover="{ scale: 0.97 }" v-for="celltype in cellTypes">
 				<Tag
@@ -52,6 +52,7 @@
 import { motion } from 'motion-v'
 
 const props = defineProps({
+	noFilter: { type: Boolean, default: false },
 	clusters: { type: Array, default: () => [] },
 	cellTypes: { type: Array, default: () => [] },
 	selectedFilterOption: { type: String, default: null },
