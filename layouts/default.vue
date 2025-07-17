@@ -667,7 +667,7 @@ const navItems = ref([
 	{
 		label: 'Violin Plots',
 		icon: 'solar:graph-up-bold-duotone',
-		route: '/',
+		route: '/violin_plot_demo',
 	},
 ])
 </script>
