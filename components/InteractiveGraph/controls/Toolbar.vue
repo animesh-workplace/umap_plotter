@@ -27,8 +27,8 @@
 						inputId="Visualization-Type"
 						:options="visualizationTypes"
 						:model-value="selectedVisualizationType"
-						@update:model-value="$emit('update:selectedVisualizationType', $event)"
 						@value-change="handleVisualizationChange"
+						@update:model-value="$emit('update:selectedVisualizationType', $event)"
 					/>
 					<label for="Visualization-Type" class="flex items-center gap-2">
 						<Icon class="w-4 h-4 text-slate-500" name="tabler:chart-dots" /> Plot type
@@ -94,11 +94,11 @@ const resetFilter = () => {
 }
 
 const emit = defineEmits([
-	'visualization-changed',
 	'filter-reset',
+	'visualization-changed',
 	'update:activate3DMode',
-	'update:selectedVisualizationType',
 	'update:selectedColorOption',
 	'update:selectedFilterOption',
+	'update:selectedVisualizationType',
 ])
 </script>
