@@ -481,6 +481,35 @@ onBeforeMount(() => {
 	})
 })
 
+const set3DMode = (mode) => {
+	activate3DMode.value = mode
+}
+
+const setPlotType = (type) => {
+	selectedVisualizationType.value = type
+	handleVisualizationChange(type)
+}
+
+const setFilterBySource = (sources) => {
+	selectedFilterOption.value = 'Source'
+	cellTypes.value.forEach((item) => {
+		item.active = sources.includes(item.name)
+	})
+	applyFilters(cellTypes)
+}
+
+const setFilterByCluster = (clustersToFilter) => {
+	selectedFilterOption.value = 'Cluster'
+	clusters.value.forEach((item) => {
+		item.active = clustersToFilter.includes(item.name)
+	})
+	applyFilters(clusters)
+}
+
+const setGeneSearch = (gene) => {
+	searchGeneExpression(gene)
+}
+
 defineExpose({
 	isLoading,
 	selectedGene,
@@ -489,6 +518,15 @@ defineExpose({
 	selectedColorOption,
 	searchGeneExpression,
 	selectedVisualizationType,
+	set3DMode,
+	setPlotType,
+	setFilterBySource,
+	setFilterByCluster,
+	setGeneSearch,
+	FilterCellType,
+	FilterCluster,
+	resetFilter,
+	handleVisualizationChange,
 })
 </script>
 
