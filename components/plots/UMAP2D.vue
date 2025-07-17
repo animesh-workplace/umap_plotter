@@ -159,6 +159,11 @@ onMounted(() => {
 
 defineExpose({
 	updateChart,
+	updatePointColors: (colors) => {
+		chartOption.value.series[0].itemStyle.color = (params) => {
+			return colors[params.dataIndex]
+		}
+	},
 })
 </script>
 
