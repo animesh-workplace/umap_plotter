@@ -511,10 +511,14 @@ defineExpose({
 	setPlotType,
 	resetFilter,
 	setGeneSearch,
+	geneExpression,
 	setFilterBySource,
 	setFilterByCluster,
 	clearGeneSelection,
 	selectedColorOption,
+	updatePointColors: (colors) => {
+		viewer.value.updatePointColors(colors)
+	},
 })
 </script>
 
