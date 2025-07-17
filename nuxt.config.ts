@@ -2,7 +2,7 @@ import Aura from '@primeuix/themes/aura'
 
 export default defineNuxtConfig({
 	devServer: { port: 3010 },
-	devtools: { enabled: false },
+	devtools: { enabled: true },
 	runtimeConfig: {
 		public: {
 			API_BASE_URL: process.env.API_BASE_URL || 'http://10.10.6.80/fibrohub/api',
