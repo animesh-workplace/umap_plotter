@@ -62,5 +62,16 @@ defineExpose({
 	UMAP3DGraph,
 	TSNE2DGraph,
 	TSNE3DGraph,
+	updatePointColors: (colors) => {
+		if (props.activate3DMode && props.selectedVisualizationType === 'UMAP') {
+			UMAP3DGraph.value.updatePointColors(colors)
+		} else if (!props.activate3DMode && props.selectedVisualizationType === 'UMAP') {
+			UMAP2DGraph.value.updatePointColors(colors)
+		} else if (props.activate3DMode && props.selectedVisualizationType === 't-SNE') {
+			TSNE3DGraph.value.updatePointColors(colors)
+		} else if (!props.activate3DMode && props.selectedVisualizationType === 't-SNE') {
+			TSNE2DGraph.value.updatePointColors(colors)
+		}
+	},
 })
 </script>
