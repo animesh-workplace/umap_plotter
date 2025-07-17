@@ -57,9 +57,9 @@
 						size="small"
 						inputId="Data-Filter"
 						:options="filterMethods"
+						@value-change="resetFilter"
 						:model-value="selectedFilterOption"
 						@update:model-value="$emit('update:selectedFilterOption', $event)"
-						@value-change="resetFilter"
 					/>
 					<label for="Data-Filter" class="flex items-center gap-2">
 						<Icon class="w-4 h-4 text-slate-500" name="akar-icons:filter" /> Filter by
