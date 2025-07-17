@@ -70,7 +70,10 @@
 				colorScheme="#ca8a04"
 				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
 			/>
-			<PlotsHeatMap class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg" />
+			<PlotsHeatMap
+				ref="heatmap"
+				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
+			/>
 		</div>
 	</div>
 </template>
@@ -82,6 +85,7 @@ import { useGeneralDataStore } from '@/stores/generalData'
 const graph1 = ref(null)
 const graph2 = ref(null)
 const graph3 = ref(null)
+const heatmap = ref(null)
 const clusters = ref([])
 const cellTypes = ref([])
 const selectedGene1 = ref('')
@@ -137,7 +141,8 @@ const handleClearGene1 = async (changeValue) => {
 }
 const handleSearchGene1 = async (changeValue) => {
 	graph1.value.selectedColorOption = 'Gene'
-	graph1.value.setGeneSearch(changeValue)
+	await graph1.value.setGeneSearch(changeValue)
+	await updateGraph3Colors()
 }
 
 // Handle Gene Search Logic for Gene 2
@@ -147,7 +152,26 @@ const handleClearGene2 = async (changeValue) => {
 }
 const handleSearchGene2 = async (changeValue) => {
 	graph2.value.selectedColorOption = 'Gene'
-	graph2.value.setGeneSearch(changeValue)
+	await graph2.value.setGeneSearch(changeValue)
+	await updateGraph3Colors()
+}
+
+const updateGraph3Colors = async () => {
+	const gene1Data = graph1.value.geneExpression
+	const gene2Data = graph2.value.geneExpression
+	console.log(gene1Data, gene2Data)
+	const colorGrid = heatmap.value.colorGrid
+
+	if (gene1Data && gene2Data && colorGrid) {
+		const colors = []
+		for (let i = 0; i < gene1Data.length; i++) {
+			const x = Math.floor(gene1Data[i] * 9)
+			const y = Math.floor(gene2Data[i] * 9)
+			colors.push(colorGrid[y][x])
+		}
+		console.log(colors)
+		graph3.value.updatePointColors(colors)
+	}
 }
 
 const loadFilterOptions = async () => {
