@@ -22,6 +22,7 @@
 			:selectedColorOption="selectedColorOption"
 		/>
 		<InteractiveGraphControlsFilterControls
+			:noFilter="noFilter"
 			:clusters="clusters"
 			:cellTypes="cellTypes"
 			@cluster-filtered="FilterCluster"
@@ -492,18 +493,12 @@ const setPlotType = (type) => {
 
 const setFilterBySource = (sources) => {
 	selectedFilterOption.value = 'Source'
-	cellTypes.value.forEach((item) => {
-		item.active = sources.includes(item.name)
-	})
-	applyFilters(cellTypes)
+	applyFilters(sources)
 }
 
 const setFilterByCluster = (clustersToFilter) => {
 	selectedFilterOption.value = 'Cluster'
-	clusters.value.forEach((item) => {
-		item.active = clustersToFilter.includes(item.name)
-	})
-	applyFilters(clusters)
+	applyFilters(clustersToFilter)
 }
 
 const setGeneSearch = (gene) => {
@@ -512,21 +507,14 @@ const setGeneSearch = (gene) => {
 
 defineExpose({
 	isLoading,
-	selectedGene,
-	activate3DMode,
-	clearGeneSelection,
-	selectedColorOption,
-	searchGeneExpression,
-	selectedVisualizationType,
 	set3DMode,
 	setPlotType,
+	resetFilter,
+	setGeneSearch,
 	setFilterBySource,
 	setFilterByCluster,
-	setGeneSearch,
-	FilterCellType,
-	FilterCluster,
-	resetFilter,
-	handleVisualizationChange,
+	clearGeneSelection,
+	selectedColorOption,
 })
 </script>
 
