@@ -4,137 +4,180 @@
 			<h2 class="text-xl font-semibold mb-1">Gene Co-expression Visualization</h2>
 		</div>
 
-		<div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-9 min-w-full mt-2 mx-4">
+		<!-- <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-9 min-w-full mt-2 mx-4">
 			<Skeleton height="3rem" v-if="isLoading" class="mb-4 mt-2" />
-
+			
 			<div
-				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-3 xl:col-start-4 grid grid-cols-2 xl:grid-cols-3 gap-1 items-center justify-between mb-2 px-2 xl:px-4 backdrop-blur rounded-lg"
-				v-else
+			class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-3 xl:col-start-4 grid grid-cols-2 xl:grid-cols-3 gap-1 items-center justify-between mb-2 px-2 xl:px-4 backdrop-blur rounded-lg"
+			v-else
 			>
-				<div class="flex gap-2 items-center justify-center">
-					<ToggleSwitch v-model="activate3DMode" @update:modelValue="handle3DModeChange" />
-					<Icon class="w-5 h-5 text-slate-500" name="akar-icons:augmented-reality" />
-					<div>3D Mode</div>
-				</div>
+			<div class="flex gap-2 items-center justify-center">
+				<ToggleSwitch v-model="activate3DMode" @update:modelValue="handle3DModeChange" />
+				<Icon class="w-5 h-5 text-slate-500" name="akar-icons:augmented-reality" />
+				<div>3D Mode</div>
+			</div>
+			
+			<FloatLabel variant="on">
+				<Select
+				fluid
+				size="small"
+				inputId="Visualization-Type"
+				:options="visualizationTypes"
+				@update:modelValue="handlePlotChange"
+				v-model="selectedVisualizationType"
+				/>
+				<label for="Visualization-Type" class="flex items-center gap-2">
+					<Icon class="w-4 h-4 text-slate-500" name="tabler:chart-dots" /> Plot type
+				</label>
+			</FloatLabel>
+			
+			<FloatLabel variant="on">
+				<Select
+				fluid
+				showClear
+				size="small"
+				inputId="Data-Filter"
+				:options="filterMethods"
+				@value-change="resetFilter"
+				v-model="selectedFilterOption"
+				/>
+				<label for="Data-Filter" class="flex items-center gap-2">
+					<Icon class="w-4 h-4 text-slate-500" name="akar-icons:filter" /> Filter by
+				</label>
+			</FloatLabel>
+		</div>
+	</div>
+	
+	<div
+	v-if="selectedFilterOption == 'Source'"
+	class="flex gap-3 items-center mb-2 mt-2 justify-center px-4 backdrop-blur rounded-lg"
+	>
+	<motion.div :index="celltype.index" :while-hover="{ scale: 0.97 }" v-for="celltype in cellTypes">
+		<Tag
+		rounded
+		:value="celltype.name"
+		class="cursor-pointer"
+		@click="FilterCellType(celltype.index)"
+		:severity="celltype.active ? 'success' : 'danger'"
+		>
+		<template #icon>
+			<Icon
+			v-if="celltype.active"
+			class="w-4 h-4 text-green-500"
+			name="akar-icons:tetragon-fill"
+			/>
+			<Icon v-else class="w-4 h-4 text-rose-500" name="akar-icons:tetragon" />
+		</template>
+	</Tag>
+</motion.div>
+</div>
 
-				<FloatLabel variant="on">
-					<Select
-						fluid
-						size="small"
-						inputId="Visualization-Type"
-						:options="visualizationTypes"
-						@update:modelValue="handlePlotChange"
-						v-model="selectedVisualizationType"
+<div v-if="selectedFilterOption == 'Cluster'">
+	<Carousel :value="clusters" :numVisible="6" :showIndicators="false" class="backdrop-blur rounded-lg">
+		<template #item="slotProp">
+			<motion.div :while-hover="{ scale: 0.95 }" class="py-2">
+				<Tag
+				rounded
+				class="cursor-pointer"
+				:value="slotProp.data.name"
+				@click="FilterCluster(slotProp.data.index)"
+				:severity="slotProp.data.active ? 'success' : 'danger'"
+				>
+				<template #icon>
+					<Icon
+					v-if="slotProp.data.active"
+					class="w-4 h-4 text-green-500"
+					name="akar-icons:tetragon-fill"
 					/>
-					<label for="Visualization-Type" class="flex items-center gap-2">
-						<Icon class="w-4 h-4 text-slate-500" name="tabler:chart-dots" /> Plot type
-					</label>
-				</FloatLabel>
-
-				<FloatLabel variant="on">
-					<Select
-						fluid
-						showClear
-						size="small"
-						inputId="Data-Filter"
-						:options="filterMethods"
-						@value-change="resetFilter"
-						v-model="selectedFilterOption"
-					/>
-					<label for="Data-Filter" class="flex items-center gap-2">
-						<Icon class="w-4 h-4 text-slate-500" name="akar-icons:filter" /> Filter by
-					</label>
-				</FloatLabel>
+					<Icon v-else class="w-4 h-4 text-rose-500" name="akar-icons:tetragon" />
+				</template>
+			</Tag>
+		</motion.div>
+	</template>
+</Carousel>
+		</div>
+		
+		<div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 min-w-full mt-2 mx-4">
+			<Skeleton height="3rem" v-if="isLoading" class="mb-4 mt-2" />
+			
+			<div
+			class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-3 xl:col-start-3 grid grid-cols-2 gap-2 items-center justify-between px-2 xl:px-4 backdrop-blur rounded-lg"
+			v-else
+			>
+			<div class="mb-2 flex relative">
+				<AutoComplete
+				dropdown
+				class="w-full"
+				v-model="selectedGene1"
+				@complete="handleGeneSearch1"
+				@item-select="searchGeneExpression1"
+				:suggestions="suggestions_for_graph1"
+				placeholder="Type gene name to search ..."
+				/>
+				
+				<button class="ml-2" v-if="selectedGene1" @click="clearGeneSelection1">
+					<Icon name="akar-icons:circle-x" class="w-5 h-5 text-red-500" />
+				</button>
+			</div>
+			
+			<div class="mb-2 flex relative">
+				<AutoComplete
+				dropdown
+				class="w-full"
+				v-model="selectedGene2"
+				@complete="handleGeneSearch2"
+				@item-select="searchGeneExpression2"
+				:suggestions="suggestions_for_graph2"
+				placeholder="Type gene name to search ..."
+				/>
+				
+				<button class="ml-2" v-if="selectedGene2" @click="clearGeneSelection2">
+					<Icon name="akar-icons:circle-x" class="w-5 h-5 text-red-500" />
+				</button>
 			</div>
 		</div>
+	</div> -->
 
-		<div
-			v-if="selectedFilterOption == 'Source'"
-			class="flex gap-3 items-center mb-2 mt-2 justify-center px-4 backdrop-blur rounded-lg"
-		>
-			<motion.div :index="celltype.index" :while-hover="{ scale: 0.97 }" v-for="celltype in cellTypes">
-				<Tag
-					rounded
-					:value="celltype.name"
-					class="cursor-pointer"
-					@click="FilterCellType(celltype.index)"
-					:severity="celltype.active ? 'success' : 'danger'"
-				>
-					<template #icon>
-						<Icon
-							v-if="celltype.active"
-							class="w-4 h-4 text-green-500"
-							name="akar-icons:tetragon-fill"
-						/>
-						<Icon v-else class="w-4 h-4 text-rose-500" name="akar-icons:tetragon" />
-					</template>
-				</Tag>
-			</motion.div>
+		<div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-9 min-w-full mt-2 mx-4">
+			<InteractiveGraphControlsToolbar
+				noColorBy
+				:activate3DMode="activate3DMode"
+				@update:activate3DMode="handle3DModeChange"
+				:selectedFilterOption="selectedFilterOption"
+				@update:selectedFilterOption="handleFilterChange"
+				@update:selectedVisualizationType="handlePlotChange"
+				:selectedVisualizationType="selectedVisualizationType"
+				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-3 xl:col-start-4"
+			/>
 		</div>
 
-		<div v-if="selectedFilterOption == 'Cluster'">
-			<Carousel :value="clusters" :numVisible="6" :showIndicators="false" class="backdrop-blur rounded-lg">
-				<template #item="slotProp">
-					<motion.div :while-hover="{ scale: 0.95 }" class="py-2">
-						<Tag
-							rounded
-							class="cursor-pointer"
-							:value="slotProp.data.name"
-							@click="FilterCluster(slotProp.data.index)"
-							:severity="slotProp.data.active ? 'success' : 'danger'"
-						>
-							<template #icon>
-								<Icon
-									v-if="slotProp.data.active"
-									class="w-4 h-4 text-green-500"
-									name="akar-icons:tetragon-fill"
-								/>
-								<Icon v-else class="w-4 h-4 text-rose-500" name="akar-icons:tetragon" />
-							</template>
-						</Tag>
-					</motion.div>
-				</template>
-			</Carousel>
+		<div>
+			<InteractiveGraphControlsFilterControls
+				:clusters="clusters"
+				:cellTypes="cellTypes"
+				class="backdrop-blur rounded-lg"
+				@cell-type-filtered="handleCellFilterChange"
+				:selectedFilterOption="selectedFilterOption"
+				@cluster-filtered="handleClusterFilterChange"
+			/>
 		</div>
 
 		<div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 min-w-full mt-2 mx-4">
-			<Skeleton height="3rem" v-if="isLoading" class="mb-4 mt-2" />
-
 			<div
 				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-3 xl:col-start-3 grid grid-cols-2 gap-2 items-center justify-between px-2 xl:px-4 backdrop-blur rounded-lg"
-				v-else
 			>
-				<div class="mb-2 flex relative">
-					<AutoComplete
-						dropdown
-						class="w-full"
-						v-model="selectedGene1"
-						@complete="handleGeneSearch1"
-						@item-select="searchGeneExpression1"
-						:suggestions="suggestions_for_graph1"
-						placeholder="Type gene name to search ..."
-					/>
-
-					<button class="ml-2" v-if="selectedGene1" @click="clearGeneSelection1">
-						<Icon name="akar-icons:circle-x" class="w-5 h-5 text-red-500" />
-					</button>
-				</div>
-
-				<div class="mb-2 flex relative">
-					<AutoComplete
-						dropdown
-						class="w-full"
-						v-model="selectedGene2"
-						@complete="handleGeneSearch2"
-						@item-select="searchGeneExpression2"
-						:suggestions="suggestions_for_graph2"
-						placeholder="Type gene name to search ..."
-					/>
-
-					<button class="ml-2" v-if="selectedGene2" @click="clearGeneSelection2">
-						<Icon name="akar-icons:circle-x" class="w-5 h-5 text-red-500" />
-					</button>
-				</div>
+				<InteractiveGraphControlsGeneSearch
+					v-model="selectedGene1"
+					selectedColorOption="Gene"
+					@gene-cleared="handleClearGene1"
+					@gene-selected="handleSearchGene1"
+				/>
+				<InteractiveGraphControlsGeneSearch
+					v-model="selectedGene2"
+					selectedColorOption="Gene"
+					@gene-cleared="handleClearGene2"
+					@gene-selected="handleSearchGene2"
+				/>
 			</div>
 		</div>
 
@@ -167,7 +210,6 @@
 </template>
 
 <script setup>
-import { motion } from 'motion-v'
 import { useGeneAPI } from '@/api/geneAPI'
 import { useGeneralDataStore } from '@/stores/generalData'
 
@@ -176,83 +218,129 @@ const graph2 = ref(null)
 const graph3 = ref(null)
 const clusters = ref([])
 const cellTypes = ref([])
+const activate3DMode = ref(false)
+const selectedFilterOption = ref(null)
+const selectedVisualizationType = ref('UMAP')
+
 const isLoading = ref(false)
 const selectedGene1 = ref('')
 const selectedGene2 = ref('')
-const activate3DMode = ref(false)
-const selectedFilterOption = ref()
-const selectedVisualizationType = ref('UMAP')
-const filterMethods = ref(['Source', 'Cluster'])
-const visualizationTypes = ref(['UMAP', 't-SNE'])
 
-const resetFilter = () => {
-	console.log('resetFilter')
-}
-
-// For gene1
-const suggestions_for_graph1 = computed(() => {
-	return graph1.value?.suggestions || []
-})
-
-const handleGeneSearch1 = async (event) => {
-	if (graph1.value) {
-		await graph1.value.searchGene(event)
-	}
-}
-
-const searchGeneExpression1 = async (event) => {
-	if (graph1.value) {
-		graph1.value.selectedColorOption = 'Gene'
-		await graph1.value.searchGeneExpression(event)
-	}
-}
-
-const clearGeneSelection1 = async () => {
-	if (graph1.value) {
-		await graph1.value.clearGeneSelection()
-		selectedGene1.value = ''
-		graph1.value.selectedColorOption = ''
-	}
-}
-
-// For gene2
-const suggestions_for_graph2 = computed(() => {
-	return graph2.value?.suggestions || []
-})
-
-const handleGeneSearch2 = async (event) => {
-	if (graph2.value) {
-		await graph2.value.searchGene(event)
-	}
-}
-
-const searchGeneExpression2 = async (event) => {
-	if (graph2.value) {
-		graph2.value.selectedColorOption = 'Gene'
-		await graph2.value.searchGeneExpression(event)
-	}
-}
-
-const clearGeneSelection2 = async () => {
-	if (graph2.value) {
-		await graph2.value.clearGeneSelection()
-		selectedGene2.value = ''
-		graph2.value.selectedColorOption = ''
-	}
-}
+//////////////////////////////////////////////////////////////////////////////////
 
 // Handle 3D Mode Changes
 const handle3DModeChange = (changeValue) => {
-	graph1.value.activate3DMode = changeValue
-	graph2.value.activate3DMode = changeValue
-	graph3.value.activate3DMode = changeValue
+	graph1.value.set3DMode(changeValue)
+	graph2.value.set3DMode(changeValue)
+	graph3.value.set3DMode(changeValue)
 }
+
 // Handle Plot Changes
 const handlePlotChange = async (changeValue) => {
-	graph1.value.selectedVisualizationType = changeValue
-	graph2.value.selectedVisualizationType = changeValue
-	graph3.value.selectedVisualizationType = changeValue
+	graph1.value.setPlotType(changeValue)
+	graph2.value.setPlotType(changeValue)
+	graph3.value.setPlotType(changeValue)
 }
+
+// Handle Filter Change and Reset Filter
+const handleFilterChange = async (changeValue) => {
+	selectedFilterOption.value = changeValue
+	if (changeValue == null) {
+		graph1.value.resetFilter()
+		graph2.value.resetFilter()
+		graph3.value.resetFilter()
+	}
+}
+
+// Handle Cluster based filtering
+const handleClusterFilterChange = async (changeValue) => {
+	clusters.value[changeValue].active = !clusters.value[changeValue].active
+	graph1.value.setFilterByCluster(clusters)
+	graph2.value.setFilterByCluster(clusters)
+	graph3.value.setFilterByCluster(clusters)
+}
+
+// Handle Cell based filtering
+const handleCellFilterChange = async (changeValue) => {
+	cellTypes.value[changeValue].active = !cellTypes.value[changeValue].active
+	graph1.value.setFilterBySource(cellTypes)
+	graph2.value.setFilterBySource(cellTypes)
+	graph3.value.setFilterBySource(cellTypes)
+}
+
+// Handle Gene Search Logic for Gene 1
+const handleClearGene1 = async (changeValue) => {
+	graph1.value.selectedColorOption = null
+	graph1.value.clearGeneSelection()
+}
+const handleSearchGene1 = async (changeValue) => {
+	graph1.value.selectedColorOption = 'Gene'
+	graph1.value.setGeneSearch(changeValue)
+}
+
+// Handle Gene Search Logic for Gene 2
+const handleClearGene2 = async (changeValue) => {
+	graph2.value.selectedColorOption = null
+	graph2.value.clearGeneSelection()
+}
+const handleSearchGene2 = async (changeValue) => {
+	graph2.value.selectedColorOption = 'Gene'
+	graph2.value.setGeneSearch(changeValue)
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+
+// For gene1
+// const suggestions_for_graph1 = computed(() => {
+// 	return graph1.value?.suggestions || []
+// })
+
+// const handleGeneSearch1 = async (event) => {
+// 	if (graph1.value) {
+// 		await graph1.value.searchGene(event)
+// 	}
+// }
+
+// const searchGeneExpression1 = async (event) => {
+// 	if (graph1.value) {
+// 		graph1.value.selectedColorOption = 'Gene'
+// 		await graph1.value.searchGeneExpression(event)
+// 	}
+// }
+
+// const clearGeneSelection1 = async () => {
+// 	if (graph1.value) {
+// 		await graph1.value.clearGeneSelection()
+// 		selectedGene1.value = ''
+// 		graph1.value.selectedColorOption = ''
+// 	}
+// }
+
+// // For gene2
+// const suggestions_for_graph2 = computed(() => {
+// 	return graph2.value?.suggestions || []
+// })
+
+// const handleGeneSearch2 = async (event) => {
+// 	if (graph2.value) {
+// 		await graph2.value.searchGene(event)
+// 	}
+// }
+
+// const searchGeneExpression2 = async (event) => {
+// 	if (graph2.value) {
+// 		graph2.value.selectedColorOption = 'Gene'
+// 		await graph2.value.searchGeneExpression(event)
+// 	}
+// }
+
+// const clearGeneSelection2 = async () => {
+// 	if (graph2.value) {
+// 		await graph2.value.clearGeneSelection()
+// 		selectedGene2.value = ''
+// 		graph2.value.selectedColorOption = ''
+// 	}
+// }
 
 const loadFilterOptions = async () => {
 	const { get2DUmapCellType } = useGeneAPI()
