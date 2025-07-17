@@ -7,10 +7,9 @@
 <script setup>
 import { use } from 'echarts/core'
 import { ScatterGLChart } from 'echarts-gl/charts'
-import { TooltipComponent } from 'echarts/components'
 
 // Register the components
-use([ScatterGLChart, TooltipComponent])
+use([ScatterGLChart])
 
 const props = defineProps({
 	colorBy: { type: String, default: '' },
@@ -88,16 +87,18 @@ const chartOption = ref({
 		axisLabel: { fontFamily: 'Averta', fontWeight: 500 },
 	},
 	tooltip: {
-		trigger: 'item',
+		trigger: 'axis',
+		zlevel: 100,
 		axisPointer: { type: 'cross' },
 		textStyle: { fontFamily: 'Averta', fontWeight: 500 },
 		formatter: function (params) {
-			const expressionText = params.value[5] !== 0 ? `Expression: ${params.value[5].toFixed(2)}` : ''
+			if (!params.length) return ''
+			const expressionText = params[0].value[5] !== 0 ? `Expression: ${params[0].value[5].toFixed(2)}` : ''
 			return (
-				`X: ${params.value[0].toFixed(2)}<br/>` +
-				`Y: ${params.value[1].toFixed(2)}<br/>` +
-				`Cell: ${params.value[2]}<br/>` +
-				`Cluster: ${params.value[4]}<br/>` +
+				`X: ${params[0].value[0].toFixed(2)}<br/>` +
+				`Y: ${params[0].value[1].toFixed(2)}<br/>` +
+				`Cell: ${params[0].value[2]}<br/>` +
+				`Cluster: ${params[0].value[4]}<br/>` +
 				`${expressionText}`
 			)
 		},
