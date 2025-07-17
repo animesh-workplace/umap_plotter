@@ -19,14 +19,14 @@ const initializeHeatmap = () => {
 	const topRight = '#9d174d'
 	const topLeft = '#808080'
 
-	for (let y = 0; y < 10; y++) {
+	for (let y = 0; y < 8; y++) {
 		const row = []
-		for (let x = 0; x < 10; x++) {
+		for (let x = 0; x < 5; x++) {
 			// Calculate interpolation factors (0 to 1)
 			// 0 at left, 1 at right
-			const xFactor = x / 9
+			const xFactor = x / 5
 			// 0 at top, 1 at bottom
-			const yFactor = y / 9
+			const yFactor = y / 7
 
 			// Top edge: interpolate between green (top-left) and yellow (top-right)
 			const topColor = interpolateColor(topLeft, topRight, xFactor)
@@ -88,13 +88,13 @@ const chartOption = ref({
 		type: 'category',
 		splitArea: { show: false },
 		axisLabel: { fontSize: 12 },
-		data: Array.from({ length: 10 }, (_, i) => (i + 1).toString()),
+		data: Array.from({ length: 5 }, (_, i) => (i + 1).toString()),
 	},
 	yAxis: {
 		type: 'category',
 		splitArea: { show: false },
 		axisLabel: { fontSize: 12 },
-		data: Array.from({ length: 10 }, (_, i) => (i + 1).toString()),
+		data: Array.from({ length: 8 }, (_, i) => (i + 1).toString()),
 	},
 	series: [
 		{
@@ -120,8 +120,8 @@ onMounted(() => {
 		initializeHeatmap()
 
 		const data = []
-		for (let y = 0; y < 10; y++) {
-			for (let x = 0; x < 10; x++) {
+		for (let y = 0; y < 8; y++) {
+			for (let x = 0; x < 5; x++) {
 				data.push({
 					// [x, y, value]
 					value: [x, y, 1],
