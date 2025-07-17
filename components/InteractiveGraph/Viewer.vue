@@ -42,14 +42,14 @@
 <script setup>
 const props = defineProps({
 	isLoading: { type: Boolean, default: true },
-	colorScheme: { type: String, default: '#5470c6' },
 	activate3DMode: { type: Boolean, default: false },
+	colorScheme: { type: String, default: '#5470c6' },
 	selectedColorOption: { type: String, default: null },
-	selectedVisualizationType: { type: String, default: 'UMAP' },
 	umap2DEmbedding: { type: Array, default: () => [] },
 	umap3DEmbedding: { type: Array, default: () => [] },
 	tsne2DEmbedding: { type: Array, default: () => [] },
 	tsne3DEmbedding: { type: Array, default: () => [] },
+	selectedVisualizationType: { type: String, default: 'UMAP' },
 })
 
 const UMAP2DGraph = ref(null)
