@@ -91,17 +91,17 @@ import { useGeneralDataStore } from '@/stores/generalData'
 const graph1 = ref(null)
 const graph2 = ref(null)
 const graph3 = ref(null)
-const heatmap = ref(null)
+const graph3Key = ref(0)
 const clusters = ref([])
 const cellTypes = ref([])
+const heatmap = ref(null)
 const selectedGene1 = ref('')
 const selectedGene2 = ref('')
-const maxGene1Expression = ref(1)
-const maxGene2Expression = ref(1)
+const maxGene1Expression = ref(0)
+const maxGene2Expression = ref(0)
 const activate3DMode = ref(false)
 const selectedFilterOption = ref(null)
 const selectedVisualizationType = ref('UMAP')
-const graph3Key = ref(0)
 
 // Handle 3D Mode Changes
 const handle3DModeChange = async (changeValue) => {
@@ -126,11 +126,12 @@ const handlePlotChange = async (changeValue) => {
 // Handle Filter Change and Reset Filter
 const handleFilterChange = async (changeValue) => {
 	selectedFilterOption.value = changeValue
-	if (changeValue == null) {
-		graph1.value.resetFilter()
-		graph2.value.resetFilter()
-		graph3.value.resetFilter()
-	}
+	clusters.value.forEach((item) => (item.active = true))
+	cellTypes.value.forEach((item) => (item.active = true))
+	graph1.value.resetFilter()
+	graph2.value.resetFilter()
+	graph3.value.resetFilter()
+	updateGraph3Colors()
 }
 
 // Handle Cluster based filtering
@@ -139,6 +140,9 @@ const handleClusterFilterChange = async (changeValue) => {
 	graph1.value.setFilterByCluster(clusters)
 	graph2.value.setFilterByCluster(clusters)
 	graph3.value.setFilterByCluster(clusters)
+	nextTick(() => {
+		updateGraph3Colors()
+	})
 }
 
 // Handle Cell based filtering
@@ -147,6 +151,9 @@ const handleCellFilterChange = async (changeValue) => {
 	graph1.value.setFilterBySource(cellTypes)
 	graph2.value.setFilterBySource(cellTypes)
 	graph3.value.setFilterBySource(cellTypes)
+	nextTick(() => {
+		updateGraph3Colors()
+	})
 }
 
 // Handle Gene Search Logic for Gene 1
@@ -154,7 +161,7 @@ const handleClearGene1 = async (changeValue) => {
 	graph1.value.selectedColorOption = null
 	graph1.value.clearGeneSelection()
 	graph3Key.value++
-	maxGene1Expression.value = 1
+	maxGene1Expression.value = 0
 }
 const handleSearchGene1 = async (changeValue) => {
 	graph1.value.selectedColorOption = 'Gene'
@@ -175,7 +182,7 @@ const handleClearGene2 = async (changeValue) => {
 	graph2.value.selectedColorOption = null
 	await graph2.value.clearGeneSelection()
 	graph3Key.value++
-	maxGene2Expression.value = 1
+	maxGene2Expression.value = 0
 }
 const handleSearchGene2 = async (changeValue) => {
 	graph2.value.selectedColorOption = 'Gene'
@@ -192,19 +199,30 @@ const handleUpdateGraph2 = async () => {
 }
 
 const updateGraph3Colors = () => {
+	let gene1Embedding, gene2Embedding
+	const colorGrid = heatmap.value.colorGrid
 	const gene1Data = graph1.value.geneExpression
 	const gene2Data = graph2.value.geneExpression
-	const colorGrid = heatmap.value.colorGrid
-	console.log(gene1Data, gene2Data, colorGrid)
 
-	console.log(maxGene1Expression.value, maxGene2Expression.value)
+	if (!activate3DMode.value && selectedVisualizationType.value == 'UMAP') {
+		gene1Embedding = graph1.value.umap2DEmbedding
+		gene2Embedding = graph2.value.umap2DEmbedding
+	} else if (activate3DMode.value && selectedVisualizationType.value == 'UMAP') {
+		gene1Embedding = graph1.value.umap3DEmbedding
+		gene2Embedding = graph2.value.umap3DEmbedding
+	} else if (!activate3DMode.value && selectedVisualizationType.value == 't-SNE') {
+		gene1Embedding = graph1.value.tsne2DEmbedding
+		gene2Embedding = graph2.value.tsne2DEmbedding
+	} else if (activate3DMode.value && selectedVisualizationType.value == 't-SNE') {
+		gene1Embedding = graph1.value.tsne3DEmbedding
+		gene2Embedding = graph2.value.tsne3DEmbedding
+	}
 
 	if (gene1Data && gene2Data && colorGrid) {
 		const colors = []
-		const keys = Object.keys(gene1Data)
-		for (let i = 0; i < keys.length; i++) {
-			const x = Math.floor(gene1Data[keys[i]])
-			const y = Math.floor(gene2Data[keys[i]])
+		for (let i = 0; i < gene1Embedding.length; i++) {
+			const x = Math.round(gene1Embedding[i][activate3DMode.value ? 6 : 5])
+			const y = Math.round(gene2Embedding[i][activate3DMode.value ? 6 : 5])
 			colors.push(colorGrid[y][x])
 		}
 		graph3.value.updatePointColors(colors)
