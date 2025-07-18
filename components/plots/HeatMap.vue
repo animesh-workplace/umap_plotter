@@ -7,14 +7,8 @@
 
 <script setup>
 const props = defineProps({
-	maxX: {
-		type: Number,
-		default: 10,
-	},
-	maxY: {
-		type: Number,
-		default: 10,
-	},
+	maxX: { type: Number, default: 10 },
+	maxY: { type: Number, default: 10 },
 })
 
 const isLoading = ref(true)
@@ -34,8 +28,8 @@ const initializeHeatmap = () => {
 		const row = []
 		for (let x = 0; x <= props.maxX; x++) {
 			// Calculate interpolation factors (0 to 1)
-			let xFactor = x / props.maxX // 0 at left, 1 at right
-			let yFactor = y / props.maxY // 0 at top, 1 at bottom
+			let xFactor = props.maxX > 0 ? x / props.maxX : 0 // 0 at left, 1 at right
+			let yFactor = props.maxY > 0 ? y / props.maxY : 0 // 0 at top, 1 at bottom
 
 			// Remapping functions to create biased gradients
 			const biasTowardsEnd = (f) => {
@@ -130,13 +124,13 @@ const chartOption = ref({
 		type: 'category',
 		splitArea: { show: false },
 		axisLabel: { fontSize: 12 },
-		data: Array.from({ length: props.maxX + 1 }, (_, i) => (i).toString()),
+		data: Array.from({ length: props.maxX + 1 }, (_, i) => i.toString()),
 	},
 	yAxis: {
 		type: 'category',
 		splitArea: { show: false },
 		axisLabel: { fontSize: 12 },
-		data: Array.from({ length: props.maxY + 1 }, (_, i) => (i).toString()),
+		data: Array.from({ length: props.maxY + 1 }, (_, i) => i.toString()),
 	},
 	series: [
 		{
@@ -158,8 +152,8 @@ defineExpose({ colorGrid })
 
 watch([() => props.maxX, () => props.maxY], () => {
 	initializeHeatmap()
-	chartOption.value.xAxis.data = Array.from({ length: props.maxX + 1 }, (_, i) => (i).toString())
-	chartOption.value.yAxis.data = Array.from({ length: props.maxY + 1 }, (_, i) => (i).toString())
+	chartOption.value.xAxis.data = Array.from({ length: props.maxX + 1 }, (_, i) => i.toString())
+	chartOption.value.yAxis.data = Array.from({ length: props.maxY + 1 }, (_, i) => i.toString())
 	const data = []
 	for (let y = 0; y <= props.maxY; y++) {
 		for (let x = 0; x <= props.maxX; x++) {
