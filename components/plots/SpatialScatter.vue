@@ -22,7 +22,7 @@ const currentImageHeight = ref(0)
 const props = defineProps({
 	clusterSelected: { type: Boolean },
 	imageURL: { type: String, default: '' },
-	colorScheme: { type: String, default: '#5470c6' },
+	colorScheme: { type: String, default: '' },
 	scatterData: { type: Array, required: true, default: () => [] },
 })
 
@@ -86,7 +86,7 @@ const updateChart = () => {
 	calculateDimensions()
 	const [min, max] = getExpressionRange()
 
-	if (props.clusterSelected) {
+	if (props.clusterSelected && props.colorScheme == '') {
 		chartOption.value = {
 			...chartOption.value,
 			visualMap: {
@@ -125,6 +125,64 @@ const updateChart = () => {
 					type: 'scatter',
 					data: props.scatterData,
 					itemStyle: { color: 'green' },
+				},
+			],
+		}
+	} else if (props.clusterSelected && props.colorScheme == 'Path Annotation') {
+		chartOption.value = {
+			...chartOption.value,
+			tooltip: {
+				formatter: (p) =>
+					`${p.data.cell_id}<br/>x: ${p.data.x}, y: ${p.data.y}, expression: ${p.data.expression} <br/> Annotation: ${p.data.path_annotation}`,
+			},
+			series: [
+				{
+					symbolSize: 8,
+					type: 'scatter',
+					data: props.scatterData,
+					itemStyle: {
+						color: (params) => {
+							const sourceColors = {
+								null: '#D9D9D9',
+								SCC: '#EE6363',
+								Core: '#00FFFF',
+								Stroma: '#FFEC8B',
+								Transitory: '#EE9572',
+								'Leading Edge': '#8B1C62',
+								'Artifact/Fold': '#838B83',
+							}
+							return sourceColors[params.data.path_annotation]
+						},
+					},
+				},
+			],
+		}
+	} else if (props.clusterSelected && props.colorScheme == 'TE Annotation') {
+		chartOption.value = {
+			...chartOption.value,
+			tooltip: {
+				formatter: (p) =>
+					`${p.data.cell_id}<br/>x: ${p.data.x}, y: ${p.data.y}, expression: ${p.data.expression} <br/> Annotation: ${p.data.te_annotation}`,
+			},
+			series: [
+				{
+					symbolSize: 8,
+					type: 'scatter',
+					data: props.scatterData,
+					itemStyle: {
+						color: (params) => {
+							const sourceColors = {
+								null: '#D9D9D9',
+								SCC: '#EE6363',
+								Core: '#00FFFF',
+								Stroma: '#FFEC8B',
+								Transitory: '#EE9572',
+								'Leading Edge': '#8B1C62',
+								'Artifact/Fold': '#838B83',
+							}
+							return sourceColors[params.data.te_annotation]
+						},
+					},
 				},
 			],
 		}
