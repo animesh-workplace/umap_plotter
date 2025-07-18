@@ -126,6 +126,7 @@ const searchGeneExpression = async (gene) => {
 // Clear gene selection and reset expression values
 const clearGeneSelection = () => {
 	selectedGene.value = null
+	geneExpression.value = null
 
 	// Reset expression values to 0 for UMAP data
 	originalUmap2DEmbedding.value = originalUmap2DEmbedding.value.map(([x, y, cellID, source, cluster, _]) => {
