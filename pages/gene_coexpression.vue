@@ -55,6 +55,7 @@
 				ref="graph1"
 				:geneSearch="false"
 				colorScheme="#9d174d"
+				@gene-fetched="handleUpdateGraph1"
 				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
 			/>
 			<InteractiveGraph
@@ -62,6 +63,7 @@
 				ref="graph2"
 				:geneSearch="false"
 				colorScheme="#16DB93"
+				@gene-fetched="handleUpdateGraph2"
 				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
 			/>
 			<InteractiveGraph
@@ -99,7 +101,9 @@ const handle3DModeChange = async (changeValue) => {
 	graph1.value.set3DMode(changeValue)
 	graph2.value.set3DMode(changeValue)
 	graph3.value.set3DMode(changeValue)
-	await updateGraph3Colors()
+	nextTick(() => {
+		updateGraph3Colors()
+	})
 }
 
 // Handle Plot Changes
@@ -107,7 +111,9 @@ const handlePlotChange = async (changeValue) => {
 	graph1.value.setPlotType(changeValue)
 	graph2.value.setPlotType(changeValue)
 	graph3.value.setPlotType(changeValue)
-	await updateGraph3Colors()
+	nextTick(() => {
+		updateGraph3Colors()
+	})
 }
 
 // Handle Filter Change and Reset Filter
@@ -140,25 +146,38 @@ const handleCellFilterChange = async (changeValue) => {
 const handleClearGene1 = async (changeValue) => {
 	graph1.value.selectedColorOption = null
 	graph1.value.clearGeneSelection()
+	graph3.value.clearGeneSelection()
 }
 const handleSearchGene1 = async (changeValue) => {
 	graph1.value.selectedColorOption = 'Gene'
 	await graph1.value.setGeneSearch(changeValue)
-	await updateGraph3Colors()
+}
+
+const handleUpdateGraph1 = async () => {
+	nextTick(() => {
+		updateGraph3Colors()
+	})
 }
 
 // Handle Gene Search Logic for Gene 2
 const handleClearGene2 = async (changeValue) => {
 	graph2.value.selectedColorOption = null
 	graph2.value.clearGeneSelection()
+	graph3.value.clearGeneSelection()
 }
 const handleSearchGene2 = async (changeValue) => {
 	graph2.value.selectedColorOption = 'Gene'
 	await graph2.value.setGeneSearch(changeValue)
-	await updateGraph3Colors()
+	updateGraph3Colors()
 }
 
-const updateGraph3Colors = async () => {
+const handleUpdateGraph2 = async () => {
+	nextTick(() => {
+		updateGraph3Colors()
+	})
+}
+
+const updateGraph3Colors = () => {
 	const gene1Data = graph1.value.geneExpression
 	const gene2Data = graph2.value.geneExpression
 	const colorGrid = heatmap.value.colorGrid
@@ -170,7 +189,6 @@ const updateGraph3Colors = async () => {
 		for (let i = 0; i < keys.length; i++) {
 			const x = Math.floor(gene1Data[keys[i]])
 			const y = Math.floor(gene2Data[keys[i]])
-			console.log(x, y)
 			colors.push(colorGrid[y][x])
 		}
 		graph3.value.updatePointColors(colors)
