@@ -54,14 +54,14 @@
 				noFilter
 				ref="graph1"
 				:geneSearch="false"
-				colorScheme="#0284c7"
+				colorScheme="#9d174d"
 				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
 			/>
 			<InteractiveGraph
 				noFilter
 				ref="graph2"
 				:geneSearch="false"
-				colorScheme="#9d174d"
+				colorScheme="#16DB93"
 				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
 			/>
 			<InteractiveGraph
