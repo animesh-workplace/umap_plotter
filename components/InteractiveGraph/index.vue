@@ -119,6 +119,7 @@ const searchGeneExpression = async (gene) => {
 		geneExpression.value = []
 	} finally {
 		isLoading.value = false
+		emit('gene-fetched')
 	}
 }
 
@@ -504,6 +505,8 @@ const setFilterByCluster = (clustersToFilter) => {
 const setGeneSearch = (gene) => {
 	searchGeneExpression(gene)
 }
+
+const emit = defineEmits(['gene-fetched'])
 
 defineExpose({
 	isLoading,
