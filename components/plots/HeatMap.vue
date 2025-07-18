@@ -14,23 +14,33 @@ const initializeHeatmap = () => {
 	const grid = []
 
 	// Define corner colors
-	const bottomRight = '#ca8a04'
-	const bottomLeft = '#0284c7'
+	const bottomRight = '#FFF94F'
+	const bottomLeft = '#16DB93'
 	const topRight = '#9d174d'
-	const topLeft = '#808080'
+	const topLeft = '#d3d3d3'
 
-	for (let y = 0; y < 8; y++) {
+	for (let y = 0; y < 10; y++) {
 		const row = []
-		for (let x = 0; x < 5; x++) {
+		for (let x = 0; x < 10; x++) {
 			// Calculate interpolation factors (0 to 1)
-			// 0 at left, 1 at right
-			const xFactor = x / 5
-			// 0 at top, 1 at bottom
-			const yFactor = y / 7
+			let xFactor = x / 9 // 0 at left, 1 at right
+			let yFactor = y / 9 // 0 at top, 1 at bottom
 
-			// Top edge: interpolate between green (top-left) and yellow (top-right)
+			// If in the bottom-right quadrant, adjust factors to bias towards bottom-right color
+			if (xFactor > 0.5 && yFactor > 0.5) {
+				const remap = (f) => {
+					// Remap the factor in the range [0.5, 1] to a curve that biases towards 1
+					const norm = (f - 0.5) * 2 // Normalize to [0, 1]
+					const curved = Math.sqrt(norm) // Apply a curve (sqrt makes it concave up)
+					return curved / 2 + 0.5 // Map back to [0.5, 1]
+				}
+				xFactor = remap(xFactor)
+				yFactor = remap(yFactor)
+			}
+
+			// Top edge: interpolate between top-left and top-right
 			const topColor = interpolateColor(topLeft, topRight, xFactor)
-			// Bottom edge: interpolate between grey (bottom-left) and red (bottom-right)
+			// Bottom edge: interpolate between bottom-left and bottom-right
 			const bottomColor = interpolateColor(bottomLeft, bottomRight, xFactor)
 			// Final color: interpolate between top and bottom colors
 			const finalColor = interpolateColor(topColor, bottomColor, yFactor)
@@ -88,13 +98,13 @@ const chartOption = ref({
 		type: 'category',
 		splitArea: { show: false },
 		axisLabel: { fontSize: 12 },
-		data: Array.from({ length: 5 }, (_, i) => (i + 1).toString()),
+		data: Array.from({ length: 10 }, (_, i) => (i + 1).toString()),
 	},
 	yAxis: {
 		type: 'category',
 		splitArea: { show: false },
 		axisLabel: { fontSize: 12 },
-		data: Array.from({ length: 8 }, (_, i) => (i + 1).toString()),
+		data: Array.from({ length: 10 }, (_, i) => (i + 1).toString()),
 	},
 	series: [
 		{
@@ -120,8 +130,8 @@ onMounted(() => {
 		initializeHeatmap()
 
 		const data = []
-		for (let y = 0; y < 8; y++) {
-			for (let x = 0; x < 5; x++) {
+		for (let y = 0; y < 10; y++) {
+			for (let x = 0; x < 10; x++) {
 				data.push({
 					// [x, y, value]
 					value: [x, y, 1],
