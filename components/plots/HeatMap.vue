@@ -6,6 +6,17 @@
 </template>
 
 <script setup>
+const props = defineProps({
+	maxX: {
+		type: Number,
+		default: 10,
+	},
+	maxY: {
+		type: Number,
+		default: 10,
+	},
+})
+
 const isLoading = ref(true)
 const colorGrid = ref([])
 
@@ -19,12 +30,12 @@ const initializeHeatmap = () => {
 	const topRight = '#9d174d'
 	const topLeft = '#d3d3d3'
 
-	for (let y = 0; y < 10; y++) {
+	for (let y = 0; y <= props.maxY; y++) {
 		const row = []
-		for (let x = 0; x < 10; x++) {
+		for (let x = 0; x <= props.maxX; x++) {
 			// Calculate interpolation factors (0 to 1)
-			let xFactor = x / 9 // 0 at left, 1 at right
-			let yFactor = y / 9 // 0 at top, 1 at bottom
+			let xFactor = x / props.maxX // 0 at left, 1 at right
+			let yFactor = y / props.maxY // 0 at top, 1 at bottom
 
 			// Remapping functions to create biased gradients
 			const biasTowardsEnd = (f) => {
@@ -71,51 +82,6 @@ const initializeHeatmap = () => {
 	colorGrid.value = grid
 }
 
-/*
-// Initialize the heatmap with a single biased quadrant
-const initializeHeatmap = () => {
-	const grid = []
-
-	// Define corner colors
-	const bottomRight = '#FFF94F'
-	const bottomLeft = '#16DB93'
-	const topRight = '#9d174d'
-	const topLeft = '#d3d3d3'
-
-	for (let y = 0; y < 10; y++) {
-		const row = []
-		for (let x = 0; x < 10; x++) {
-			// Calculate interpolation factors (0 to 1)
-			let xFactor = x / 9 // 0 at left, 1 at right
-			let yFactor = y / 9 // 0 at top, 1 at bottom
-
-			// If in the bottom-right quadrant, adjust factors to bias towards bottom-right color
-			if (xFactor > 0.5 && yFactor > 0.5) {
-				const remap = (f) => {
-					// Remap the factor in the range [0.5, 1] to a curve that biases towards 1
-					const norm = (f - 0.5) * 2 // Normalize to [0, 1]
-					const curved = Math.sqrt(norm) // Apply a curve (sqrt makes it concave up)
-					return curved / 2 + 0.5 // Map back to [0.5, 1]
-				}
-				xFactor = remap(xFactor)
-				yFactor = remap(yFactor)
-			}
-
-			// Top edge: interpolate between top-left and top-right
-			const topColor = interpolateColor(topLeft, topRight, xFactor)
-			// Bottom edge: interpolate between bottom-left and bottom-right
-			const bottomColor = interpolateColor(bottomLeft, bottomRight, xFactor)
-			// Final color: interpolate between top and bottom colors
-			const finalColor = interpolateColor(topColor, bottomColor, yFactor)
-
-			row.push(finalColor)
-		}
-		grid.push(row)
-	}
-	colorGrid.value = grid
-}
-*/
-
 // Helper function to interpolate between two colors
 const interpolateColor = (color1, color2, factor) => {
 	// Convert hex to RGB
@@ -149,6 +115,8 @@ const rgbToHex = (r, g, b) => {
 }
 
 // Chart configuration
+const emits = defineEmits(['heatmap-updated'])
+
 const chartOption = ref({
 	visualMap: { show: false },
 	grid: {
@@ -162,13 +130,13 @@ const chartOption = ref({
 		type: 'category',
 		splitArea: { show: false },
 		axisLabel: { fontSize: 12 },
-		data: Array.from({ length: 10 }, (_, i) => (i + 1).toString()),
+		data: Array.from({ length: props.maxX + 1 }, (_, i) => (i).toString()),
 	},
 	yAxis: {
 		type: 'category',
 		splitArea: { show: false },
 		axisLabel: { fontSize: 12 },
-		data: Array.from({ length: 10 }, (_, i) => (i + 1).toString()),
+		data: Array.from({ length: props.maxY + 1 }, (_, i) => (i).toString()),
 	},
 	series: [
 		{
@@ -187,6 +155,29 @@ const chartOption = ref({
 })
 
 defineExpose({ colorGrid })
+
+watch([() => props.maxX, () => props.maxY], () => {
+	initializeHeatmap()
+	chartOption.value.xAxis.data = Array.from({ length: props.maxX + 1 }, (_, i) => (i).toString())
+	chartOption.value.yAxis.data = Array.from({ length: props.maxY + 1 }, (_, i) => (i).toString())
+	const data = []
+	for (let y = 0; y <= props.maxY; y++) {
+		for (let x = 0; x <= props.maxX; x++) {
+			data.push({
+				// [x, y, value]
+				value: [x, y, 1],
+				itemStyle: {
+					borderWidth: 0,
+					borderColor: '#fff',
+					color: colorGrid.value[y][x],
+				},
+			})
+		}
+	}
+	chartOption.value.series[0].data = data
+	emits('heatmap-updated')
+})
+
 // Initialize on mount
 onMounted(() => {
 	nextTick(() => {
@@ -194,8 +185,8 @@ onMounted(() => {
 		initializeHeatmap()
 
 		const data = []
-		for (let y = 0; y < 10; y++) {
-			for (let x = 0; x < 10; x++) {
+		for (let y = 0; y <= props.maxY; y++) {
+			for (let x = 0; x <= props.maxX; x++) {
 				data.push({
 					// [x, y, value]
 					value: [x, y, 1],
@@ -209,6 +200,7 @@ onMounted(() => {
 		}
 
 		chartOption.value.series[0].data = data
+		emits('heatmap-updated')
 	})
 })
 </script>
