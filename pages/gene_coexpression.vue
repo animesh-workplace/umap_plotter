@@ -70,10 +70,14 @@
 				noFilter
 				ref="graph3"
 				colorScheme="#ca8a04"
+				:key="graph3Key"
 				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
 			/>
 			<PlotsHeatMap
 				ref="heatmap"
+				:maxX="maxGene1Expression"
+				:maxY="maxGene2Expression"
+				@heatmap-updated="updateGraph3Colors"
 				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
 			/>
 		</div>
@@ -92,9 +96,12 @@ const clusters = ref([])
 const cellTypes = ref([])
 const selectedGene1 = ref('')
 const selectedGene2 = ref('')
+const maxGene1Expression = ref(1)
+const maxGene2Expression = ref(1)
 const activate3DMode = ref(false)
 const selectedFilterOption = ref(null)
 const selectedVisualizationType = ref('UMAP')
+const graph3Key = ref(0)
 
 // Handle 3D Mode Changes
 const handle3DModeChange = async (changeValue) => {
@@ -146,7 +153,8 @@ const handleCellFilterChange = async (changeValue) => {
 const handleClearGene1 = async (changeValue) => {
 	graph1.value.selectedColorOption = null
 	graph1.value.clearGeneSelection()
-	graph3.value.clearGeneSelection()
+	graph3Key.value++
+	maxGene1Expression.value = 1
 }
 const handleSearchGene1 = async (changeValue) => {
 	graph1.value.selectedColorOption = 'Gene'
@@ -155,25 +163,31 @@ const handleSearchGene1 = async (changeValue) => {
 
 const handleUpdateGraph1 = async () => {
 	nextTick(() => {
-		updateGraph3Colors()
+		const gene1Data = graph1.value.geneExpression
+		if (gene1Data && typeof gene1Data === 'object') {
+			maxGene1Expression.value = Math.ceil(Math.max(...Object.values(gene1Data)))
+		}
 	})
 }
 
 // Handle Gene Search Logic for Gene 2
 const handleClearGene2 = async (changeValue) => {
 	graph2.value.selectedColorOption = null
-	graph2.value.clearGeneSelection()
-	graph3.value.clearGeneSelection()
+	await graph2.value.clearGeneSelection()
+	graph3Key.value++
+	maxGene2Expression.value = 1
 }
 const handleSearchGene2 = async (changeValue) => {
 	graph2.value.selectedColorOption = 'Gene'
 	await graph2.value.setGeneSearch(changeValue)
-	updateGraph3Colors()
 }
 
 const handleUpdateGraph2 = async () => {
 	nextTick(() => {
-		updateGraph3Colors()
+		const gene2Data = graph2.value.geneExpression
+		if (gene2Data && typeof gene2Data === 'object') {
+			maxGene2Expression.value = Math.ceil(Math.max(...Object.values(gene2Data)))
+		}
 	})
 }
 
@@ -182,6 +196,8 @@ const updateGraph3Colors = () => {
 	const gene2Data = graph2.value.geneExpression
 	const colorGrid = heatmap.value.colorGrid
 	console.log(gene1Data, gene2Data, colorGrid)
+
+	console.log(maxGene1Expression.value, maxGene2Expression.value)
 
 	if (gene1Data && gene2Data && colorGrid) {
 		const colors = []
