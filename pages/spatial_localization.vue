@@ -3,53 +3,73 @@
 		<div class="mb-2 text-center">
 			<h2 class="text-xl font-semibold mb-1">Spatial Localization</h2>
 		</div>
+		<div>
+			<FloatLabel class="w-full" variant="on">
+				<Select
+					fluid
+					size="small"
+					optionLabel="name"
+					optionValue="image"
+					inputId="Image-Select"
+					:options="imageOptions"
+					@change="getSpatialInfo"
+					v-model="selectedImageOption"
+				/>
+				<label for="Image-Select" class="flex items-center gap-2">
+					<Icon class="w-4 h-4 text-slate-500" name="tabler:photo-square-rounded" /> Select image
+				</label>
+			</FloatLabel>
+
+			<div class="my-2">
+				<Carousel :value="clusterOptions" :numVisible="6" :showIndicators="false">
+					<template #item="slotProp">
+						<motion.div :while-hover="{ scale: 0.95 }" class="my-2 w-24">
+							<Tag
+								rounded
+								class="cursor-pointer"
+								:value="slotProp.data.name"
+								@click="FilterCluster(slotProp.data.index)"
+								:severity="slotProp.data.active ? 'success' : 'danger'"
+							>
+								<template #icon>
+									<Icon
+										v-if="slotProp.data.active"
+										class="w-4 h-4 text-green-500"
+										name="akar-icons:tetragon-fill"
+									/>
+									<Icon v-else class="w-4 h-4 text-rose-500" name="akar-icons:tetragon" />
+								</template>
+							</Tag>
+						</motion.div>
+					</template>
+				</Carousel>
+			</div>
+
+			<div class="my-2">
+				<div class="flex gap-2 items-center backdrop-blur rounded-lg">
+					<SelectButton
+						v-model="switchAnnotation"
+						:options="['Path Annotation', 'TE Annotation']"
+						:pt="{ pcToggleButton: { root: '!bg-gray-200' } }"
+					/>
+				</div>
+			</div>
+		</div>
 		<div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 min-w-full mt-2">
 			<div
-				class="xl:col-start-3 col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
+				class="xl:col-start-2 col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
 			>
-				<FloatLabel class="w-full" variant="on">
-					<Select
-						fluid
-						size="small"
-						optionLabel="name"
-						optionValue="image"
-						inputId="Image-Select"
-						:options="imageOptions"
-						@change="getSpatialInfo"
-						v-model="selectedImageOption"
-					/>
-					<label for="Image-Select" class="flex items-center gap-2">
-						<Icon class="w-4 h-4 text-slate-500" name="tabler:photo-square-rounded" /> Select image
-					</label>
-				</FloatLabel>
-
-				<div class="my-2">
-					<Carousel :value="clusterOptions" :numVisible="6" :showIndicators="false">
-						<template #item="slotProp">
-							<motion.div :while-hover="{ scale: 0.95 }" class="my-2 w-24">
-								<Tag
-									rounded
-									class="cursor-pointer"
-									:value="slotProp.data.name"
-									@click="FilterCluster(slotProp.data.index)"
-									:severity="slotProp.data.active ? 'success' : 'danger'"
-								>
-									<template #icon>
-										<Icon
-											v-if="slotProp.data.active"
-											class="w-4 h-4 text-green-500"
-											name="akar-icons:tetragon-fill"
-										/>
-										<Icon v-else class="w-4 h-4 text-rose-500" name="akar-icons:tetragon" />
-									</template>
-								</Tag>
-							</motion.div>
-						</template>
-					</Carousel>
-				</div>
-
 				<PlotsSpatialScatter
 					:scatterData="scatterData"
+					:imageURL="selectedImageOption"
+					:clusterSelected="isClusterFilterActive"
+				/>
+			</div>
+
+			<div class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg">
+				<PlotsSpatialScatter
+					:scatterData="scatterData"
+					:colorScheme="switchAnnotation"
 					:imageURL="selectedImageOption"
 					:clusterSelected="isClusterFilterActive"
 				/>
@@ -66,6 +86,7 @@ import { useGeneralDataStore } from '@/stores/generalData'
 const scatterData = ref([])
 const spatialExpression = ref([])
 const selectedImageOption = ref('')
+const switchAnnotation = ref('Path Annotation')
 const clusterOptions = ref([
 	{ name: 'CAF-1', active: false, option_name: 'caf_1', index: 0 },
 	{ name: 'CAF-2', active: false, option_name: 'caf_2', index: 1 },
@@ -76,7 +97,6 @@ const clusterOptions = ref([
 	{ name: 'CAF-7', active: false, option_name: 'caf_7', index: 6 },
 	{ name: 'CAF-8', active: false, option_name: 'caf_8', index: 7 },
 	{ name: 'CAF-9', active: false, option_name: 'caf_9', index: 8 },
-	{ name: 'CAF-10', active: false, option_name: 'caf_10', index: 9 },
 ])
 const imageOptions = ref([
 	{ name: 'Sample 1', image: '/fibrohub/media/s1.webp' },
