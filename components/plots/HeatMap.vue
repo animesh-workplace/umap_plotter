@@ -19,12 +19,12 @@ const initializeHeatmap = () => {
 	const topRight = '#9d174d'
 	const topLeft = '#d3d3d3'
 
-	for (let y = 0; y < 5; y++) {
+	for (let y = 0; y < 10; y++) {
 		const row = []
-		for (let x = 0; x < 8; x++) {
+		for (let x = 0; x < 10; x++) {
 			// Calculate interpolation factors (0 to 1)
-			let xFactor = x / 7 // 0 at left, 1 at right
-			let yFactor = y / 4 // 0 at top, 1 at bottom
+			let xFactor = x / 9 // 0 at left, 1 at right
+			let yFactor = y / 9 // 0 at top, 1 at bottom
 
 			// Remapping functions to create biased gradients
 			const biasTowardsEnd = (f) => {
@@ -162,13 +162,13 @@ const chartOption = ref({
 		type: 'category',
 		splitArea: { show: false },
 		axisLabel: { fontSize: 12 },
-		data: Array.from({ length: 8 }, (_, i) => (i + 1).toString()),
+		data: Array.from({ length: 10 }, (_, i) => (i + 1).toString()),
 	},
 	yAxis: {
 		type: 'category',
 		splitArea: { show: false },
 		axisLabel: { fontSize: 12 },
-		data: Array.from({ length: 5 }, (_, i) => (i + 1).toString()),
+		data: Array.from({ length: 10 }, (_, i) => (i + 1).toString()),
 	},
 	series: [
 		{
@@ -194,8 +194,8 @@ onMounted(() => {
 		initializeHeatmap()
 
 		const data = []
-		for (let y = 0; y < 5; y++) {
-			for (let x = 0; x < 8; x++) {
+		for (let y = 0; y < 10; y++) {
+			for (let x = 0; x < 10; x++) {
 				data.push({
 					// [x, y, value]
 					value: [x, y, 1],
