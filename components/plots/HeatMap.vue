@@ -19,6 +19,69 @@ const initializeHeatmap = () => {
 	const topRight = '#9d174d'
 	const topLeft = '#d3d3d3'
 
+	for (let y = 0; y < 5; y++) {
+		const row = []
+		for (let x = 0; x < 8; x++) {
+			// Calculate interpolation factors (0 to 1)
+			let xFactor = x / 7 // 0 at left, 1 at right
+			let yFactor = y / 4 // 0 at top, 1 at bottom
+
+			// Remapping functions to create biased gradients
+			const biasTowardsEnd = (f) => {
+				const norm = (f - 0.5) * 2
+				const curved = Math.sqrt(norm)
+				return curved / 2 + 0.5
+			}
+			const biasTowardsStart = (f) => {
+				const norm = f * 2
+				const curved = norm * norm
+				return curved / 2
+			}
+
+			// Adjust factors based on the quadrant
+			if (xFactor <= 0.5 && yFactor <= 0.5) {
+				// Top-Left Quadrant
+				xFactor = biasTowardsStart(xFactor)
+				yFactor = biasTowardsStart(yFactor)
+			} else if (xFactor > 0.5 && yFactor <= 0.5) {
+				// Top-Right Quadrant
+				xFactor = biasTowardsEnd(xFactor)
+				yFactor = biasTowardsStart(yFactor)
+			} else if (xFactor <= 0.5 && yFactor > 0.5) {
+				// Bottom-Left Quadrant
+				xFactor = biasTowardsStart(xFactor)
+				yFactor = biasTowardsEnd(yFactor)
+			} else {
+				// Bottom-Right Quadrant
+				xFactor = biasTowardsEnd(xFactor)
+				yFactor = biasTowardsEnd(yFactor)
+			}
+
+			// Top edge: interpolate between top-left and top-right
+			const topColor = interpolateColor(topLeft, topRight, xFactor)
+			// Bottom edge: interpolate between bottom-left and bottom-right
+			const bottomColor = interpolateColor(bottomLeft, bottomRight, xFactor)
+			// Final color: interpolate between top and bottom colors
+			const finalColor = interpolateColor(topColor, bottomColor, yFactor)
+
+			row.push(finalColor)
+		}
+		grid.push(row)
+	}
+	colorGrid.value = grid
+}
+
+/*
+// Initialize the heatmap with a single biased quadrant
+const initializeHeatmap = () => {
+	const grid = []
+
+	// Define corner colors
+	const bottomRight = '#FFF94F'
+	const bottomLeft = '#16DB93'
+	const topRight = '#9d174d'
+	const topLeft = '#d3d3d3'
+
 	for (let y = 0; y < 10; y++) {
 		const row = []
 		for (let x = 0; x < 10; x++) {
@@ -51,6 +114,7 @@ const initializeHeatmap = () => {
 	}
 	colorGrid.value = grid
 }
+*/
 
 // Helper function to interpolate between two colors
 const interpolateColor = (color1, color2, factor) => {
@@ -98,13 +162,13 @@ const chartOption = ref({
 		type: 'category',
 		splitArea: { show: false },
 		axisLabel: { fontSize: 12 },
-		data: Array.from({ length: 10 }, (_, i) => (i + 1).toString()),
+		data: Array.from({ length: 8 }, (_, i) => (i + 1).toString()),
 	},
 	yAxis: {
 		type: 'category',
 		splitArea: { show: false },
 		axisLabel: { fontSize: 12 },
-		data: Array.from({ length: 10 }, (_, i) => (i + 1).toString()),
+		data: Array.from({ length: 5 }, (_, i) => (i + 1).toString()),
 	},
 	series: [
 		{
@@ -122,16 +186,16 @@ const chartOption = ref({
 	],
 })
 
-// Initialize on mount
 defineExpose({ colorGrid })
+// Initialize on mount
 onMounted(() => {
 	nextTick(() => {
 		isLoading.value = false
 		initializeHeatmap()
 
 		const data = []
-		for (let y = 0; y < 10; y++) {
-			for (let x = 0; x < 10; x++) {
+		for (let y = 0; y < 5; y++) {
+			for (let x = 0; x < 8; x++) {
 				data.push({
 					// [x, y, value]
 					value: [x, y, 1],

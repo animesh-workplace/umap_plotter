@@ -95,10 +95,11 @@ const selectedFilterOption = ref(null)
 const selectedVisualizationType = ref('UMAP')
 
 // Handle 3D Mode Changes
-const handle3DModeChange = (changeValue) => {
+const handle3DModeChange = async (changeValue) => {
 	graph1.value.set3DMode(changeValue)
 	graph2.value.set3DMode(changeValue)
 	graph3.value.set3DMode(changeValue)
+	await updateGraph3Colors()
 }
 
 // Handle Plot Changes
@@ -106,6 +107,7 @@ const handlePlotChange = async (changeValue) => {
 	graph1.value.setPlotType(changeValue)
 	graph2.value.setPlotType(changeValue)
 	graph3.value.setPlotType(changeValue)
+	await updateGraph3Colors()
 }
 
 // Handle Filter Change and Reset Filter
@@ -160,14 +162,16 @@ const updateGraph3Colors = async () => {
 	const gene1Data = graph1.value.geneExpression
 	const gene2Data = graph2.value.geneExpression
 	const colorGrid = heatmap.value.colorGrid
+	console.log(gene1Data, gene2Data, colorGrid)
 
 	if (gene1Data && gene2Data && colorGrid) {
 		const colors = []
 		const keys = Object.keys(gene1Data)
 		for (let i = 0; i < keys.length; i++) {
-			const x = Math.ceil(gene1Data[keys[i]])
-			const y = Math.ceil(gene2Data[keys[i]])
-			colors.push(colorGrid[x][y])
+			const x = Math.floor(gene1Data[keys[i]])
+			const y = Math.floor(gene2Data[keys[i]])
+			console.log(x, y)
+			colors.push(colorGrid[y][x])
 		}
 		graph3.value.updatePointColors(colors)
 	}
