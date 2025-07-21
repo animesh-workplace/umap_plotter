@@ -90,12 +90,12 @@ const updateChart = () => {
 		chartOption.value = {
 			...chartOption.value,
 			visualMap: {
-				right: 5,
-				show: false,
-				dimension: 2,
-				top: 'center',
 				min,
 				max,
+				right: 5,
+				show: true,
+				dimension: 2,
+				top: 'center',
 				hoverLink: false,
 				calculable: true,
 				type: 'continuous',
