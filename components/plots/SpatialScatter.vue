@@ -36,17 +36,17 @@ const chartOption = ref({
 	},
 	xAxis: {
 		min: 0,
+		show: false,
 		type: 'value',
 		inverse: false,
-		show: false,
 		splitNumber: 40,
 		max: originalImageWidth,
 	},
 	yAxis: {
 		min: 0,
+		show: false,
 		type: 'value',
 		inverse: true,
-		show: false,
 		splitNumber: 40,
 		max: originalImageHeight,
 	},
@@ -59,10 +59,10 @@ const chartOption = ref({
 		top: 'center',
 		left: 'center',
 		style: {
-			text: 'Please Select Image',
 			textAlign: 'center',
-			textVerticalAlign: 'middle',
 			font: 'bold 20px Averta',
+			text: 'Please Select Image',
+			textVerticalAlign: 'middle',
 		},
 	},
 })
@@ -128,69 +128,65 @@ const updateChart = () => {
 				},
 			],
 		}
-	} else if (props.clusterSelected && props.colorScheme == 'Path Annotation') {
-		chartOption.value = {
-			...chartOption.value,
-			tooltip: {
-				formatter: (p) =>
-					`${p.data.cell_id}<br/>x: ${p.data.x}, y: ${p.data.y}, expression: ${p.data.expression} <br/> Annotation: ${p.data.path_annotation}`,
-			},
-			series: [
-				{
-					symbolSize: 8,
-					type: 'scatter',
-					data: props.scatterData,
-					itemStyle: {
-						color: (params) => {
-							const sourceColors = {
-								null: '#D9D9D9',
-								SCC: '#EE6363',
-								Core: '#00FFFF',
-								Stroma: '#FFEC8B',
-								Transitory: '#EE9572',
-								'Leading Edge': '#8B1C62',
-								'Artifact/Fold': '#838B83',
-							}
-							return sourceColors[params.data.path_annotation]
-						},
-					},
-				},
-			],
+	} else if (
+		props.clusterSelected &&
+		(props.colorScheme == 'Pathologist Annotation' || props.colorScheme == 'TE Annotation')
+	) {
+		const annotationKey = props.colorScheme === 'Pathologist Annotation' ? 'path_annotation' : 'te_annotation'
+		const sourceColors = {
+			null: '#D9D9D9',
+			SCC: '#EE6363',
+			Core: '#00FFFF',
+			Stroma: '#FFEC8B',
+			Transitory: '#EE9572',
+			'Leading Edge': '#8B1C62',
+			'Artifact/Fold': '#838B83',
 		}
-	} else if (props.clusterSelected && props.colorScheme == 'TE Annotation') {
+
+		const groupedData = props.scatterData.reduce((acc, item) => {
+			const key = item[annotationKey]
+			if (!acc[key]) {
+				acc[key] = []
+			}
+			acc[key].push(item)
+			return acc
+		}, {})
+
+		const series = Object.keys(groupedData).map((key) => ({
+			name: key,
+			type: 'scatter',
+			data: groupedData[key],
+			symbolSize: 8,
+			itemStyle: {
+				color: sourceColors[key],
+			},
+		}))
+
 		chartOption.value = {
 			...chartOption.value,
+			visualMap: null,
+			legend: {
+				top: 10,
+				shadowBlur: 1,
+				right: 'center',
+				borderRadius: 5,
+				width: originalImageWidth,
+				backgroundColor: 'white',
+				data: Object.keys(sourceColors),
+				textStyle: { fontFamily: 'Averta', fontWeight: 700, fontSize: 15 },
+			},
 			tooltip: {
 				formatter: (p) =>
-					`${p.data.cell_id}<br/>x: ${p.data.x}, y: ${p.data.y}, expression: ${p.data.expression} <br/> Annotation: ${p.data.te_annotation}`,
+					`${p.data.cell_id}<br/>x: ${p.data.x}, y: ${p.data.y}, expression: ${p.data.expression} <br/> Annotation: ${p.data[annotationKey]}`,
 			},
-			series: [
-				{
-					symbolSize: 8,
-					type: 'scatter',
-					data: props.scatterData,
-					itemStyle: {
-						color: (params) => {
-							const sourceColors = {
-								null: '#D9D9D9',
-								SCC: '#EE6363',
-								Core: '#00FFFF',
-								Stroma: '#FFEC8B',
-								Transitory: '#EE9572',
-								'Leading Edge': '#8B1C62',
-								'Artifact/Fold': '#838B83',
-							}
-							return sourceColors[params.data.te_annotation]
-						},
-					},
-				},
-			],
+			series,
 		}
 	} else {
 		chartOption.value = {
 			...chartOption.value,
 			visualMap: undefined,
 			series: undefined,
+			legend: undefined,
 		}
 	}
 
