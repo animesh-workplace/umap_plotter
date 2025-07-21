@@ -20,13 +20,13 @@
 				</label>
 			</FloatLabel>
 
-			<div class="my-2">
+			<div class="my-2 backdrop-blur rounded-lg">
 				<Carousel :value="clusterOptions" :numVisible="6" :showIndicators="false">
 					<template #item="slotProp">
-						<motion.div :while-hover="{ scale: 0.95 }" class="my-2 w-24">
+						<motion.div :while-hover="{ scale: 0.95 }" class="p-2">
 							<Tag
 								rounded
-								class="cursor-pointer"
+								class="cursor-pointer w-full px-2"
 								:value="slotProp.data.name"
 								@click="FilterCluster(slotProp.data.index)"
 								:severity="slotProp.data.active ? 'success' : 'danger'"
@@ -46,12 +46,23 @@
 			</div>
 
 			<div class="my-2">
-				<div class="flex gap-2 items-center backdrop-blur rounded-lg">
+				<div class="flex gap-2 justify-center items-center backdrop-blur rounded-lg">
 					<SelectButton
 						v-model="switchAnnotation"
+						:disabled="!isClusterFilterActive"
 						:options="['Path Annotation', 'TE Annotation']"
 						:pt="{ pcToggleButton: { root: '!bg-gray-200' } }"
-					/>
+					>
+						<template #option="slotProps">
+							<Icon
+								class="w-4 h-4"
+								name="tabler:keyframe-align-center-filled"
+								v-if="slotProps.index == 0"
+							/>
+							<Icon class="w-4 h-4" name="tabler:north-star" v-if="slotProps.index == 1" />
+							{{ slotProps.option }}
+						</template>
+					</SelectButton>
 				</div>
 			</div>
 		</div>
