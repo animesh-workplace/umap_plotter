@@ -50,7 +50,7 @@
 					<SelectButton
 						v-model="switchAnnotation"
 						:disabled="!isClusterFilterActive"
-						:options="['Path Annotation', 'TE Annotation']"
+						:options="['Pathologist Annotation', 'TE Annotation']"
 						:pt="{ pcToggleButton: { root: '!bg-gray-200' } }"
 					>
 						<template #option="slotProps">
@@ -97,7 +97,7 @@ import { useGeneralDataStore } from '@/stores/generalData'
 const scatterData = ref([])
 const spatialExpression = ref([])
 const selectedImageOption = ref('')
-const switchAnnotation = ref('Path Annotation')
+const switchAnnotation = ref('Pathologist Annotation')
 const clusterOptions = ref([
 	{ name: 'CAF-1', active: false, option_name: 'caf_1', index: 0 },
 	{ name: 'CAF-2', active: false, option_name: 'caf_2', index: 1 },
