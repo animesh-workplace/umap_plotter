@@ -1,7 +1,7 @@
 <template>
 	<div class="w-full flex justify-center">
 		<Skeleton height="30rem" v-if="isLoading" />
-		<VChart :option="chartOption" class="h-[30rem]" autoresize v-else />
+		<VChart :option="chartOption" class="h-[34rem]" autoresize v-else />
 	</div>
 </template>
 
