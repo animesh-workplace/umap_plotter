@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<Skeleton height="30rem" v-if="isLoading" />
+		<Skeleton height="34rem" v-if="isLoading" />
 
 		<div v-else>
 			<!-- UMAP 3D -->
