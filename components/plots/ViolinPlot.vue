@@ -5,13 +5,7 @@
 </template>
 
 <script setup>
-import { use } from 'echarts/core'
-import { CustomChart } from 'echarts/charts'
-import { GridComponent, TooltipComponent, DatasetComponent } from 'echarts/components'
 import * as kde from 'fast-kde'
-
-// Register the components
-use([CustomChart, GridComponent, TooltipComponent, DatasetComponent])
 
 const props = defineProps({
 	plotData: { type: Array, required: true, default: () => [] },
