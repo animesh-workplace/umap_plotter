@@ -54,6 +54,7 @@
 				noFilter
 				ref="graph1"
 				:geneSearch="false"
+				:geneSlot="1"
 				colorScheme="#9d174d"
 				@gene-fetched="handleUpdateGraph1"
 				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
@@ -62,6 +63,7 @@
 				noFilter
 				ref="graph2"
 				:geneSearch="false"
+				:geneSlot="2"
 				colorScheme="#16DB93"
 				@gene-fetched="handleUpdateGraph2"
 				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
@@ -69,6 +71,7 @@
 			<InteractiveGraph
 				noFilter
 				ref="graph3"
+				:geneSlot="3"
 				colorScheme="#ca8a04"
 				:key="graph3Key"
 				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
@@ -85,16 +88,17 @@
 </template>
 
 <script setup>
-import { useGeneAPI } from '@/api/geneAPI'
+import { useEmbeddingDataStore } from '@/stores/embeddingDataStore'
 import { useGeneralDataStore } from '@/stores/generalData'
 import { useHeatmapStore } from '@/stores/heatmapStore'
+
+const embeddingDataStore = useEmbeddingDataStore()
+const heatmapStore = useHeatmapStore()
 
 const graph1 = ref(null)
 const graph2 = ref(null)
 const graph3 = ref(null)
 const graph3Key = ref(0)
-const clusters = ref([])
-const cellTypes = ref([])
 const heatmap = ref(null)
 const selectedGene1 = ref('')
 const selectedGene2 = ref('')
@@ -103,7 +107,8 @@ const maxGene2Expression = ref(0)
 const activate3DMode = ref(false)
 const selectedFilterOption = ref(null)
 const selectedVisualizationType = ref('UMAP')
-const heatmapStore = useHeatmapStore()
+
+const { clusters, cellTypes } = storeToRefs(embeddingDataStore)
 
 watch(
 	() => heatmapStore.selectedCells,
@@ -115,6 +120,7 @@ watch(
 
 // Handle 3D Mode Changes
 const handle3DModeChange = async (changeValue) => {
+	activate3DMode.value = changeValue
 	graph1.value.set3DMode(changeValue)
 	graph2.value.set3DMode(changeValue)
 	graph3.value.set3DMode(changeValue)
@@ -125,6 +131,7 @@ const handle3DModeChange = async (changeValue) => {
 
 // Handle Plot Changes
 const handlePlotChange = async (changeValue) => {
+	selectedVisualizationType.value = changeValue
 	graph1.value.setPlotType(changeValue)
 	graph2.value.setPlotType(changeValue)
 	graph3.value.setPlotType(changeValue)
@@ -136,8 +143,7 @@ const handlePlotChange = async (changeValue) => {
 // Handle Filter Change and Reset Filter
 const handleFilterChange = async (changeValue) => {
 	selectedFilterOption.value = changeValue
-	clusters.value.forEach((item) => (item.active = true))
-	cellTypes.value.forEach((item) => (item.active = true))
+	embeddingDataStore.resetFilters()
 	graph1.value.resetFilter()
 	graph2.value.resetFilter()
 	graph3.value.resetFilter()
@@ -146,10 +152,7 @@ const handleFilterChange = async (changeValue) => {
 
 // Handle Cluster based filtering
 const handleClusterFilterChange = async (changeValue) => {
-	clusters.value[changeValue].active = !clusters.value[changeValue].active
-	graph1.value.setFilterByCluster(clusters)
-	graph2.value.setFilterByCluster(clusters)
-	graph3.value.setFilterByCluster(clusters)
+	embeddingDataStore.toggleClusterFilter(changeValue)
 	nextTick(() => {
 		updateGraph3Colors()
 	})
@@ -157,25 +160,20 @@ const handleClusterFilterChange = async (changeValue) => {
 
 // Handle Cell based filtering
 const handleCellFilterChange = async (changeValue) => {
-	cellTypes.value[changeValue].active = !cellTypes.value[changeValue].active
-	graph1.value.setFilterBySource(cellTypes)
-	graph2.value.setFilterBySource(cellTypes)
-	graph3.value.setFilterBySource(cellTypes)
+	embeddingDataStore.toggleCellTypeFilter(changeValue)
 	nextTick(() => {
 		updateGraph3Colors()
 	})
 }
 
 // Handle Gene Search Logic for Gene 1
-const handleClearGene1 = async (changeValue) => {
-	graph1.value.selectedColorOption = null
+const handleClearGene1 = async () => {
 	graph1.value.clearGeneSelection()
-	graph3Key.value++
 	maxGene1Expression.value = 0
+	graph3Key.value++
 }
-const handleSearchGene1 = async (changeValue) => {
-	graph1.value.selectedColorOption = 'Gene'
-	await graph1.value.setGeneSearch(changeValue)
+const handleSearchGene1 = async (gene) => {
+	await graph1.value.setGeneSearch(gene)
 }
 
 const handleUpdateGraph1 = async () => {
@@ -188,15 +186,13 @@ const handleUpdateGraph1 = async () => {
 }
 
 // Handle Gene Search Logic for Gene 2
-const handleClearGene2 = async (changeValue) => {
-	graph2.value.selectedColorOption = null
-	await graph2.value.clearGeneSelection()
-	graph3Key.value++
+const handleClearGene2 = async () => {
+	graph2.value.clearGeneSelection()
 	maxGene2Expression.value = 0
+	graph3Key.value++
 }
-const handleSearchGene2 = async (changeValue) => {
-	graph2.value.selectedColorOption = 'Gene'
-	await graph2.value.setGeneSearch(changeValue)
+const handleSearchGene2 = async (gene) => {
+	await graph2.value.setGeneSearch(gene)
 }
 
 const handleUpdateGraph2 = async () => {
@@ -246,36 +242,11 @@ const updateGraph3Colors = () => {
 	}
 }
 
-const loadFilterOptions = async () => {
-	const { get2DUmapCellType } = useGeneAPI()
-	const clusterNames = ['CAF-1', 'CAF-2', 'CAF-3', 'CAF-4', 'CAF-5', 'CAF-6', 'CAF-7', 'CAF-8', 'CAF-9']
-
-	try {
-		const response = (await get2DUmapCellType()) || []
-
-		cellTypes.value = response.map((item, index) => ({
-			name: item,
-			index: index,
-			active: true,
-		}))
-
-		clusters.value = clusterNames.map((item, index) => ({
-			name: item,
-			index: index,
-			active: true,
-		}))
-	} catch (err) {
-		console.error('Error fetching cell type names:', err)
-		cellTypes.value = []
-		clusters.value = []
-	}
-}
-
 onMounted(() => {
 	nextTick(async () => {
 		const generalDataStore = useGeneralDataStore()
 		generalDataStore.updateNavBarPosition('Gene Co-expression')
-		await loadFilterOptions()
+		await embeddingDataStore.fetchAllEmbeddings()
 	})
 })
 </script>
