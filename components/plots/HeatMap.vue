@@ -1,16 +1,19 @@
 <template>
 	<div class="w-full flex justify-center">
 		<Skeleton height="30rem" v-if="isLoading" />
-		<VChart :option="chartOption" class="h-[34rem]" autoresize v-else />
+		<VChart :option="chartOption" class="h-[34rem]" autoresize @click="handleClick" v-else />
 	</div>
 </template>
 
 <script setup>
+import { useHeatmapStore } from '@/stores/heatmapStore'
+
 const props = defineProps({
 	maxX: { type: Number, default: 10 },
 	maxY: { type: Number, default: 10 },
 })
 
+const heatmapStore = useHeatmapStore()
 const isLoading = ref(true)
 const colorGrid = ref([])
 
@@ -148,27 +151,40 @@ const chartOption = ref({
 	],
 })
 
-defineExpose({ colorGrid })
+const handleClick = (params) => {
+	const x = params.data.value[0]
+	const y = params.data.value[1]
+	const cellKey = `${x},${y}`
+	heatmapStore.toggleCell(cellKey)
+	updateChart()
+}
 
-watch([() => props.maxX, () => props.maxY], () => {
-	initializeHeatmap()
-	chartOption.value.xAxis.data = Array.from({ length: props.maxX + 1 }, (_, i) => i.toString())
-	chartOption.value.yAxis.data = Array.from({ length: props.maxY + 1 }, (_, i) => i.toString())
+const updateChart = () => {
 	const data = []
 	for (let y = 0; y <= props.maxY; y++) {
 		for (let x = 0; x <= props.maxX; x++) {
+			const cellKey = `${x},${y}`
+			const isSelected = heatmapStore.selectedCells.has(cellKey)
 			data.push({
-				// [x, y, value]
 				value: [x, y, 1],
 				itemStyle: {
-					borderWidth: 0,
-					borderColor: '#fff',
+					borderWidth: isSelected ? 2 : 0,
+					borderColor: isSelected ? '#000' : '#fff',
 					color: colorGrid.value[y][x],
 				},
 			})
 		}
 	}
 	chartOption.value.series[0].data = data
+}
+
+defineExpose({ colorGrid })
+
+watch([() => props.maxX, () => props.maxY], () => {
+	initializeHeatmap()
+	chartOption.value.xAxis.data = Array.from({ length: props.maxX + 1 }, (_, i) => i.toString())
+	chartOption.value.yAxis.data = Array.from({ length: props.maxY + 1 }, (_, i) => i.toString())
+	updateChart()
 	emits('heatmap-updated')
 })
 
@@ -177,23 +193,7 @@ onMounted(() => {
 	nextTick(() => {
 		isLoading.value = false
 		initializeHeatmap()
-
-		const data = []
-		for (let y = 0; y <= props.maxY; y++) {
-			for (let x = 0; x <= props.maxX; x++) {
-				data.push({
-					// [x, y, value]
-					value: [x, y, 1],
-					itemStyle: {
-						borderWidth: 0,
-						borderColor: '#fff',
-						color: colorGrid.value[y][x],
-					},
-				})
-			}
-		}
-
-		chartOption.value.series[0].data = data
+		updateChart()
 		emits('heatmap-updated')
 	})
 })
