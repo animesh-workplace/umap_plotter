@@ -87,6 +87,7 @@
 <script setup>
 import { useGeneAPI } from '@/api/geneAPI'
 import { useGeneralDataStore } from '@/stores/generalData'
+import { useHeatmapStore } from '@/stores/heatmapStore'
 
 const graph1 = ref(null)
 const graph2 = ref(null)
@@ -102,6 +103,15 @@ const maxGene2Expression = ref(0)
 const activate3DMode = ref(false)
 const selectedFilterOption = ref(null)
 const selectedVisualizationType = ref('UMAP')
+const heatmapStore = useHeatmapStore()
+
+watch(
+	() => heatmapStore.selectedCells,
+	() => {
+		updateGraph3Colors()
+	},
+	{ deep: true },
+)
 
 // Handle 3D Mode Changes
 const handle3DModeChange = async (changeValue) => {
@@ -220,10 +230,17 @@ const updateGraph3Colors = () => {
 
 	if (gene1Data && gene2Data && colorGrid) {
 		const colors = []
+		const selectedCells = heatmapStore.selectedCells
 		for (let i = 0; i < gene1Embedding.length; i++) {
 			const x = Math.round(gene1Embedding[i][activate3DMode.value ? 6 : 5])
 			const y = Math.round(gene2Embedding[i][activate3DMode.value ? 6 : 5])
-			colors.push(colorGrid[y][x])
+			const cellKey = `${x + 1},${y + 1}`
+
+			if (selectedCells.size > 0 && !selectedCells.has(cellKey)) {
+				colors.push('transparent')
+			} else {
+				colors.push(colorGrid[y][x])
+			}
 		}
 		graph3.value.updatePointColors(colors)
 	}
