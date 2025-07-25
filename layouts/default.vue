@@ -665,10 +665,15 @@ const navItems = ref([
 		route: '/spatial_localization',
 	},
 	{
-		label: 'Violin Plots',
-		icon: 'solar:graph-up-bold-duotone',
-		route: '/violin_plot_demo',
+		label: 'Dual Gene Expression',
+		icon: 'tabler:box-multiple-filled',
+		route: '/dual_gene_expression',
 	},
+	// {
+	// 	label: 'Violin Plots',
+	// 	icon: 'solar:graph-up-bold-duotone',
+	// 	route: '/violin_plot_demo',
+	// },
 ])
 </script>
 
