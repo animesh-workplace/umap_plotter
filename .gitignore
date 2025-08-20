@@ -24,3 +24,4 @@ logs
 !.env.example
 bash_script_git
 git_bash
+git.saver
