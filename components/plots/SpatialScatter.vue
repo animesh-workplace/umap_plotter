@@ -154,12 +154,10 @@ const updateChart = () => {
 
 		const series = Object.keys(groupedData).map((key) => ({
 			name: key,
+			symbolSize: 8,
 			type: 'scatter',
 			data: groupedData[key],
-			symbolSize: 8,
-			itemStyle: {
-				color: sourceColors[key],
-			},
+			itemStyle: { color: sourceColors[key] },
 		}))
 
 		chartOption.value = {
