@@ -13,7 +13,7 @@
 						class="flex justify-center items-center px-4 cursor-pointer"
 					>
 						<img src="@/assets/images/logo.png" alt="Logo" width="35" />
-						<div class="text-[#186aa5ce] text-xl font-semibold">FibroHub</div>
+						<div class="text-[#186aa5ce] text-xl font-semibold">FibroScape</div>
 					</NuxtLink>
 				</template>
 
