@@ -1,7 +1,7 @@
 export function useGeneAPI() {
 	// const config = useRuntimeConfig()
 	// const BASEURL = `${config.public.API_BASE_URL}`
-	const BASEURL = 'http://10.10.6.80/fibrohub/api'
+	const BASEURL = 'http://10.10.6.80/fibroscape/api'
 
 	const getGeneAutocomplete = async (payload) => {
 		try {
@@ -105,7 +105,7 @@ export function useGeneAPI() {
 
 	const get2DUmapCellType = async () => {
 		try {
-			const { data, error } = await useFetch(`${BASEURL}/umap/2d/celltype/`, {
+			const { data, error } = await useFetch(`${BASEURL}/umap/2d/celltype`, {
 				method: 'GET',
 			})
 
