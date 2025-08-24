@@ -9,9 +9,9 @@ export default defineNuxtConfig({
 		},
 	},
 	app: {
-		baseURL: process.env.ROUTER_BASE || '/fibrohub/',
+		baseURL: process.env.ROUTER_BASE || '/fibroscape/',
 		head: {
-			title: 'FibroHub | National Institute of Biomedical Genomics',
+			title: 'FibroScape | National Institute of Biomedical Genomics',
 			meta: [],
 			link: [],
 		},
