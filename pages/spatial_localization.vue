@@ -110,18 +110,18 @@ const clusterOptions = ref([
 	{ name: 'CAF-9', active: false, option_name: 'caf_9', index: 8 },
 ])
 const imageOptions = ref([
-	{ name: 'Sample 1', image: '/fibrohub/media/s1.webp' },
-	{ name: 'Sample 2', image: '/fibrohub/media/s2.webp' },
-	{ name: 'Sample 3', image: '/fibrohub/media/s3.webp' },
-	{ name: 'Sample 4', image: '/fibrohub/media/s4.webp' },
-	{ name: 'Sample 5', image: '/fibrohub/media/s5.webp' },
-	{ name: 'Sample 6', image: '/fibrohub/media/s6.webp' },
-	{ name: 'Sample 7', image: '/fibrohub/media/s7.webp' },
-	{ name: 'Sample 8', image: '/fibrohub/media/s8.webp' },
-	{ name: 'Sample 9', image: '/fibrohub/media/s9.webp' },
-	{ name: 'Sample 10', image: '/fibrohub/media/s10.webp' },
-	{ name: 'Sample 11', image: '/fibrohub/media/s11.webp' },
-	{ name: 'Sample 12', image: '/fibrohub/media/s12.webp' },
+	{ name: 'Sample 1', image: '/fibroscape/media/s1.webp' },
+	{ name: 'Sample 2', image: '/fibroscape/media/s2.webp' },
+	{ name: 'Sample 3', image: '/fibroscape/media/s3.webp' },
+	{ name: 'Sample 4', image: '/fibroscape/media/s4.webp' },
+	{ name: 'Sample 5', image: '/fibroscape/media/s5.webp' },
+	{ name: 'Sample 6', image: '/fibroscape/media/s6.webp' },
+	{ name: 'Sample 7', image: '/fibroscape/media/s7.webp' },
+	{ name: 'Sample 8', image: '/fibroscape/media/s8.webp' },
+	{ name: 'Sample 9', image: '/fibroscape/media/s9.webp' },
+	{ name: 'Sample 10', image: '/fibroscape/media/s10.webp' },
+	{ name: 'Sample 11', image: '/fibroscape/media/s11.webp' },
+	{ name: 'Sample 12', image: '/fibroscape/media/s12.webp' },
 ])
 
 const isClusterFilterActive = computed(() => {
