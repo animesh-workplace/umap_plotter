@@ -5,7 +5,7 @@ export function useGeneAPI() {
 
 	const getGeneAutocomplete = async (payload) => {
 		try {
-			const { data, error } = await useFetch(`${BASEURL}/genes/autocomplete/`, {
+			const { data, error } = await useFetch(`${BASEURL}/genes/autocomplete`, {
 				method: 'GET',
 				query: { gene: payload },
 			})
