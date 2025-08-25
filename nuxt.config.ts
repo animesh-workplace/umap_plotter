@@ -14,6 +14,15 @@ export default defineNuxtConfig({
 			title: 'FibroScape | National Institute of Biomedical Genomics',
 			meta: [],
 			link: [],
+			script: [
+				{
+					async: true,
+					defer: true,
+					type: 'text/javascript',
+					src: 'https://research.nibmg.ac.in/umami/script.js',
+					'data-website-id': '3bc8fee8-9a14-49c8-9f7a-d1e1e33381a7',
+				},
+			],
 		},
 	},
 	compatibilityDate: '2024-11-01',
@@ -70,7 +79,7 @@ export default defineNuxtConfig({
 		],
 	},
 	umami: {
-		enabled: true,
+		enabled: false,
 		autoTrack: true,
 		logErrors: true,
 		// customEndpoint: '/umami',
