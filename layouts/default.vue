@@ -3,8 +3,8 @@
 		<div class="flex justify-center min-w-full">
 			<Menubar
 				:model="navItems"
-				class="drop-shadow-lg fixed top-3 bg-slate-400/20 backdrop-blur-lg justify-between min-w-[calc(100%-50px)] lg:min-w-0 !rounded-full"
-				:pt="{ root: 'l z-50 pr-4', itemContent: '!bg-transparent' }"
+				class="drop-shadow-lg fixed top-3 !bg-slate-400/20 backdrop-blur-lg justify-between min-w-[calc(100%-50px)] lg:min-w-0"
+				:pt="{ root: '!rounded-full z-50 pr-4', itemContent: '!bg-transparent' }"
 			>
 				<template #start>
 					<NuxtLink
