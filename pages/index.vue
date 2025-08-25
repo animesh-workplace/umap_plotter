@@ -70,7 +70,7 @@
 		<section class="overflow-hidden bg-gray-50 grid grid-cols-2 gap-12 items-center">
 			<div class="p-8 md:p-12 lg:px-16">
 				<div class="text-center ltr:sm:text-left rtl:sm:text-right">
-					<h2 class="text-2xl font-bold text-gray-900 md:text-3xl">
+					<!-- <h2 class="text-2xl font-bold text-gray-900 md:text-3xl">
 						Lorem, ipsum dolor sit amet consectetur adipisicing elit
 					</h2>
 
@@ -78,7 +78,47 @@
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Et, egestas tempus tellus etiam
 						sed. Quam a scelerisque amet ullamcorper eu enim et fermentum, augue. Aliquet amet volutpat
 						quisque ut interdum tincidunt duis.
-					</p>
+					</p> -->
+
+					<div class="max-w-5xl mx-auto px-6">
+						<!-- Header -->
+						<div class="text-center mb-10">
+							<h2 class="text-2xl md:text-3xl font-bold text-gray-800">
+								Built for Researchers. Designed for Discovery.
+							</h2>
+							<p class="mt-3 text-gray-600 max-w-2xl mx-auto">
+								Unlock powerful insights into single-cell RNA-seq data with ease.
+							</p>
+						</div>
+
+						<!-- Benefit Grid -->
+						<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+							<div class="benefit-item flex items-start space-x-3">
+								<div class="benefit-icon text-green-600 font-bold text-lg">✓</div>
+								<span class="text-gray-700">No programming required</span>
+							</div>
+							<div class="benefit-item flex items-start space-x-3">
+								<div class="benefit-icon text-green-600 font-bold text-lg">✓</div>
+								<span class="text-gray-700">Interactive UMAP/tSNE visualizations</span>
+							</div>
+							<div class="benefit-item flex items-start space-x-3">
+								<div class="benefit-icon text-green-600 font-bold text-lg">✓</div>
+								<span class="text-gray-700">Interactive 3D visualizations</span>
+							</div>
+							<div class="benefit-item flex items-start space-x-3">
+								<div class="benefit-icon text-green-600 font-bold text-lg">✓</div>
+								<span class="text-gray-700">Co-expression and spatial analysis</span>
+							</div>
+							<div class="benefit-item flex items-start space-x-3">
+								<div class="benefit-icon text-green-600 font-bold text-lg">✓</div>
+								<span class="text-gray-700">Publication-ready figures</span>
+							</div>
+							<div class="benefit-item flex items-start space-x-3">
+								<div class="benefit-icon text-green-600 font-bold text-lg">✓</div>
+								<span class="text-gray-700">Cancer-associated fibroblast insights</span>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 
