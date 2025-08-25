@@ -20,6 +20,7 @@
 <script setup>
 import { useGeneAPI } from '@/api/geneAPI'
 
+const route = useRoute()
 const props = defineProps({
 	modelValue: { type: String, default: null },
 	geneSearch: { type: Boolean, default: true },
@@ -39,7 +40,7 @@ const searchGene = async (event) => {
 }
 
 const searchGeneExpression = (event) => {
-	umami.track('gene-search', { gene: event.value })
+	umami.track('gene-search', { gene: event.value, page: route.path })
 	emit('gene-selected', event.value)
 }
 
