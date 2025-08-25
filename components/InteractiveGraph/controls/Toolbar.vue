@@ -12,10 +12,8 @@
 				v-else
 			>
 				<div class="flex gap-2 items-center">
-					<ToggleSwitch
-						:model-value="activate3DMode"
-						@update:model-value="$emit('update:activate3DMode', $event)"
-					/>
+					<ToggleSwitch :model-value="activate3DMode" @update:model-value="handle3DMode" />
+					<!-- @update:model-value="$emit('update:activate3DMode', $event)" -->
 					<Icon class="w-5 h-5 text-slate-500" name="akar-icons:augmented-reality" />
 					<div class="text-sm">3D Mode</div>
 				</div>
@@ -43,7 +41,7 @@
 						inputId="Color-Filter"
 						:options="colorMethods"
 						:model-value="selectedColorOption"
-						@update:model-value="$emit('update:selectedColorOption', $event)"
+						@update:model-value="handleColorOption"
 					/>
 					<label for="Color-Filter" class="flex items-center gap-2">
 						<Icon class="w-4 h-4 text-slate-500" name="tabler:color-filter" /> Color by
@@ -59,7 +57,7 @@
 						:options="filterMethods"
 						@value-change="resetFilter"
 						:model-value="selectedFilterOption"
-						@update:model-value="$emit('update:selectedFilterOption', $event)"
+						@update:model-value="handleFilterOption"
 					/>
 					<label for="Data-Filter" class="flex items-center gap-2">
 						<Icon class="w-4 h-4 text-slate-500" name="akar-icons:filter" /> Filter by
@@ -71,6 +69,7 @@
 </template>
 
 <script setup>
+const route = useRoute()
 const props = defineProps({
 	noFilter: { type: Boolean, default: false },
 	isLoading: { type: Boolean, default: false },
@@ -86,7 +85,23 @@ const visualizationTypes = ref(['UMAP', 't-SNE'])
 const colorMethods = ref(['Source', 'Cluster', 'Gene'])
 
 const handleVisualizationChange = (value) => {
+	umami.track('plot-type', { plot: value, page: route.path })
 	emit('visualization-changed', value)
+}
+
+const handle3DMode = (value) => {
+	umami.track('3d-view', { mode: value, page: route.path })
+	emit('update:activate3DMode', value)
+}
+
+const handleColorOption = (value) => {
+	umami.track('color-by', { selected: value, page: route.path })
+	emit('update:selectedColorOption', value)
+}
+
+const handleFilterOption = (value) => {
+	umami.track('filter-by', { selected: value, page: route.path })
+	emit('update:selectedFilterOption', value)
 }
 
 const resetFilter = () => {
