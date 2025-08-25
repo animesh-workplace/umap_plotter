@@ -15,13 +15,13 @@ export default defineNuxtConfig({
 			meta: [],
 			link: [],
 			script: [
-				{
-					async: true,
-					defer: true,
-					type: 'text/javascript',
-					src: 'https://research.nibmg.ac.in/umami/script.js',
-					'data-website-id': '3bc8fee8-9a14-49c8-9f7a-d1e1e33381a7',
-				},
+				// {
+				// 	async: true,
+				// 	defer: true,
+				// 	type: 'text/javascript',
+				// 	src: 'https://research.nibmg.ac.in/umami/script.js',
+				// 	'data-website-id': '3bc8fee8-9a14-49c8-9f7a-d1e1e33381a7',
+				// },
 			],
 		},
 	},
@@ -49,7 +49,7 @@ export default defineNuxtConfig({
 	},
 	build: { transpile: ['echarts', 'echarts-gl', 'zrender'] },
 	modules: [
-		'nuxt-umami',
+		'nuxt-tour',
 		'@nuxt/icon',
 		'@nuxt/fonts',
 		'@pinia/nuxt',
@@ -77,13 +77,5 @@ export default defineNuxtConfig({
 			'VisualMapComponent',
 			'SingleAxisComponent',
 		],
-	},
-	umami: {
-		enabled: false,
-		autoTrack: true,
-		logErrors: true,
-		// customEndpoint: '/umami',
-		host: 'https://research.nibmg.ac.in/umami/',
-		id: '3bc8fee8-9a14-49c8-9f7a-d1e1e33381a7',
 	},
 })
