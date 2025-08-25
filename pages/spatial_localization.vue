@@ -26,8 +26,8 @@
 						<motion.div :while-hover="{ scale: 0.95 }" class="p-2">
 							<Tag
 								rounded
-								class="cursor-pointer w-full px-2"
 								:value="slotProp.data.name"
+								class="cursor-pointer w-full px-2"
 								@click="FilterCluster(slotProp.data.index)"
 								:severity="slotProp.data.active ? 'success' : 'danger'"
 							>
@@ -50,8 +50,9 @@
 					<SelectButton
 						v-model="switchAnnotation"
 						:disabled="!isClusterFilterActive"
-						:options="['Pathologist Annotation', 'TE Annotation']"
+						@value-change="handleAnnotationChange"
 						:pt="{ pcToggleButton: { root: '!bg-gray-200' } }"
+						:options="['Pathologist Annotation', 'TE Annotation']"
 					>
 						<template #option="slotProps">
 							<Icon
@@ -94,6 +95,7 @@ import { motion } from 'motion-v'
 import { useGeneAPI } from '@/api/geneAPI'
 import { useGeneralDataStore } from '@/stores/generalData'
 
+const route = useRoute()
 const scatterData = ref([])
 const spatialExpression = ref([])
 const selectedImageOption = ref('')
@@ -128,8 +130,21 @@ const isClusterFilterActive = computed(() => {
 	return clusterOptions.value.some((opt) => opt.active)
 })
 
+const handleAnnotationChange = (value) => {
+	umami.track('annotation-select', {
+		selected: value,
+		page: route.path,
+	})
+}
+
 const FilterCluster = (index) => {
 	const currentState = clusterOptions.value[index]?.active
+	if (!currentState) {
+		umami.track('caf-select', {
+			page: route.path,
+			selected: clusterOptions.value[index].name,
+		})
+	}
 
 	// Toggle the selected cluster's active state and deactivate others
 	clusterOptions.value = clusterOptions.value.map((d, i) => ({
@@ -156,6 +171,10 @@ const FilterCluster = (index) => {
 }
 
 const getSpatialInfo = async () => {
+	umami.track('spatial-image-select', {
+		page: route.path,
+		image: imageOptions.value.find((d) => d.image === selectedImageOption.value).name,
+	})
 	getSpatialExpression()
 	getImagePosition()
 }
