@@ -90,6 +90,11 @@ const navItems = ref([
 		route: '/gene_expression',
 	},
 	{
+		label: 'Dual Gene Expression',
+		icon: 'tabler:box-multiple-filled',
+		route: '/dual_gene_expression',
+	},
+	{
 		label: 'Gene Co-expression',
 		icon: 'tabler:dna-2',
 		route: '/gene_coexpression',
@@ -98,11 +103,6 @@ const navItems = ref([
 		label: 'Spatial Localization',
 		icon: 'tabler:image-in-picture',
 		route: '/spatial_localization',
-	},
-	{
-		label: 'Dual Gene Expression',
-		icon: 'tabler:box-multiple-filled',
-		route: '/dual_gene_expression',
 	},
 	// {
 	// 	label: 'Violin Plots',
