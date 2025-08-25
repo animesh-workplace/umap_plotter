@@ -1,7 +1,17 @@
 <template>
 	<div class="p-4 grid grid-cols-1 justify-items-center z-50">
 		<div class="mb-2 text-center">
-			<h2 class="text-xl font-semibold mb-1">Spatial Localization</h2>
+			<div class="p-4 lg:px-16">
+				<div class="text-center ltr:sm:text-left rtl:sm:text-right">
+					<h2 class="text-2xl font-bold text-gray-900 md:text-3xl">Spatial Localization</h2>
+
+					<p class="text-gray-500 mt-4 max-w-3xl">
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Et, egestas tempus tellus etiam
+						sed. Quam a scelerisque amet ullamcorper eu enim et fermentum, augue. Aliquet amet volutpat
+						quisque ut interdum tincidunt duis.
+					</p>
+				</div>
+			</div>
 		</div>
 		<div>
 			<FloatLabel class="w-full" variant="on">
