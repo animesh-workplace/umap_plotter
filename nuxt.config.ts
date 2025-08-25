@@ -40,6 +40,7 @@ export default defineNuxtConfig({
 	},
 	build: { transpile: ['echarts', 'echarts-gl', 'zrender'] },
 	modules: [
+		'nuxt-umami',
 		'@nuxt/icon',
 		'@nuxt/fonts',
 		'@pinia/nuxt',
@@ -67,5 +68,13 @@ export default defineNuxtConfig({
 			'VisualMapComponent',
 			'SingleAxisComponent',
 		],
+	},
+	umami: {
+		enabled: true,
+		autoTrack: true,
+		logErrors: true,
+		customEndpoint: '/umami',
+		host: 'https://research.nibmg.ac.in/',
+		id: '3bc8fee8-9a14-49c8-9f7a-d1e1e33381a7',
 	},
 })
