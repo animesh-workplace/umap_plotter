@@ -73,7 +73,7 @@ export default defineNuxtConfig({
 		enabled: true,
 		autoTrack: true,
 		logErrors: true,
-		customEndpoint: '/umami',
+		// customEndpoint: '/umami',
 		host: 'https://research.nibmg.ac.in/',
 		id: '3bc8fee8-9a14-49c8-9f7a-d1e1e33381a7',
 	},
