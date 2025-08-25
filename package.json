@@ -27,7 +27,7 @@
 		"motion-v": "^1.1.0-alpha.1",
 		"nuxt": "^3.17.1",
 		"nuxt-echarts": "^0.3.0",
-		"nuxt-umami": "3.2.0",
+		"nuxt-tour": "^0.0.40",
 		"pinia": "^3.0.2",
 		"primevue": "^4.3.4",
 		"radashi": "^12.4.0",
