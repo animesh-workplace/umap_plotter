@@ -22,13 +22,13 @@
 						</div>
 
 						<div>
-							<p class="mt-4 text-gray-500 dark:text-gray-400" align="justify">
+							<p class="mt-4 text-gray-400" align="justify">
 								FibroScape Description Lorem ipsum dolor, sit amet consectetur adipisicing elit.
 								Numquam itaque eum est nobis id eligendi sunt quod modi fuga aspernatur? Molestiae
 								iusto sequi eveniet quasi ad minima eos eius natus.
 							</p>
 
-							<h2 class="mt-4 text-xl font-medium text-gray-900 dark:text-white">Cite us</h2>
+							<!-- <h2 class="mt-4 text-xl font-medium text-white">Cite us</h2> -->
 							<!-- <p class="mt-2 text-gray-500 dark:text-gray-400">
 								Sanchari Pradhan, Subrata Das, Animesh K Singh, Chitrarpita Das, Analabha Basu,
 								Partha P Majumder, Nidhan K Biswas, dbGENVOC: database of GENomic Variants of Oral
