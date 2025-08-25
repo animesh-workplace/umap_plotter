@@ -39,6 +39,7 @@ const searchGene = async (event) => {
 }
 
 const searchGeneExpression = (event) => {
+	umami.track('gene-search', { gene: event.value })
 	emit('gene-selected', event.value)
 }
 
