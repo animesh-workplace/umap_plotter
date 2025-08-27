@@ -21,29 +21,28 @@
 			</motion.div>
 		</div>
 
-		<div v-if="selectedFilterOption == 'Cluster'">
-			<Carousel :value="clusters" :numVisible="6" :showIndicators="false">
-				<template #item="slotProp">
-					<motion.div :while-hover="{ scale: 0.95 }" class="py-2 px-2">
-						<Tag
-							rounded
-							:value="slotProp.data.pill_name"
-							class="cursor-pointer w-full px-2"
-							@click="FilterCluster(slotProp.data.index)"
-							:severity="slotProp.data.active ? 'success' : 'danger'"
-						>
-							<template #icon>
-								<Icon
-									v-if="slotProp.data.active"
-									class="w-4 h-4 text-green-500"
-									name="akar-icons:tetragon-fill"
-								/>
-								<Icon v-else class="w-4 h-4 text-rose-500" name="akar-icons:tetragon" />
-							</template>
-						</Tag>
-					</motion.div>
-				</template>
-			</Carousel>
+		<div
+			v-if="selectedFilterOption == 'Cluster'"
+			class="flex gap-2 items-center mb-2 mt-2 justify-center px-4"
+		>
+			<motion.div :while-hover="{ scale: 0.95 }" v-for="(cluster, index) in clusters" :key="index">
+				<Tag
+					rounded
+					class="cursor-pointer"
+					:value="cluster.pill_name"
+					@click="FilterCluster(cluster.index)"
+					:severity="cluster.active ? 'success' : 'danger'"
+				>
+					<template #icon>
+						<Icon
+							v-if="cluster.active"
+							class="w-4 h-4 text-green-500"
+							name="akar-icons:tetragon-fill"
+						/>
+						<Icon v-else class="w-4 h-4 text-rose-500" name="akar-icons:tetragon" />
+					</template>
+				</Tag>
+			</motion.div>
 		</div>
 	</div>
 </template>
