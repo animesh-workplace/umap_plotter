@@ -11,13 +11,6 @@
 						<div class="text-teal-600 lg:hidden dark:text-teal-300">
 							<div class="flex justify-center items-center px-4">
 								<div class="text-2xl font-extrabold cursor-pointer text-white">FibroScape</div>
-								<div>
-									<button
-										class="rounded-2xl bg-gray-100/10 py-0.5 px-2 text-xs font-medium text-gray-50 cursor-pointer"
-									>
-										v2
-									</button>
-								</div>
 							</div>
 						</div>
 
