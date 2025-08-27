@@ -17,6 +17,18 @@ const props = defineProps({
 	scatterData: { type: Array, required: true, default: () => [] },
 })
 
+const clusterNewNameMap = {
+	'CAF-1': 'quiCAF',
+	'CAF-2': 'apCAF',
+	'CAF-3': 'actCAF',
+	'CAF-4': 'periCAF',
+	'CAF-5': 'meCAF',
+	'CAF-6': 'vsmCAF',
+	'CAF-7': 'infCAF',
+	'CAF-8': 'msCAF',
+	'CAF-9': 'pCAF',
+}
+
 // Add a watcher to log the data when it changes
 watch(
 	() => props.scatterData,
@@ -98,7 +110,7 @@ const chartOption = ref({
 				`X: ${params[0].value[0].toFixed(2)}<br/>` +
 				`Y: ${params[0].value[1].toFixed(2)}<br/>` +
 				`Cell: ${params[0].value[2]}<br/>` +
-				`Cluster: ${params[0].value[4]}<br/>` +
+				`Cluster: ${clusterNewNameMap[params[0].value[4]]}<br/>` +
 				`${expressionText}`
 			)
 		},
