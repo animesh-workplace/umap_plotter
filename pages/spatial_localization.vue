@@ -44,7 +44,7 @@
 						<motion.div :while-hover="{ scale: 0.95 }" class="p-2">
 							<Tag
 								rounded
-								:value="slotProp.data.name"
+								:value="slotProp.data.pill_name"
 								class="cursor-pointer w-full px-2"
 								@click="FilterCluster(slotProp.data.index)"
 								:severity="slotProp.data.active ? 'success' : 'danger'"
@@ -119,15 +119,15 @@ const spatialExpression = ref([])
 const selectedImageOption = ref('')
 const switchAnnotation = ref('Pathologist Annotation')
 const clusterOptions = ref([
-	{ name: 'CAF-1', active: false, option_name: 'caf_1', index: 0 },
-	{ name: 'CAF-2', active: false, option_name: 'caf_2', index: 1 },
-	{ name: 'CAF-3', active: false, option_name: 'caf_3', index: 2 },
-	{ name: 'CAF-4', active: false, option_name: 'caf_4', index: 3 },
-	{ name: 'CAF-5', active: false, option_name: 'caf_5', index: 4 },
-	{ name: 'CAF-6', active: false, option_name: 'caf_6', index: 5 },
-	{ name: 'CAF-7', active: false, option_name: 'caf_7', index: 6 },
-	{ name: 'CAF-8', active: false, option_name: 'caf_8', index: 7 },
-	{ name: 'CAF-9', active: false, option_name: 'caf_9', index: 8 },
+	{ name: 'CAF-1', active: false, option_name: 'caf_1', index: 0, pill_name: 'quiCAF' },
+	{ name: 'CAF-2', active: false, option_name: 'caf_2', index: 1, pill_name: 'apCAF' },
+	{ name: 'CAF-3', active: false, option_name: 'caf_3', index: 2, pill_name: 'actCAF' },
+	{ name: 'CAF-4', active: false, option_name: 'caf_4', index: 3, pill_name: 'periCAF' },
+	{ name: 'CAF-5', active: false, option_name: 'caf_5', index: 4, pill_name: 'meCAF' },
+	{ name: 'CAF-6', active: false, option_name: 'caf_6', index: 5, pill_name: 'vsmCAF' },
+	{ name: 'CAF-7', active: false, option_name: 'caf_7', index: 6, pill_name: 'infCAF' },
+	{ name: 'CAF-8', active: false, option_name: 'caf_8', index: 7, pill_name: 'msCAF' },
+	{ name: 'CAF-9', active: false, option_name: 'caf_9', index: 8, pill_name: 'pCAF' },
 ])
 const imageOptions = ref([
 	{ name: 'Sample 1', image: '/fibroscape/media/s1.webp' },
