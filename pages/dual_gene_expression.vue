@@ -7,7 +7,7 @@
 						Dual Gene Expression Visualization
 					</h2>
 
-					<p class="text-gray-500 mt-4 max-w-3xl">
+					<p class="text-gray-500 mt-4 max-w-3xl backdrop-blur">
 						This module enables viewers to compare gene expression profiles across multiple covariates.
 					</p>
 				</div>
