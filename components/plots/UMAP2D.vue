@@ -1,6 +1,6 @@
 <template>
 	<div class="w-full flex justify-center">
-		<VChart ref="chart" :option="chartOption" class="h-[34rem]" autoresize />
+		<VChart ref="chart" :option="chartOption" class="chart" autoresize />
 	</div>
 </template>
 
@@ -168,4 +168,9 @@ defineExpose({
 })
 </script>
 
-<style></style>
+<style scoped>
+.chart {
+	width: 100%;
+	height: 34rem;
+}
+</style>
