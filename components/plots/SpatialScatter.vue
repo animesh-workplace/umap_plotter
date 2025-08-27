@@ -6,7 +6,7 @@
 			autoresize
 			ref="chartRef"
 			:option="chartOption"
-			class="backdrop-blur rounded-lg font-[Averta] chart"
+			class="backdrop-blur rounded-lg font-[Lexend Deca] chart"
 		/>
 	</div>
 </template>
@@ -78,6 +78,7 @@ const chartOption = ref({
 		max: originalImageHeight,
 	},
 	tooltip: {
+		textStyle: { fontFamily: 'Lexend Deca', fontWeight: 500 },
 		formatter: (p) => `${p.data.cell_id}<br/>x: ${p.data.x}, y: ${p.data.y}, expression: ${p.data.expression}`,
 	},
 	graphic: {
@@ -87,8 +88,8 @@ const chartOption = ref({
 		left: 'center',
 		style: {
 			textAlign: 'center',
-			font: 'bold 20px Averta',
-			text: 'Please Select Image',
+			font: 'bold 20px Lexend Deca',
+			text: 'Please select image',
 			textVerticalAlign: 'middle',
 		},
 	},
@@ -143,7 +144,7 @@ const updateChart = () => {
 					],
 				},
 				textStyle: {
-					fontFamily: 'Averta',
+					fontFamily: 'Lexend Deca',
 					fontWeight: 500,
 				},
 			},
@@ -196,12 +197,13 @@ const updateChart = () => {
 				shadowBlur: 1,
 				right: 'center',
 				borderRadius: 5,
-				width: originalImageWidth,
 				backgroundColor: 'white',
+				width: originalImageWidth,
 				data: Object.keys(sourceColors),
-				textStyle: { fontFamily: 'Averta', fontWeight: 700, fontSize: 15 },
+				textStyle: { fontFamily: 'Lexend Deca', fontWeight: 500, fontSize: 13 },
 			},
 			tooltip: {
+				textStyle: { fontFamily: 'Lexend Deca', fontWeight: 500 },
 				formatter: (p) =>
 					`${p.data.cell_id}<br/>x: ${p.data.x}, y: ${p.data.y}, expression: ${p.data.expression} <br/> Annotation: ${p.data[annotationKey]}`,
 			},
