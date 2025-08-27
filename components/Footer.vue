@@ -4,7 +4,7 @@
 			<div class="lg:grid lg:grid-cols-2">
 				<!-- Section -->
 				<div
-					class="border-b border-gray-100 py-8 lg:order-last lg:border-s lg:border-b-0 lg:py-16 lg:p-16"
+					class="border-b border-gray-800 py-8 lg:order-last lg:border-s lg:border-b-0 lg:py-16 lg:p-16"
 				>
 					<div class="mt-8 space-y-4 lg:mt-0">
 						<!-- Website Logo -->
@@ -41,11 +41,17 @@
 					<!-- Website Logo -->
 					<div class="hidden text-teal-600 lg:block">
 						<div class="grid grid-cols-2">
-							<div class="flex justify-center items-center border-x border-gray-200 px-4">
+							<div class="flex justify-center items-center border-x border-gray-500 px-4">
+								<img
+									alt="Logo"
+									width="40"
+									class="mr-1 brightness-0 invert"
+									src="@/assets/images/logo_white.png"
+								/>
 								<div class="text-2xl font-extrabold cursor-pointer text-white">FibroScape</div>
 							</div>
 
-							<div class="flex justify-center items-center border-r border-gray-200 px-4">
+							<div class="flex justify-center items-center border-r border-gray-500 px-4">
 								<div class="text-2xl font-extrabold cursor-pointer text-white">BRIC NIBMG</div>
 							</div>
 						</div>
@@ -58,7 +64,7 @@
 
 							<ul class="mt-6 space-y-4 text-sm">
 								<li v-for="(link, index) in siteLinks" :key="index">
-									<NuxtLink :to="link.href" class="transition hover:opacity-75 text-gray-200">
+									<NuxtLink :to="link.href" class="transition hover:opacity-75 text-gray-400">
 										{{ link.label }}
 									</NuxtLink>
 								</li>
@@ -71,7 +77,7 @@
 
 							<ul class="mt-6 space-y-4 text-sm">
 								<li v-for="(link, index) in helpfulLinks" :key="index">
-									<NuxtLink :to="link.href" class="transition hover:opacity-75 text-gray-200">
+									<NuxtLink :to="link.href" class="transition hover:opacity-75 text-gray-400">
 										{{ link.label }}
 									</NuxtLink>
 								</li>
@@ -84,7 +90,7 @@
 
 							<ul class="mt-6 space-y-4 text-sm">
 								<li v-for="(link, index) in nibmgLinks" :key="index">
-									<NuxtLink :to="link.href" class="transition hover:opacity-75 text-gray-200">
+									<NuxtLink :to="link.href" class="transition hover:opacity-75 text-gray-400">
 										{{ link.label }}
 									</NuxtLink>
 								</li>
