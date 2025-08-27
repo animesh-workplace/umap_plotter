@@ -143,6 +143,7 @@ const updateChart = () => {
 						'#FCFDBF',
 					],
 				},
+				formatter: '', // Done so that the values are not shown
 				textStyle: {
 					fontFamily: 'Lexend Deca',
 					fontWeight: 500,
