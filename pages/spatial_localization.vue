@@ -1,26 +1,26 @@
 <template>
-	<VTour :steps="steps" ref="tour" name="spatial_localization_tour" backdrop />
-	<div class="p-4 grid grid-cols-1 justify-items-center z-50">
-		<div class="mb-2 text-center">
-			<div class="p-4 lg:px-16">
-				<div class="text-center">
-					<h2 class="text-2xl font-bold text-gray-900 md:text-3xl">Spatial Localization</h2>
-
-					<p class="text-gray-500 mt-4 max-w-3xl backdrop-blur">
-						This module enables viewers to visualise spatial localisation of CAF subtypes across
-						pathologist annotated regions, as well as, spatially-distinct tumour niches as identified
-						by
-						<NuxtLink class="underline" href="https://doi.org/10.1038/s41467-023-40271-4">
-							Arora et. al.
-						</NuxtLink>
-
-						For gene expression queries, visit:
-						<NuxtLink class="underline" href="http://www.pboselab.ca/spatial_OSCC/">
-							http://www.pboselab.ca/spatial_OSCC/
-						</NuxtLink>
-					</p>
-				</div>
+	<VTour :steps="steps" ref="tour" name="spatial_localization_tour" backdrop highlight />
+	<div class="p-4 grid grid-cols-1 justify-items-center z-50 realtive">
+		<div class="mb-2 text-center p-4 lg:px-16">
+			<div class="flex items-center justify-center gap-1">
+				<h2 class="text-2xl font-bold text-gray-900 md:text-3xl">Spatial Localization</h2>
+				<Button severity="info" variant="text" rounded class="!p-1" @click="ResetTour">
+					<Icon class="!w-7 !h-7 text-slate-800" name="tabler:progress-help" />
+				</Button>
 			</div>
+
+			<p class="text-gray-500 mt-4 max-w-3xl backdrop-blur">
+				This module enables viewers to visualise spatial localisation of CAF subtypes across pathologist
+				annotated regions, as well as, spatially-distinct tumour niches as identified by
+				<NuxtLink class="underline" href="https://doi.org/10.1038/s41467-023-40271-4">
+					Arora et. al.
+				</NuxtLink>
+
+				For gene expression queries, visit:
+				<NuxtLink class="underline" href="http://www.pboselab.ca/spatial_OSCC/">
+					http://www.pboselab.ca/spatial_OSCC/
+				</NuxtLink>
+			</p>
 		</div>
 
 		<div class="w-full">
@@ -93,6 +93,7 @@
 				class="xl:col-start-2 col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
 			>
 				<PlotsSpatialScatter
+					id="Step4a"
 					:scatterData="scatterData"
 					:imageURL="selectedImageOption"
 					:clusterSelected="isClusterFilterActive"
@@ -101,6 +102,7 @@
 
 			<div class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg">
 				<PlotsSpatialScatter
+					id="Step4b"
 					:scatterData="scatterData"
 					:colorScheme="switchAnnotation"
 					:imageURL="selectedImageOption"
@@ -117,9 +119,36 @@ import { useGeneAPI } from '@/api/geneAPI'
 import { useGeneralDataStore } from '@/stores/generalData'
 
 const steps = [
-	{ target: '#Step1', body: 'Step1' },
-	{ target: '#Step2', body: 'Step2' },
-	{ target: '#Step3', body: 'Step3' },
+	{
+		target: '#Step1',
+		title: 'Choose a Whole Slide Image',
+		subText: 'Start your exploration here',
+		body: 'Use this dropdown to select the H&E Whole Slide Image that you want to analyze. This will serve as the base for all further visualizations.',
+	},
+	{
+		target: '#Step2',
+		title: 'Select Cancer-Associated Fibroblasts (CAFs)',
+		subText: 'Focus on key cell types',
+		body: 'Choose the CAF type you wish to highlight in the visualization. This helps in identifying fibroblast-related patterns across the tissue.',
+	},
+	{
+		target: '#Step3',
+		title: 'Pick an Annotation',
+		subText: 'Add biological context',
+		body: 'Select an annotation layer (e.g., region or feature) to overlay on your slide. This provides deeper insights into cell distribution and structure.',
+	},
+	{
+		target: '#Step4a',
+		title: 'View CAF Abundance',
+		subText: 'Left-side visualization',
+		body: 'The left panel shows spatial localization of the selected CAFs with their abundance levels mapped across the tissue image.',
+	},
+	{
+		target: '#Step4b',
+		title: 'View Annotation Overlay',
+		subText: 'Right-side visualization',
+		body: 'The right panel displays spatial localization with the selected annotation, allowing you to compare structural and cellular patterns.',
+	},
 ]
 
 const tour = ref(null)
@@ -245,12 +274,15 @@ const getSpatialExpression = async () => {
 	}
 }
 
+const ResetTour = () => {
+	tour.value?.resetTour()
+}
+
 onMounted(() => {
 	nextTick(() => {
 		const generalDataStore = useGeneralDataStore()
 		generalDataStore.updateNavBarPosition('Spatial Localization')
 		tour.value?.startTour()
-		console.log('🚀 ~ :253 ~ tour:', tour)
 	})
 })
 </script>
