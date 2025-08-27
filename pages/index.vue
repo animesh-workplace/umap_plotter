@@ -14,7 +14,7 @@
 		<div class="p-8 z-10 w-full">
 			<section class="py-8">
 				<h2 class="text-2xl font-bold text-gray-900 md:text-4xl max-w-4xl mx-auto text-center">
-					FibroScape: Advanced Single-Cell Visualizer
+					FibroScape: Single-Cell Fibroblast Visualizer
 				</h2>
 
 				<h5 class="text-md font-semibold text-gray-600 mt-4 max-w-2xl mx-auto text-center">
