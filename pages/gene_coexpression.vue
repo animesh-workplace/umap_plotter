@@ -6,9 +6,8 @@
 					<h2 class="text-2xl font-bold text-gray-900 md:text-3xl">Gene Co-Expression Visualization</h2>
 
 					<p class="text-gray-500 mt-4 max-w-3xl">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Et, egestas tempus tellus etiam
-						sed. Quam a scelerisque amet ullamcorper eu enim et fermentum, augue. Aliquet amet volutpat
-						quisque ut interdum tincidunt duis.
+						This module enables viewers to visualise co-expression of two genes across user-defined
+						criteria
 					</p>
 				</div>
 			</div>
