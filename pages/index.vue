@@ -67,22 +67,12 @@
 			</div>
 		</section>
 
-		<section class="overflow-hidden bg-gray-50 grid grid-cols-2 gap-12 items-center">
-			<div class="p-8 md:p-12 lg:px-16">
-				<div class="text-center ltr:sm:text-left rtl:sm:text-right">
-					<!-- <h2 class="text-2xl font-bold text-gray-900 md:text-3xl">
-						Lorem, ipsum dolor sit amet consectetur adipisicing elit
-					</h2>
-
-					<p class="hidden text-gray-500 md:mt-4 md:block">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Et, egestas tempus tellus etiam
-						sed. Quam a scelerisque amet ullamcorper eu enim et fermentum, augue. Aliquet amet volutpat
-						quisque ut interdum tincidunt duis.
-					</p> -->
-
-					<div class="max-w-5xl mx-auto px-6">
+		<section class="overflow-hidden bg-gray-50 grid lg:grid-cols-2 grid-cols-1 gap-1 lg:gap-12 items-center">
+			<div class="p-8 xl:px-16">
+				<div>
+					<div class="max-w-5xl mx-auto sm:px-6">
 						<!-- Header -->
-						<div class="text-center mb-10">
+						<div class="mb-10">
 							<h2 class="text-2xl md:text-3xl font-bold text-gray-800">
 								Built for Researchers. Designed for Discovery.
 							</h2>
@@ -92,7 +82,7 @@
 						</div>
 
 						<!-- Benefit Grid -->
-						<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+						<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-6">
 							<div class="benefit-item flex items-start space-x-3">
 								<div class="benefit-icon text-green-600 font-bold text-lg">✓</div>
 								<span class="text-gray-700">No programming required</span>
@@ -123,15 +113,15 @@
 			</div>
 
 			<div class="my-8">
-				<div>
+				<div class="px-8">
 					<div
 						class="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[8px] rounded-t-xl h-[172px] max-w-[301px] md:h-[294px] md:max-w-[512px]"
 					>
 						<div class="rounded-lg overflow-hidden h-[156px] md:h-[278px] bg-white dark:bg-gray-800">
 							<img
-								src="https://flowbite.s3.amazonaws.com/docs/device-mockups/laptop-screen-dark.png"
-								class="block h-[156px] md:h-[278px] w-full rounded-lg"
 								alt="Analysis Image"
+								class="block h-[156px] md:h-[278px] w-full rounded-lg"
+								src="https://flowbite.s3.amazonaws.com/docs/device-mockups/laptop-screen-dark.png"
 							/>
 						</div>
 					</div>
