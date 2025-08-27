@@ -13,6 +13,7 @@
 
 <script setup>
 const chartRef = ref(null)
+const scale_factor = ref(1)
 const isLoading = ref(true)
 const originalImageWidth = 778
 const originalImageHeight = 768
@@ -25,6 +26,32 @@ const props = defineProps({
 	colorScheme: { type: String, default: '' },
 	scatterData: { type: Array, required: true, default: () => [] },
 })
+
+const scaleValue = (x) => {
+	const points = [
+		[288, 2.0],
+		[343, 1.7],
+		[393, 1.5],
+		[488, 1.22],
+		[601, 0.998],
+		[736, 0.8],
+	]
+	// Find which segment x falls into
+	for (let i = 0; i < points.length - 1; i++) {
+		const [x1, y1] = points[i]
+		const [x2, y2] = points[i + 1]
+
+		if (x >= x1 && x <= x2) {
+			// Linear interpolation
+			return y1 + ((x - x1) / (x2 - x1)) * (y2 - y1)
+		}
+	}
+
+	// Extrapolate if outside range
+	const [x1, y1] = points[points.length - 2]
+	const [x2, y2] = points[points.length - 1]
+	return y1 + ((x - x1) / (x2 - x1)) * (y2 - y1)
+}
 
 const chartOption = ref({
 	animation: true,
@@ -69,6 +96,7 @@ const chartOption = ref({
 
 const calculateDimensions = () => {
 	if (!chartRef.value?.$el) return
+
 	currentImageWidth.value = chartRef.value.$el.clientWidth
 	currentImageHeight.value = chartRef.value.$el.clientHeight
 }
@@ -188,7 +216,7 @@ const updateChart = () => {
 		}
 	}
 
-	chartOption.value.xAxis.max = currentImageWidth.value
+	chartOption.value.xAxis.max = currentImageWidth.value * scaleValue(currentImageWidth.value)
 	chartOption.value.yAxis.max = currentImageHeight.value * 0.956
 
 	if (props.imageURL) {
