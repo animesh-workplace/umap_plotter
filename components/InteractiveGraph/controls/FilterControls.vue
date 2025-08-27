@@ -27,7 +27,7 @@
 					<motion.div :while-hover="{ scale: 0.95 }" class="py-2 px-2">
 						<Tag
 							rounded
-							:value="slotProp.data.name"
+							:value="slotProp.data.pill_name"
 							class="cursor-pointer w-full px-2"
 							@click="FilterCluster(slotProp.data.index)"
 							:severity="slotProp.data.active ? 'success' : 'danger'"
