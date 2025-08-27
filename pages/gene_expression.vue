@@ -5,10 +5,9 @@
 				<div class="text-center ltr:sm:text-left rtl:sm:text-right">
 					<h2 class="text-2xl font-bold text-gray-900 md:text-3xl">Gene Expression Visualization</h2>
 
-					<p class="text-gray-500 mt-4 max-w-3xl">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Et, egestas tempus tellus etiam
-						sed. Quam a scelerisque amet ullamcorper eu enim et fermentum, augue. Aliquet amet volutpat
-						quisque ut interdum tincidunt duis.
+					<p class="text-gray-500 mt-4 max-w-2xl">
+						This module enables viewers to visualise gene expression in CAFs based on a specific
+						filtering criteria, such as, specific CAF subtype, or study type
 					</p>
 				</div>
 			</div>
