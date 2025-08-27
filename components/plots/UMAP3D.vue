@@ -19,6 +19,17 @@ const props = defineProps({
 	colorScheme: { type: String, default: '#5470c6' },
 	scatterData: { type: Array, required: true, default: () => [] },
 })
+const clusterNewNameMap = {
+	'CAF-1': 'quiCAF',
+	'CAF-2': 'apCAF',
+	'CAF-3': 'actCAF',
+	'CAF-4': 'periCAF',
+	'CAF-5': 'meCAF',
+	'CAF-6': 'vsmCAF',
+	'CAF-7': 'infCAF',
+	'CAF-8': 'msCAF',
+	'CAF-9': 'pCAF',
+}
 
 // Add a watcher to log the data when it changes
 watch(
@@ -75,9 +86,21 @@ const updateChart = () => {
 
 // Chart options as a computed property
 const chartOption = ref({
-	xAxis3D: { type: 'value' },
-	yAxis3D: { type: 'value' },
-	zAxis3D: { type: 'value' },
+	xAxis3D: {
+		type: 'value',
+		axisLabel: { fontFamily: 'Lexend Deca', fontWeight: 500 },
+		nameTextStyle: { fontFamily: 'Lexend Deca', fontWeight: 500 },
+	},
+	yAxis3D: {
+		type: 'value',
+		axisLabel: { fontFamily: 'Lexend Deca', fontWeight: 500 },
+		nameTextStyle: { fontFamily: 'Lexend Deca', fontWeight: 500 },
+	},
+	zAxis3D: {
+		type: 'value',
+		axisLabel: { fontFamily: 'Lexend Deca', fontWeight: 500 },
+		nameTextStyle: { fontFamily: 'Lexend Deca', fontWeight: 500 },
+	},
 	tooltip: {
 		textStyle: { fontFamily: 'Lexend Deca', fontWeight: 500 },
 		formatter: (params) => {
@@ -86,7 +109,7 @@ const chartOption = ref({
 				`Y: ${params.data[1].toFixed(2)}<br/>` +
 				`Z: ${params.data[2].toFixed(2)}<br/>` +
 				`Cell ID: ${params.data[3]}<br/>` +
-				`Cluster: ${params.data[5]}`
+				`Cluster: ${clusterNewNameMap[params.data[5]]}`
 			)
 		},
 	},
