@@ -6,9 +6,17 @@
 					<h2 class="text-2xl font-bold text-gray-900 md:text-3xl">Spatial Localization</h2>
 
 					<p class="text-gray-500 mt-4 max-w-3xl">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Et, egestas tempus tellus etiam
-						sed. Quam a scelerisque amet ullamcorper eu enim et fermentum, augue. Aliquet amet volutpat
-						quisque ut interdum tincidunt duis.
+						This module enables viewers to visualise spatial localisation of CAF subtypes across
+						pathologist annotated regions, as well as, spatially-distinct tumour niches as identified
+						by
+						<NuxtLink class="underline" href="https://doi.org/10.1038/s41467-023-40271-4">
+							Arora et. al.
+						</NuxtLink>
+
+						For gene expression queries, visit:
+						<NuxtLink class="underline" href="http://www.pboselab.ca/spatial_OSCC/">
+							http://www.pboselab.ca/spatial_OSCC/
+						</NuxtLink>
 					</p>
 				</div>
 			</div>
