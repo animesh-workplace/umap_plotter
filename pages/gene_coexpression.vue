@@ -5,7 +5,7 @@
 				<div class="text-center">
 					<h2 class="text-2xl font-bold text-gray-900 md:text-3xl">Gene Co-Expression Visualization</h2>
 
-					<p class="text-gray-500 mt-4 max-w-3xl">
+					<p class="text-gray-500 mt-4 max-w-3xl backdrop-blur">
 						This module enables viewers to visualise co-expression of two genes across user-defined
 						criteria
 					</p>
