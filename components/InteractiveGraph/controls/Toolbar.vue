@@ -13,7 +13,6 @@
 			>
 				<div class="flex gap-2 items-center">
 					<ToggleSwitch :model-value="activate3DMode" @update:model-value="handle3DMode" />
-					<!-- @update:model-value="$emit('update:activate3DMode', $event)" -->
 					<Icon class="w-5 h-5 text-slate-500" name="akar-icons:augmented-reality" />
 					<div class="text-sm">3D Mode</div>
 				</div>
