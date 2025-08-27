@@ -2,7 +2,7 @@
 	<div class="p-4 grid grid-cols-1 justify-items-center z-50">
 		<div class="mb-2 text-center">
 			<div class="p-4 lg:px-16">
-				<div class="text-center ltr:sm:text-left rtl:sm:text-right">
+				<div class="text-center">
 					<h2 class="text-2xl font-bold text-gray-900 md:text-3xl">
 						Dual Gene Expression Visualization
 					</h2>
