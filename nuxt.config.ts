@@ -1,12 +1,22 @@
 import Aura from '@primeuix/themes/aura'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
 	devServer: { port: 3010 },
 	devtools: { enabled: true },
+	css: ['@/assets/css/main.css'],
+	compatibilityDate: '2024-11-01',
+	googleFonts: {
+		preload: true,
+		prefetch: true,
+		useStylesheet: true,
+		outputDir: 'assets',
+		families: { Poppins: true, 'Lexend+Deca': { wght: '100..900' } },
+	},
+	vite: { plugins: [tailwindcss()] },
+	build: { transpile: ['echarts', 'echarts-gl', 'zrender'] },
 	runtimeConfig: {
-		public: {
-			API_BASE_URL: process.env.API_BASE_URL || 'http://10.10.6.80/fibrohub/api',
-		},
+		public: { API_BASE_URL: process.env.API_BASE_URL || 'http://10.10.6.80/fibrohub/api' },
 	},
 	app: {
 		baseURL: process.env.ROUTER_BASE || '/fibroscape/',
@@ -25,8 +35,6 @@ export default defineNuxtConfig({
 			],
 		},
 	},
-	compatibilityDate: '2024-11-01',
-	css: ['@/assets/css/main.css'],
 	icon: { clientBundle: { scan: true }, serverBundle: { collections: ['akar-icons', 'tabler', 'solar'] } },
 	primevue: {
 		options: {
@@ -47,18 +55,15 @@ export default defineNuxtConfig({
 			],
 		},
 	},
-	build: { transpile: ['echarts', 'echarts-gl', 'zrender'] },
 	modules: [
-		'nuxt-tour',
 		'@nuxt/icon',
-		'@nuxt/fonts',
 		'@pinia/nuxt',
 		'nuxt-echarts',
 		'@nuxt/eslint',
 		'@vueuse/nuxt',
 		'motion-v/nuxt',
-		'@nuxtjs/tailwindcss',
 		'@primevue/nuxt-module',
+		'@nuxtjs/google-fonts',
 	],
 	echarts: {
 		ssr: true,
