@@ -63,7 +63,7 @@ const updateChart = () => {
 				type: 'continuous',
 				orient: 'vertical',
 				inRange: { color: ['#d3d3d3', props.colorScheme] },
-				textStyle: { fontFamily: 'Averta', fontWeight: 500 },
+				textStyle: { fontFamily: 'Lexend Deca', fontWeight: 500 },
 			},
 		}
 	} else {
@@ -79,7 +79,7 @@ const chartOption = ref({
 	yAxis3D: { type: 'value' },
 	zAxis3D: { type: 'value' },
 	tooltip: {
-		textStyle: { fontFamily: 'Averta', fontWeight: 500 },
+		textStyle: { fontFamily: 'Lexend Deca', fontWeight: 500 },
 		formatter: (params) => {
 			return (
 				`X: ${params.data[0].toFixed(2)}<br/>` +
