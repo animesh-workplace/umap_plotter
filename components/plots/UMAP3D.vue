@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<client-only>
-			<VChart :option="chartOption" class="w-full h-[30rem]" autoresize />
+			<VChart :option="chartOption" class="chart" autoresize />
 		</client-only>
 	</div>
 </template>
@@ -169,3 +169,10 @@ defineExpose({
 	},
 })
 </script>
+
+<style scoped>
+.chart {
+	width: 100%;
+	height: 34rem;
+}
+</style>
