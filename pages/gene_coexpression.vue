@@ -258,6 +258,17 @@ const updateGraph3Colors = () => {
 const loadFilterOptions = async () => {
 	const { get2DUmapCellType } = useGeneAPI()
 	const clusterNames = ['CAF-1', 'CAF-2', 'CAF-3', 'CAF-4', 'CAF-5', 'CAF-6', 'CAF-7', 'CAF-8', 'CAF-9']
+	const clusterNewNameMap = {
+		'CAF-1': 'quiCAF',
+		'CAF-2': 'apCAF',
+		'CAF-3': 'actCAF',
+		'CAF-4': 'periCAF',
+		'CAF-5': 'meCAF',
+		'CAF-6': 'vsmCAF',
+		'CAF-7': 'infCAF',
+		'CAF-8': 'msCAF',
+		'CAF-9': 'pCAF',
+	}
 
 	try {
 		const response = (await get2DUmapCellType()) || []
@@ -272,6 +283,7 @@ const loadFilterOptions = async () => {
 			name: item,
 			index: index,
 			active: true,
+			pill_name: clusterNewNameMap[item],
 		}))
 	} catch (err) {
 		console.error('Error fetching cell type names:', err)
