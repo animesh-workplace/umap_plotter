@@ -30,7 +30,7 @@
 							<Icon
 								:name="item.icon"
 								:class="{ 'text-white': item.label == navBarPosition }"
-								class="w-5 h-5 text-slate-500 group-hover/item:text-white"
+								class="!w-5 !h-5 text-slate-500 group-hover/item:text-white"
 							/>
 							<span
 								:class="{ 'text-white': item.label == navBarPosition }"
