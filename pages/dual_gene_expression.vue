@@ -8,9 +8,7 @@
 					</h2>
 
 					<p class="text-gray-500 mt-4 max-w-3xl">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Et, egestas tempus tellus etiam
-						sed. Quam a scelerisque amet ullamcorper eu enim et fermentum, augue. Aliquet amet volutpat
-						quisque ut interdum tincidunt duis.
+						This module enables viewers to compare gene expression profiles across multiple covariates.
 					</p>
 				</div>
 			</div>
