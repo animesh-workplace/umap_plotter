@@ -1,5 +1,5 @@
 <template>
-	<VTour :steps="steps" ref="tour" name="spatial_localization_tour" backdrop highlight />
+	<VTour :steps="steps" ref="tour" name="spatial_localization_tour" backdrop highlight trapFocus />
 	<div class="p-4 grid grid-cols-1 justify-items-center z-50 realtive">
 		<div class="mb-2 text-center p-4 lg:px-16">
 			<div class="flex items-center justify-center gap-1">
