@@ -4,10 +4,10 @@
 			class="bg-white/20 backdrop-blur-md w-screen absolute top-0 overflow-hidden h-1/5 md:h-[440px] lg:h-[400px]"
 		>
 			<div
-				class="h-72 w-72 sm:h-[800px] sm:w-[800px] absolute rounded-full blur-[120px] bg-[#9d174d]/40 top-[10%] -left-[50%] xl:-left-[10%] lg:-left-[50%] md:-left-[80%] hero-morph"
+				class="h-72 w-72 sm:h-[800px] sm:w-[800px] absolute rounded-full blur-[120px] bg-[#9d174d]/40 top-0 -left-[50%] xl:-left-[5%] lg:-left-[50%] md:-left-[60%] hero-morph"
 			></div>
 			<div
-				class="h-72 w-72 sm:h-[800px] sm:w-[800px] absolute rounded-full blur-[120px] bg-[#0284c7]/40 top-[10%] -right-[50%] xl:-right-[10%] lg:-right-[50%] md:-right-[80%] hero-morph"
+				class="h-72 w-72 sm:h-[800px] sm:w-[800px] absolute rounded-full blur-[120px] bg-[#0284c7]/40 top-0 -right-[50%] xl:-right-[5%] lg:-right-[50%] md:-right-[60%] hero-morph"
 			></div>
 		</div>
 
@@ -31,7 +31,7 @@
 		</div>
 
 		<!-- Features Section -->
-		<section class="p-8 w-screen backdrop-blur-sm bg-slate-200/50">
+		<section class="p-8 w-screen backdrop-blur-sm bg-slate-200/50 hero-design">
 			<h2 class="text-2xl font-bold text-gray-900 md:text-4xl max-w-4xl mx-auto text-center mt-4">
 				Powerful Analysis Features
 			</h2>
@@ -40,34 +40,39 @@
 				Explore your gene expression data through multiple complementary approaches
 			</h5>
 
-			<div class="grid xl:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-8 mt-8">
-				<NuxtLink
+			<div class="grid xl:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-8 my-8">
+				<motion.div
 					:key="index"
-					:to="feature.href"
+					:while-hover="{ scale: 0.95 }"
 					v-for="(feature, index) in features"
-					class="rounded-2xl border border-gray-200 bg-gray-300 p-4 shadow-sm transition hover:shadow sm:p-6 cursor-pointer"
+					class="rounded-2xl border border-gray-200 bg-gray-300 p-4 shadow-sm transition sm:p-6 cursor-pointer"
 				>
-					<div class="flex justify-between mb-2">
-						<span class="rounded-xl bg-[#1D4ED826] p-2 text-white">
-							<Icon :name="feature.icon" class="w-7 h-7 flex justify-center" />
-						</span>
-						<span class="text-gray-500">
-							<Icon name="tabler:external-link" class="w-7 h-7 flex justify-center" />
-						</span>
-					</div>
+					<NuxtLink :to="feature.href">
+						<div class="flex justify-between mb-2">
+							<span class="rounded-xl bg-gray-400/70 p-2 text-white flex justify-center">
+								<Icon :name="feature.icon" class="!w-7 !h-7" />
+							</span>
+							<span class="text-gray-500/50 flex justify-center">
+								<Icon name="tabler:external-link" class="!w-7 !h-7" />
+							</span>
+						</div>
 
-					<h3 class="mt-0.5 text-lg font-bold text-gray-900">
-						{{ feature.title }}
-					</h3>
+						<h3 class="mt-0.5 text-lg font-bold text-gray-900 text-center">
+							{{ feature.title }}
+						</h3>
 
-					<p class="mt-2 text-sm/relaxed text-gray-500">
-						{{ feature.description }}
-					</p>
-				</NuxtLink>
+						<p class="mt-2 text-sm/relaxed text-gray-500 text-center">
+							{{ feature.description }}
+						</p>
+					</NuxtLink>
+				</motion.div>
 			</div>
 		</section>
 
-		<section class="overflow-hidden bg-gray-50 grid lg:grid-cols-2 grid-cols-1 gap-1 lg:gap-12 items-center">
+		<!-- Benefits Section -->
+		<section
+			class="overflow-hidden bg-gray-50 grid lg:grid-cols-2 grid-cols-1 gap-1 lg:gap-12 items-center my-8"
+		>
 			<div class="p-8 xl:px-16">
 				<div>
 					<div class="max-w-5xl mx-auto sm:px-6">
@@ -139,7 +144,7 @@
 </template>
 
 <script setup>
-import { NuxtLink } from '#components'
+import { motion } from 'motion-v'
 
 const features = ref([
 	{
@@ -178,6 +183,10 @@ const features = ref([
 </script>
 
 <style scoped>
+.hero-design {
+	background-image: url("data:image/svg+xml,%3Csvg width='32' height='64' viewBox='0 0 32 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 28h20V16h-4v8H4V4h28v28h-4V8H8v12h4v-8h12v20H0v-4zm12 8h20v4H16v24H0v-4h12V36zm16 12h-4v12h8v4H20V44h12v12h-4v-8zM0 36h8v20H0v-4h4V40H0v-4z' fill='%23a8a29e' fill-opacity='0.09' fill-rule='evenodd'/%3E%3C/svg%3E");
+}
+
 .hero-morph {
 	animation: fadeIn 5s ease-in-out infinite;
 }
