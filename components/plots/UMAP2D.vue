@@ -60,7 +60,7 @@ const updateChart = () => {
 				type: 'continuous',
 				orient: 'horizontal',
 				inRange: { color: ['#d3d3d3', props.colorScheme] },
-				textStyle: { fontFamily: 'Averta', fontWeight: 500 },
+				textStyle: { fontFamily: 'Lexend Deca', fontWeight: 500 },
 			},
 		}
 	} else {
@@ -80,17 +80,17 @@ const chartOption = ref({
 	],
 	yAxis: {
 		type: 'value',
-		axisLabel: { fontFamily: 'Averta', fontWeight: 500 },
+		axisLabel: { fontFamily: 'Lexend Deca', fontWeight: 500 },
 	},
 	xAxis: {
 		type: 'value',
-		axisLabel: { fontFamily: 'Averta', fontWeight: 500 },
+		axisLabel: { fontFamily: 'Lexend Deca', fontWeight: 500 },
 	},
 	tooltip: {
 		trigger: 'axis',
 		zlevel: 100,
-		axisPointer: { type: 'cross' },
-		textStyle: { fontFamily: 'Averta', fontWeight: 500 },
+		axisPointer: { type: 'cross', label: { fontFamily: 'Lexend Deca', fontWeight: 500 } },
+		textStyle: { fontFamily: 'Lexend Deca', fontWeight: 500 },
 		formatter: function (params) {
 			if (!params.length) return ''
 			const expressionText = params[0].value[5] !== 0 ? `Expression: ${params[0].value[5].toFixed(2)}` : ''
