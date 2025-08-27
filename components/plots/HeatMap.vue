@@ -1,7 +1,7 @@
 <template>
 	<div class="w-full flex justify-center">
 		<Skeleton height="34rem" v-if="isLoading" />
-		<VChart :option="chartOption" class="h-[34rem]" autoresize @click="handleClick" v-else />
+		<VChart :option="chartOption" class="chart" autoresize @click="handleClick" v-else />
 	</div>
 </template>
 
@@ -199,4 +199,9 @@ onMounted(() => {
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+.chart {
+	width: 100%;
+	height: 34rem;
+}
+</style>
