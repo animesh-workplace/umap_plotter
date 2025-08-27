@@ -4,7 +4,11 @@
 			<Menubar
 				:model="navItems"
 				class="drop-shadow-lg fixed top-3 !bg-slate-400/20 backdrop-blur-lg justify-between min-w-[calc(100%-50px)] lg:min-w-0 border-slate-400/20"
-				:pt="{ root: '!rounded-full z-50 pr-4', itemContent: '!bg-transparent' }"
+				:pt="{
+					itemContent: '!bg-transparent',
+					root: '!rounded-full z-50 pr-4',
+					rootList: '!rounded-3xl lg:!mt-0 !mt-3',
+				}"
 			>
 				<template #start>
 					<NuxtLink
@@ -67,7 +71,7 @@
 			<rect width="100%" height="100%" strokewidth="0" fill="url(#pattern-v-0)"></rect>
 		</svg>
 
-		<div class="w-screen min-h-screen overflow-x-hidden bg-gray-50 pt-[5rem]">
+		<div class="w-screen min-h-screen overflow-x-hidden bg-gray-50 lg:pt-[5rem]">
 			<!-- Page Content -->
 			<slot />
 			<!-- Page Content -->
