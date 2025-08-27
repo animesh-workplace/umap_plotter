@@ -1,4 +1,5 @@
 <template>
+	<VTour :steps="steps" ref="tour" name="spatial_localization_tour" backdrop />
 	<div class="p-4 grid grid-cols-1 justify-items-center z-50">
 		<div class="mb-2 text-center">
 			<div class="p-4 lg:px-16">
@@ -21,8 +22,9 @@
 				</div>
 			</div>
 		</div>
-		<div>
-			<FloatLabel class="w-full" variant="on">
+
+		<div class="w-full">
+			<FloatLabel variant="on" class="max-w-2xl mx-auto" id="Step1">
 				<Select
 					fluid
 					size="small"
@@ -38,8 +40,8 @@
 				</label>
 			</FloatLabel>
 
-			<div class="my-2 backdrop-blur rounded-lg">
-				<Carousel :value="clusterOptions" :numVisible="6" :showIndicators="false">
+			<div class="my-2 backdrop-blur rounded-lg max-w-4xl mx-auto" id="Step2">
+				<Carousel :value="clusterOptions" :numVisible="6" :numScroll="1" :showIndicators="false">
 					<template #item="slotProp">
 						<motion.div :while-hover="{ scale: 0.95 }" class="p-2">
 							<Tag
@@ -63,8 +65,8 @@
 				</Carousel>
 			</div>
 
-			<div class="my-2">
-				<div class="flex gap-2 justify-center items-center backdrop-blur rounded-lg">
+			<div class="my-2" id="Step3">
+				<div class="flex gap-2 justify-center items-center">
 					<SelectButton
 						v-model="switchAnnotation"
 						:disabled="!isClusterFilterActive"
@@ -85,6 +87,7 @@
 				</div>
 			</div>
 		</div>
+
 		<div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 min-w-full mt-2">
 			<div
 				class="xl:col-start-2 col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
@@ -113,6 +116,13 @@ import { motion } from 'motion-v'
 import { useGeneAPI } from '@/api/geneAPI'
 import { useGeneralDataStore } from '@/stores/generalData'
 
+const steps = [
+	{ target: '#Step1', body: 'Step1' },
+	{ target: '#Step2', body: 'Step2' },
+	{ target: '#Step3', body: 'Step3' },
+]
+
+const tour = ref(null)
 const route = useRoute()
 const scatterData = ref([])
 const spatialExpression = ref([])
@@ -239,6 +249,8 @@ onMounted(() => {
 	nextTick(() => {
 		const generalDataStore = useGeneralDataStore()
 		generalDataStore.updateNavBarPosition('Spatial Localization')
+		tour.value?.startTour()
+		console.log('🚀 ~ :253 ~ tour:', tour)
 	})
 })
 </script>
