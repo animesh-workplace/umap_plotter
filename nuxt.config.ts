@@ -23,7 +23,13 @@ export default defineNuxtConfig({
 		head: {
 			title: 'FibroScape | National Institute of Biomedical Genomics',
 			meta: [],
-			link: [],
+			link: [
+				{ rel: 'icon', href: '/fibroscape/favicon.ico' },
+				{ rel: 'manifest', href: '/fibroscape/site.webmanifest' },
+				{ rel: 'apple-touch-icon', sizes: '180x180', href: '/fibroscape/apple-touch-icon.png' },
+				{ rel: 'icon', type: 'image/png', sizes: '32x32', href: '/fibroscape/favicon-32x32.png' },
+				{ rel: 'icon', type: 'image/png', sizes: '16x16', href: '/fibroscape/favicon-16x16.png' },
+			],
 			script: [
 				{
 					async: true,
@@ -56,14 +62,15 @@ export default defineNuxtConfig({
 		},
 	},
 	modules: [
+		'nuxt-tour',
 		'@nuxt/icon',
 		'@pinia/nuxt',
 		'nuxt-echarts',
 		'@nuxt/eslint',
 		'@vueuse/nuxt',
 		'motion-v/nuxt',
-		'@primevue/nuxt-module',
 		'@nuxtjs/google-fonts',
+		'@primevue/nuxt-module',
 	],
 	echarts: {
 		ssr: true,
