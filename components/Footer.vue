@@ -23,9 +23,11 @@
 
 						<div>
 							<p class="mt-4 text-gray-400" align="justify">
-								FibroScape Description Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-								Numquam itaque eum est nobis id eligendi sunt quod modi fuga aspernatur? Molestiae
-								iusto sequi eveniet quasi ad minima eos eius natus.
+								Cancer-associated fibroblasts (CAFs) play a crucial role in tissue homeostasis and
+								immune remodelling in head and neck cancers. Our study has created a comprehensive
+								single-cell atlas of fibroblast cell states. We present FibroScape - an interactive
+								portal for viewing gene expression profiles in these fibroblast cell states to fuel
+								your own research questions.
 							</p>
 
 							<!-- <h2 class="mt-4 text-xl font-medium text-white">Cite us</h2> -->
