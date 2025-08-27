@@ -6,7 +6,7 @@
 			autoresize
 			ref="chartRef"
 			:option="chartOption"
-			class="h-[40rem] backdrop-blur rounded-lg font-[Averta]"
+			class="backdrop-blur rounded-lg font-[Averta] chart"
 		/>
 	</div>
 </template>
@@ -246,4 +246,9 @@ onMounted(() => {
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+.chart {
+	width: 100%;
+	height: 40rem;
+}
+</style>
