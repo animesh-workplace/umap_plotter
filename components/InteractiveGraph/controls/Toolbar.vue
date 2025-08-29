@@ -11,13 +11,13 @@
 				}"
 				v-else
 			>
-				<div class="flex gap-2 items-center">
+				<div class="flex gap-2 items-center" id="ThreeModeFilter">
 					<ToggleSwitch :model-value="activate3DMode" @update:model-value="handle3DMode" />
 					<Icon class="w-5 h-5 text-slate-500" name="akar-icons:augmented-reality" />
 					<div class="text-sm">3D Mode</div>
 				</div>
 
-				<FloatLabel variant="on">
+				<FloatLabel variant="on" id="PlotTypeFilter">
 					<Select
 						fluid
 						size="small"
@@ -32,7 +32,7 @@
 					</label>
 				</FloatLabel>
 
-				<FloatLabel variant="on" v-if="!noColorBy">
+				<FloatLabel variant="on" v-if="!noColorBy" id="ColorFilter">
 					<Select
 						fluid
 						showClear
@@ -47,7 +47,7 @@
 					</label>
 				</FloatLabel>
 
-				<FloatLabel variant="on">
+				<FloatLabel variant="on" id="DataFilter">
 					<Select
 						fluid
 						showClear
