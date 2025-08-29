@@ -1,5 +1,14 @@
 <template>
-	<VTour :steps="steps" ref="tour" name="spatial_localization_tour" backdrop highlight trapFocus />
+	<VTour
+		backdrop
+		highlight
+		trapFocus
+		ref="tour"
+		lockScroll
+		:steps="steps"
+		:showArrow="false"
+		name="spatial_localization_tour"
+	/>
 	<div class="p-4 grid grid-cols-1 justify-items-center z-50 realtive">
 		<div class="mb-2 text-center p-4 lg:px-16">
 			<div class="flex items-center justify-center gap-1">
@@ -12,13 +21,8 @@
 			<p class="text-gray-500 mt-4 max-w-3xl backdrop-blur">
 				This module enables viewers to visualise spatial localisation of CAF subtypes across pathologist
 				annotated regions, as well as, spatially-distinct tumour niches as identified by
-				<NuxtLink class="underline" href="https://doi.org/10.1038/s41467-023-40271-4">
+				<NuxtLink class="underline" to="https://doi.org/10.1038/s41467-023-40271-4" target="_blank">
 					Arora et. al.
-				</NuxtLink>
-
-				For gene expression queries, visit:
-				<NuxtLink class="underline" href="http://www.pboselab.ca/spatial_OSCC/">
-					http://www.pboselab.ca/spatial_OSCC/
 				</NuxtLink>
 			</p>
 		</div>
@@ -40,8 +44,14 @@
 				</label>
 			</FloatLabel>
 
-			<div class="my-2 backdrop-blur rounded-lg max-w-4xl mx-auto" id="Step2">
-				<Carousel :value="clusterOptions" :numVisible="6" :numScroll="1" :showIndicators="false">
+			<div class="my-2 backdrop-blur rounded-lg max-w-4xl mx-auto">
+				<Carousel
+					id="Step2"
+					:numScroll="1"
+					:numVisible="6"
+					:value="clusterOptions"
+					:showIndicators="false"
+				>
 					<template #item="slotProp">
 						<motion.div :while-hover="{ scale: 0.95 }" class="p-2">
 							<Tag
@@ -65,9 +75,10 @@
 				</Carousel>
 			</div>
 
-			<div class="my-2" id="Step3">
+			<div class="my-2">
 				<div class="flex gap-2 justify-center items-center">
 					<SelectButton
+						id="Step3"
 						v-model="switchAnnotation"
 						:disabled="!isClusterFilterActive"
 						@value-change="handleAnnotationChange"
@@ -93,7 +104,7 @@
 				class="xl:col-start-2 col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
 			>
 				<PlotsSpatialScatter
-					id="Step4a"
+					id="Step2a"
 					:scatterData="scatterData"
 					:imageURL="selectedImageOption"
 					:clusterSelected="isClusterFilterActive"
@@ -102,7 +113,7 @@
 
 			<div class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg">
 				<PlotsSpatialScatter
-					id="Step4b"
+					id="Step3a"
 					:scatterData="scatterData"
 					:colorScheme="switchAnnotation"
 					:imageURL="selectedImageOption"
@@ -124,30 +135,38 @@ const steps = [
 		title: 'Choose a Whole Slide Image',
 		subText: 'Start your exploration here',
 		body: 'Use this dropdown to select the H&E Whole Slide Image that you want to analyze. This will serve as the base for all further visualizations.',
+		onNext: () => {
+			selectedImageOption.value = '/fibroscape/media/s1.webp'
+			getSpatialExpression()
+			getImagePosition()
+		},
 	},
 	{
 		target: '#Step2',
 		title: 'Select Cancer-Associated Fibroblasts (CAFs)',
 		subText: 'Focus on key cell types',
 		body: 'Choose the CAF type you wish to highlight in the visualization. This helps in identifying fibroblast-related patterns across the tissue.',
+		onNext: () => {
+			FilterCluster(0)
+		},
+	},
+	{
+		target: '#Step2a',
+		title: 'View CAF Abundance',
+		subText: 'Left-side visualization',
+		body: 'The left panel shows spatial localization of the selected CAFs with their abundance levels mapped across the image.',
 	},
 	{
 		target: '#Step3',
 		title: 'Pick an Annotation',
 		subText: 'Add biological context',
-		body: 'Select an annotation layer (e.g., region or feature) to overlay on your slide. This provides deeper insights into cell distribution and structure.',
+		body: 'Select an annotation layer to overlay on the right panel. This provides deeper insights into cell distribution and structure.',
 	},
 	{
-		target: '#Step4a',
-		title: 'View CAF Abundance',
-		subText: 'Left-side visualization',
-		body: 'The left panel shows spatial localization of the selected CAFs with their abundance levels mapped across the tissue image.',
-	},
-	{
-		target: '#Step4b',
+		target: '#Step3a',
 		title: 'View Annotation Overlay',
 		subText: 'Right-side visualization',
-		body: 'The right panel displays spatial localization with the selected annotation, allowing you to compare structural and cellular patterns.',
+		body: 'The right panel displays spatial localization with the selected annotation, allowing you to compare structural and cellular patterns. The label for each of the color is provided on top',
 	},
 ]
 
