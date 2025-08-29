@@ -69,6 +69,7 @@ export default defineNuxtConfig({
 		'@nuxt/eslint',
 		'@vueuse/nuxt',
 		'motion-v/nuxt',
+		'nuxt-keen-slider',
 		'@nuxtjs/google-fonts',
 		'@primevue/nuxt-module',
 	],
