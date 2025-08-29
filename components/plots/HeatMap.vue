@@ -157,6 +157,7 @@ const handleClick = (params) => {
 	const x = params.data.value[0]
 	const y = params.data.value[1]
 	const cellKey = `${x},${y}`
+	console.log(cellKey)
 	heatmapStore.toggleCell(cellKey)
 	updateChart()
 }
