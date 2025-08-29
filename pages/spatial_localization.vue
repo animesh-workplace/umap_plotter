@@ -9,7 +9,7 @@
 		:showArrow="false"
 		name="spatial_localization_tour"
 	/>
-	<div class="p-4 grid grid-cols-1 justify-items-center z-50 realtive">
+	<div class="p-4 grid grid-cols-1 justify-items-center relative">
 		<div class="mb-2 text-center p-4 lg:px-16">
 			<div class="flex items-center justify-center gap-1">
 				<h2 class="text-2xl font-bold text-gray-900 md:text-3xl">Spatial Localization</h2>
@@ -45,25 +45,19 @@
 			</FloatLabel>
 
 			<div class="my-2 backdrop-blur rounded-lg max-w-4xl mx-auto">
-				<Carousel
-					id="Step2"
-					:numScroll="1"
-					:numVisible="6"
-					:value="clusterOptions"
-					:showIndicators="false"
-				>
-					<template #item="slotProp">
-						<motion.div :while-hover="{ scale: 0.95 }" class="p-2">
+				<div ref="container" class="keen-slider" id="Step2">
+					<div class="keen-slider__slide" v-for="(cluster, index) in clusterOptions" :key="index">
+						<motion.div class="p-2" :while-hover="{ scale: 0.95 }">
 							<Tag
 								rounded
-								:value="slotProp.data.pill_name"
+								:value="cluster.pill_name"
 								class="cursor-pointer w-full px-2"
-								@click="FilterCluster(slotProp.data.index)"
-								:severity="slotProp.data.active ? 'success' : 'danger'"
+								@click="FilterCluster(cluster.index)"
+								:severity="cluster.active ? 'success' : 'danger'"
 							>
 								<template #icon>
 									<Icon
-										v-if="slotProp.data.active"
+										v-if="cluster.active"
 										class="w-4 h-4 text-green-500"
 										name="akar-icons:tetragon-fill"
 									/>
@@ -71,8 +65,8 @@
 								</template>
 							</Tag>
 						</motion.div>
-					</template>
-				</Carousel>
+					</div>
+				</div>
 			</div>
 
 			<div class="my-2">
@@ -82,7 +76,7 @@
 						v-model="switchAnnotation"
 						:disabled="!isClusterFilterActive"
 						@value-change="handleAnnotationChange"
-						:pt="{ pcToggleButton: { root: '!bg-gray-200' } }"
+						:pt="{ pcToggleButton: { root: '!bg-gray-200', content: '!text-sm lg:!text-base' } }"
 						:options="['Pathologist Annotation', 'TE Annotation']"
 					>
 						<template #option="slotProps">
@@ -99,7 +93,7 @@
 			</div>
 		</div>
 
-		<div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 min-w-full mt-2">
+		<div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 min-w-full mt-2 mb-12">
 			<div
 				class="xl:col-start-2 col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
 			>
@@ -129,6 +123,25 @@ import { motion } from 'motion-v'
 import { useGeneAPI } from '@/api/geneAPI'
 import { useGeneralDataStore } from '@/stores/generalData'
 
+const animation = { duration: 500, easing: (t) => t }
+const [container, slider] = useKeenSlider({
+	mode: 'free-snap',
+	renderMode: 'performance',
+	breakpoints: {
+		'(min-width: 48rem)': {
+			slides: { origin: 'center', perView: 6, spacing: 0 },
+		},
+	},
+	slides: {
+		perView: 3,
+		spacing: 0,
+		origin: 'center',
+	},
+	created(s) {
+		s.moveToIdx(3, true, animation)
+	},
+})
+
 const steps = [
 	{
 		target: '#Step1',
@@ -146,6 +159,10 @@ const steps = [
 		title: 'Select Cancer-Associated Fibroblasts (CAFs)',
 		subText: 'Focus on key cell types',
 		body: 'Choose the CAF type you wish to highlight in the visualization. This helps in identifying fibroblast-related patterns across the tissue.',
+		onShow: () => {
+			console.log(slider)
+			slider.value.moveToIdx(0, true, animation)
+		},
 		onNext: () => {
 			FilterCluster(0)
 		},
@@ -161,6 +178,9 @@ const steps = [
 		title: 'Pick an Annotation',
 		subText: 'Add biological context',
 		body: 'Select an annotation layer to overlay on the right panel. This provides deeper insights into cell distribution and structure.',
+		onShow: () => {
+			switchAnnotation.value = 'TE Annotation'
+		},
 	},
 	{
 		target: '#Step3a',
