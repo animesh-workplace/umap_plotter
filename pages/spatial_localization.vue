@@ -45,7 +45,7 @@
 			</FloatLabel>
 
 			<div class="my-2 backdrop-blur rounded-lg max-w-4xl mx-auto">
-				<div ref="container" class="keen-slider" id="Step2">
+				<div ref="container" class="keen-slider cursor-grab" id="Step2">
 					<div class="keen-slider__slide" v-for="(cluster, index) in clusterOptions" :key="index">
 						<motion.div class="p-2" :while-hover="{ scale: 0.95 }">
 							<Tag
@@ -155,6 +155,7 @@ const steps = [
 		},
 	},
 	{
+		position: 'bottom',
 		target: '#Step2',
 		title: 'Select Cancer-Associated Fibroblasts (CAFs)',
 		subText: 'Focus on key cell types',
@@ -168,12 +169,14 @@ const steps = [
 		},
 	},
 	{
+		position: 'bottom',
 		target: '#Step2a',
 		title: 'View CAF Abundance',
 		subText: 'Left-side visualization',
 		body: 'The left panel shows spatial localization of the selected CAFs with their abundance levels mapped across the image.',
 	},
 	{
+		position: 'bottom',
 		target: '#Step3',
 		title: 'Pick an Annotation',
 		subText: 'Add biological context',
@@ -183,6 +186,7 @@ const steps = [
 		},
 	},
 	{
+		position: 'bottom',
 		target: '#Step3a',
 		title: 'View Annotation Overlay',
 		subText: 'Right-side visualization',
