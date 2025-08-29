@@ -17,6 +17,7 @@
 		"@primeuix/themes": "^1.1.1",
 		"@primevue/forms": "^4.3.4",
 		"@tailwindcss/vite": "^4.1.12",
+		"@toneflix-code/flickity-vue": "^1.0.1",
 		"@vueuse/motion": "^3.0.3",
 		"@vueuse/nuxt": "13.1.0",
 		"echarts": "^5.5.1",
@@ -36,6 +37,7 @@
 	"devDependencies": {
 		"@iconify/json": "^2.2.337",
 		"@primevue/nuxt-module": "^4.3.4",
+		"nuxt-keen-slider": "^1.1.1",
 		"tailwindcss-animate": "^1.0.7"
 	}
 }
