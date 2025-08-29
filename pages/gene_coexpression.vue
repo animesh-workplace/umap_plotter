@@ -134,24 +134,24 @@ const selectedVisualizationType = ref('UMAP')
 const heatmapStore = useHeatmapStore()
 
 const steps = [
-	{
-		target: '#ThreeModeFilter',
-		title: 'Choose a Whole Slide Image',
-		subText: 'Start your exploration here',
-		body: 'Use this dropdown to select the H&E Whole Slide Image that you want to analyze. This will serve as the base for all further visualizations.',
-	},
-	{
-		target: '#PlotTypeFilter',
-		title: 'Select Cancer-Associated Fibroblasts (CAFs)',
-		subText: 'Focus on key cell types',
-		body: 'Choose the CAF type you wish to highlight in the visualization. This helps in identifying fibroblast-related patterns across the tissue.',
-	},
-	{
-		target: '#DataFilter',
-		title: 'Pick an Annotation',
-		subText: 'Add biological context',
-		body: 'Select an annotation layer (e.g., region or feature) to overlay on your slide. This provides deeper insights into cell distribution and structure.',
-	},
+	// {
+	// 	target: '#ThreeModeFilter',
+	// 	title: 'Choose a Whole Slide Image',
+	// 	subText: 'Start your exploration here',
+	// 	body: 'Use this dropdown to select the H&E Whole Slide Image that you want to analyze. This will serve as the base for all further visualizations.',
+	// },
+	// {
+	// 	target: '#PlotTypeFilter',
+	// 	title: 'Select Cancer-Associated Fibroblasts (CAFs)',
+	// 	subText: 'Focus on key cell types',
+	// 	body: 'Choose the CAF type you wish to highlight in the visualization. This helps in identifying fibroblast-related patterns across the tissue.',
+	// },
+	// {
+	// 	target: '#DataFilter',
+	// 	title: 'Pick an Annotation',
+	// 	subText: 'Add biological context',
+	// 	body: 'Select an annotation layer (e.g., region or feature) to overlay on your slide. This provides deeper insights into cell distribution and structure.',
+	// },
 	{
 		target: '#Gene1a',
 		title: 'Gene 1 Search',
@@ -192,6 +192,24 @@ const steps = [
 	},
 	{
 		target: '#heatmap',
+		title: 'View Annotation Overlay',
+		subText: 'Right-side visualization',
+		body: 'The right panel displays spatial localization with the selected annotation, allowing you to compare structural and cellular patterns.',
+		onShow: () => {
+			heatmapStore.toggleCell('4,7')
+			heatmapStore.toggleCell('3,7')
+			heatmapStore.toggleCell('4,6')
+			heatmapStore.toggleCell('3,6')
+			heatmapStore.toggleCell('4,5')
+			heatmapStore.toggleCell('3,5')
+			heatmapStore.toggleCell('4,4')
+			heatmapStore.toggleCell('3,4')
+			heatmap.value.updateChart()
+			updateGraph3Colors()
+		},
+	},
+	{
+		target: '#Gene3',
 		title: 'View Annotation Overlay',
 		subText: 'Right-side visualization',
 		body: 'The right panel displays spatial localization with the selected annotation, allowing you to compare structural and cellular patterns.',
