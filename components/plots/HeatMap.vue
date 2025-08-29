@@ -181,7 +181,7 @@ const updateChart = () => {
 	chartOption.value.series[0].data = data
 }
 
-defineExpose({ colorGrid })
+defineExpose({ colorGrid, updateChart })
 
 watch([() => props.maxX, () => props.maxY], () => {
 	initializeHeatmap()
