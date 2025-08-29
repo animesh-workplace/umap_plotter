@@ -1,5 +1,14 @@
 <template>
-	<VTour :steps="steps" ref="tour" name="gene_coexpression_tour" backdrop highlight trapFocus />
+	<VTour
+		backdrop
+		highlight
+		trapFocus
+		ref="tour"
+		lockScroll
+		:steps="steps"
+		:showArrow="false"
+		name="gene_coexpression_tour"
+	/>
 	<div class="p-4 grid grid-cols-1 justify-items-center z-50">
 		<div class="mb-2 text-center p-4 lg:px-16">
 			<div class="flex items-center justify-center gap-1">
@@ -16,7 +25,6 @@
 
 		<div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-9 min-w-full mt-2 mx-4">
 			<InteractiveGraphControlsToolbar
-				id="Step1"
 				noColorBy
 				:activate3DMode="activate3DMode"
 				@update:activate3DMode="handle3DModeChange"
@@ -45,14 +53,14 @@
 				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-3 xl:col-start-3 grid grid-cols-2 gap-2 items-center justify-between px-2 xl:px-4 backdrop-blur rounded-lg"
 			>
 				<InteractiveGraphControlsGeneSearch
-					id="Step3"
+					id="Gene1a"
 					v-model="selectedGene1"
 					selectedColorOption="Gene"
 					@gene-cleared="handleClearGene1"
 					@gene-selected="handleSearchGene1"
 				/>
 				<InteractiveGraphControlsGeneSearch
-					id="Step4a"
+					id="Gene2a"
 					v-model="selectedGene2"
 					selectedColorOption="Gene"
 					@gene-cleared="handleClearGene2"
@@ -62,10 +70,10 @@
 		</div>
 
 		<div
-			class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 min-w-full mt-2 px-2 xl:px-8"
+			class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 min-w-full mt-2 px-2 xl:px-8 pb-12"
 		>
 			<InteractiveGraph
-				id="Step4b"
+				id="Gene1b"
 				noFilter
 				ref="graph1"
 				:geneSearch="false"
@@ -75,6 +83,7 @@
 			/>
 			<InteractiveGraph
 				noFilter
+				id="Gene2b"
 				ref="graph2"
 				:geneSearch="false"
 				colorScheme="#16DB93"
@@ -83,12 +92,14 @@
 			/>
 			<InteractiveGraph
 				noFilter
+				id="Gene3"
 				ref="graph3"
-				colorScheme="#ca8a04"
 				:key="graph3Key"
+				colorScheme="#ca8a04"
 				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
 			/>
 			<PlotsHeatMap
+				id="heatmap"
 				ref="heatmap"
 				:maxX="maxGene1Expression"
 				:maxY="maxGene2Expression"
@@ -104,6 +115,7 @@ import { useGeneAPI } from '@/api/geneAPI'
 import { useGeneralDataStore } from '@/stores/generalData'
 import { useHeatmapStore } from '@/stores/heatmapStore'
 
+const toolbar = ref(null)
 const tour = ref(null)
 const graph1 = ref(null)
 const graph2 = ref(null)
@@ -123,31 +135,63 @@ const heatmapStore = useHeatmapStore()
 
 const steps = [
 	{
-		target: '#Step1',
+		target: '#ThreeModeFilter',
 		title: 'Choose a Whole Slide Image',
 		subText: 'Start your exploration here',
 		body: 'Use this dropdown to select the H&E Whole Slide Image that you want to analyze. This will serve as the base for all further visualizations.',
 	},
 	{
-		target: '#Step2',
+		target: '#PlotTypeFilter',
 		title: 'Select Cancer-Associated Fibroblasts (CAFs)',
 		subText: 'Focus on key cell types',
 		body: 'Choose the CAF type you wish to highlight in the visualization. This helps in identifying fibroblast-related patterns across the tissue.',
 	},
 	{
-		target: '#Step3',
+		target: '#DataFilter',
 		title: 'Pick an Annotation',
 		subText: 'Add biological context',
 		body: 'Select an annotation layer (e.g., region or feature) to overlay on your slide. This provides deeper insights into cell distribution and structure.',
 	},
 	{
-		target: '#Step4a',
+		target: '#Gene1a',
+		title: 'Gene 1 Search',
+		subText: 'Left-side visualization',
+		body: 'The left panel shows spatial localization of the selected CAFs with their abundance levels mapped across the tissue image.',
+		onShow: async () => {
+			selectedGene1.value = 'PDGFRA'
+			await handleSearchGene1('PDGFRA')
+		},
+	},
+	{
+		target: '#Gene1b',
+		title: 'View Annotation Overlay',
+		subText: 'Right-side visualization',
+		body: 'The right panel displays spatial localization with the selected annotation, allowing you to compare structural and cellular patterns.',
+	},
+	{
+		target: '#Gene2a',
 		title: 'View CAF Abundance',
 		subText: 'Left-side visualization',
 		body: 'The left panel shows spatial localization of the selected CAFs with their abundance levels mapped across the tissue image.',
+		onShow: async () => {
+			selectedGene2.value = 'COL1A1'
+			await handleSearchGene2('COL1A1')
+		},
 	},
 	{
-		target: '#Step4b',
+		target: '#Gene2b',
+		title: 'View Annotation Overlay',
+		subText: 'Right-side visualization',
+		body: 'The right panel displays spatial localization with the selected annotation, allowing you to compare structural and cellular patterns.',
+	},
+	{
+		target: '#Gene3',
+		title: 'View Annotation Overlay',
+		subText: 'Right-side visualization',
+		body: 'The right panel displays spatial localization with the selected annotation, allowing you to compare structural and cellular patterns.',
+	},
+	{
+		target: '#heatmap',
 		title: 'View Annotation Overlay',
 		subText: 'Right-side visualization',
 		body: 'The right panel displays spatial localization with the selected annotation, allowing you to compare structural and cellular patterns.',
@@ -341,6 +385,7 @@ onMounted(() => {
 		const generalDataStore = useGeneralDataStore()
 		generalDataStore.updateNavBarPosition('Gene Co-expression')
 		await loadFilterOptions()
+		console.log(toolbar.value?.$el.querySelector('#ThreeModeFilter'))
 	})
 })
 </script>
