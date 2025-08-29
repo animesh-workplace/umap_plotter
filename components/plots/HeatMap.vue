@@ -126,14 +126,12 @@ const chartOption = ref({
 	xAxis: {
 		type: 'category',
 		splitArea: { show: false },
-		axisLabel: { fontSize: 12 },
 		axisLabel: { fontFamily: 'Lexend Deca', fontWeight: 500 },
 		data: Array.from({ length: props.maxX + 1 }, (_, i) => i.toString()),
 	},
 	yAxis: {
 		type: 'category',
 		splitArea: { show: false },
-		axisLabel: { fontSize: 12 },
 		axisLabel: { fontFamily: 'Lexend Deca', fontWeight: 500 },
 		data: Array.from({ length: props.maxY + 1 }, (_, i) => i.toString()),
 	},
