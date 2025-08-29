@@ -12,6 +12,8 @@
 </template>
 
 <script setup>
+import { useEventListener } from '@vueuse/core'
+
 const chartRef = ref(null)
 const scale_factor = ref(1)
 const isLoading = ref(true)
@@ -35,6 +37,7 @@ const scaleValue = (x) => {
 		[488, 1.22],
 		[601, 0.998],
 		[736, 0.8],
+		[990, 0.6],
 	]
 	// Find which segment x falls into
 	for (let i = 0; i < points.length - 1; i++) {
@@ -113,6 +116,7 @@ const updateChart = () => {
 	if (!props.scatterData.length) return
 
 	calculateDimensions()
+	console.log(currentImageWidth.value, currentImageHeight.value)
 	const [min, max] = getExpressionRange()
 
 	if (props.clusterSelected && props.colorScheme == '') {
@@ -237,6 +241,7 @@ const updateChart = () => {
 	}
 }
 
+useEventListener(window, 'resize', calculateDimensions)
 watchEffect(() => {
 	updateChart()
 })
