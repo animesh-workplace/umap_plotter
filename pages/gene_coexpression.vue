@@ -72,40 +72,60 @@
 		<div
 			class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 min-w-full mt-2 px-2 xl:px-8 pb-12"
 		>
-			<InteractiveGraph
-				id="Gene1b"
-				noFilter
-				ref="graph1"
-				:geneSearch="false"
-				colorScheme="#9d174d"
-				@gene-fetched="handleUpdateGraph1"
-				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
-			/>
-			<InteractiveGraph
-				noFilter
-				id="Gene2b"
-				ref="graph2"
-				:geneSearch="false"
-				colorScheme="#16DB93"
-				@gene-fetched="handleUpdateGraph2"
-				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
-			/>
-			<InteractiveGraph
-				noFilter
-				id="Gene3"
-				ref="graph3"
-				:key="graph3Key"
-				colorScheme="#ca8a04"
-				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
-			/>
-			<PlotsHeatMap
-				id="heatmap"
-				ref="heatmap"
-				:maxX="maxGene1Expression"
-				:maxY="maxGene2Expression"
-				@heatmap-updated="updateGraph3Colors"
-				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2 backdrop-blur rounded-lg"
-			/>
+			<div class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2">
+				<div class="text-center text-sm italic text-gray-600 mb-1">
+					{{ selectedGene1 || 'Gene1' }} Expression
+				</div>
+				<InteractiveGraph
+					id="Gene1b"
+					noFilter
+					ref="graph1"
+					:geneSearch="false"
+					colorScheme="#9d174d"
+					@gene-fetched="handleUpdateGraph1"
+					class="backdrop-blur rounded-lg"
+				/>
+			</div>
+			<div class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2">
+				<div class="text-center text-sm italic text-gray-600 mb-1">
+					{{ selectedGene2 || 'Gene2' }} Expression
+				</div>
+				<InteractiveGraph
+					noFilter
+					id="Gene2b"
+					ref="graph2"
+					:geneSearch="false"
+					colorScheme="#16DB93"
+					@gene-fetched="handleUpdateGraph2"
+					class="backdrop-blur rounded-lg"
+				/>
+			</div>
+			<div class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2">
+				<div class="text-center text-sm italic text-gray-600 mb-1">
+					Combined {{ selectedGene1 || 'Gene1' }} & {{ selectedGene2 || 'Gene2' }} Expression
+				</div>
+				<InteractiveGraph
+					noFilter
+					id="Gene3"
+					ref="graph3"
+					:key="graph3Key"
+					colorScheme="#ca8a04"
+					class="backdrop-blur rounded-lg"
+				/>
+			</div>
+			<div class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2">
+				<div class="text-center text-sm italic text-gray-600 mb-1">
+					Color Heatmap (Click on cells to filter)
+				</div>
+				<PlotsHeatMap
+					id="heatmap"
+					ref="heatmap"
+					:maxX="maxGene1Expression"
+					:maxY="maxGene2Expression"
+					@heatmap-updated="updateGraph3Colors"
+					class="backdrop-blur rounded-lg"
+				/>
+			</div>
 		</div>
 	</div>
 </template>
@@ -195,7 +215,7 @@ const steps = [
 		title: 'View Annotation Overlay',
 		subText: 'Right-side visualization',
 		body: 'The right panel displays spatial localization with the selected annotation, allowing you to compare structural and cellular patterns.',
-		onShow: () => {
+		onNext: () => {
 			heatmapStore.toggleCell('4,7')
 			heatmapStore.toggleCell('3,7')
 			heatmapStore.toggleCell('4,6')
