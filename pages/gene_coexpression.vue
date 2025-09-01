@@ -32,7 +32,7 @@
 				@update:selectedFilterOption="handleFilterChange"
 				@update:selectedVisualizationType="handlePlotChange"
 				:selectedVisualizationType="selectedVisualizationType"
-				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-3 xl:col-start-4"
+				class="col-span-1 sm:col-span-2 lg:col-span-4 xl:col-span-3 xl:col-start-4"
 			/>
 		</div>
 
@@ -48,9 +48,9 @@
 			/>
 		</div>
 
-		<div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 min-w-full mt-2 mx-4">
+		<div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 xl:grid-cols-7 min-w-full mt-2 mx-4">
 			<div
-				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-3 xl:col-start-3 grid grid-cols-2 gap-2 items-center justify-between px-2 xl:px-4 backdrop-blur rounded-lg"
+				class="col-span-1 sm:col-span-2 lg:col-span-3 lg:col-start-2 xl:col-span-3 xl:col-start-3 grid grid-cols-2 gap-2 items-center justify-between px-2 xl:px-4 backdrop-blur rounded-lg"
 			>
 				<InteractiveGraphControlsGeneSearch
 					id="Gene1a"
