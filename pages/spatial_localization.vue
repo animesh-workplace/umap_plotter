@@ -44,9 +44,15 @@
 				</label>
 			</FloatLabel>
 
-			<div class="my-2 backdrop-blur rounded-lg max-w-4xl mx-auto">
-				<div ref="container" class="keen-slider cursor-grab" id="Step2">
-					<div class="keen-slider__slide" v-for="(cluster, index) in clusterOptions" :key="index">
+			<div class="my-2 backdrop-blur rounded-lg max-w-4xl mx-auto text-center">
+				<!-- <div ref="container" class="keen-slider cursor-grab" id="Step2"> -->
+				<div
+					id="Step2"
+					ref="container"
+					class="grid grid-cols-3 lg:grid-cols-5 justify-center items-center"
+				>
+					<!-- <div class="keen-slider__slide" v-for="(cluster, index) in clusterOptions" :key="index"> -->
+					<div v-for="(cluster, index) in clusterOptions" :key="index">
 						<motion.div class="p-2" :while-hover="{ scale: 0.95 }">
 							<Tag
 								rounded
