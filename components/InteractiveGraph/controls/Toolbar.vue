@@ -4,10 +4,10 @@
 			<Skeleton height="3rem" v-if="isLoading && !noFilter" class="mb-4 mt-2" />
 
 			<div
-				class="col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-3 grid grid-cols-2 gap-1 items-center justify-between mb-2 pl-4 backdrop-blur rounded-lg"
+				class="col-span-1 sm:col-span-2 lg:col-span-3 xl:col-span-3 grid grid-cols-2 gap-1 items-center justify-between mb-2 pl-4 backdrop-blur rounded-lg"
 				:class="{
-					'xl:grid-cols-3 xl:col-start-4': noColorBy,
-					'xl:grid-cols-4 xl:col-start-3': !noColorBy,
+					'xl:grid-cols-3 xl:col-start-4 lg:grid-cols-3': noColorBy,
+					'xl:grid-cols-4 xl:col-start-3 lg:grid-cols-3': !noColorBy,
 				}"
 				v-else
 			>
