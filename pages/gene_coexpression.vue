@@ -132,10 +132,9 @@
 
 <script setup>
 import { useGeneAPI } from '@/api/geneAPI'
-import { useGeneralDataStore } from '@/stores/generalData'
 import { useHeatmapStore } from '@/stores/heatmapStore'
+import { useGeneralDataStore } from '@/stores/generalData'
 
-const toolbar = ref(null)
 const tour = ref(null)
 const graph1 = ref(null)
 const graph2 = ref(null)
@@ -143,6 +142,7 @@ const graph3 = ref(null)
 const graph3Key = ref(0)
 const clusters = ref([])
 const cellTypes = ref([])
+const toolbar = ref(null)
 const heatmap = ref(null)
 const selectedGene1 = ref('')
 const selectedGene2 = ref('')
@@ -423,7 +423,6 @@ onMounted(() => {
 		const generalDataStore = useGeneralDataStore()
 		generalDataStore.updateNavBarPosition('Gene Co-expression')
 		await loadFilterOptions()
-		console.log(toolbar.value?.$el.querySelector('#ThreeModeFilter'))
 	})
 })
 </script>
