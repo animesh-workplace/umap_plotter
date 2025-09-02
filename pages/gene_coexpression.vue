@@ -154,29 +154,29 @@ const selectedVisualizationType = ref('UMAP')
 const heatmapStore = useHeatmapStore()
 
 const steps = [
-	// {
-	// 	target: '#ThreeModeFilter',
-	// 	title: 'Choose a Whole Slide Image',
-	// 	subText: 'Start your exploration here',
-	// 	body: 'Use this dropdown to select the H&E Whole Slide Image that you want to analyze. This will serve as the base for all further visualizations.',
-	// },
-	// {
-	// 	target: '#PlotTypeFilter',
-	// 	title: 'Select Cancer-Associated Fibroblasts (CAFs)',
-	// 	subText: 'Focus on key cell types',
-	// 	body: 'Choose the CAF type you wish to highlight in the visualization. This helps in identifying fibroblast-related patterns across the tissue.',
-	// },
-	// {
-	// 	target: '#DataFilter',
-	// 	title: 'Pick an Annotation',
-	// 	subText: 'Add biological context',
-	// 	body: 'Select an annotation layer (e.g., region or feature) to overlay on your slide. This provides deeper insights into cell distribution and structure.',
-	// },
+	{
+		target: '#ThreeModeFilter',
+		title: 'Switch Between 2D and 3D Views',
+		subText: 'Explore from different perspectives',
+		body: 'Use this control to toggle the visualization mode between 2D and 3D, helping you explore spatial patterns more effectively.',
+	},
+	{
+		target: '#PlotTypeFilter',
+		title: 'Choose a Plot Type',
+		subText: 'Visualize CAF distributions',
+		body: 'Select between UMAP and t-SNE plots to view the arrangement of Cancer-Associated Fibroblasts (CAFs) in different dimensional reductions.',
+	},
+	{
+		target: '#DataFilter',
+		title: 'Filter by Annotation',
+		subText: 'Focus on specific datasets',
+		body: 'Refine the visualization by selecting the source data and CAF clusters that are most relevant to your analysis.',
+	},
 	{
 		target: '#Gene1a',
-		title: 'Gene 1 Search',
-		subText: 'Left-side visualization',
-		body: 'The left panel shows spatial localization of the selected CAFs with their abundance levels mapped across the tissue image.',
+		title: 'Search for Gene 1',
+		subText: 'Analyze left panel expression',
+		body: 'Enter or select a gene (default: PDGFRA) to visualize its expression on the first plot for comparison.',
 		onShow: async () => {
 			selectedGene1.value = 'PDGFRA'
 			await handleSearchGene1('PDGFRA')
@@ -184,15 +184,15 @@ const steps = [
 	},
 	{
 		target: '#Gene1b',
-		title: 'View Annotation Overlay',
-		subText: 'Right-side visualization',
-		body: 'The right panel displays spatial localization with the selected annotation, allowing you to compare structural and cellular patterns.',
+		title: 'Overlay Gene 1 Expression',
+		subText: 'Visualize gene activity',
+		body: 'This panel overlays the expression levels of Gene 1 across the selected dataset, revealing spatial or cluster-specific trends.',
 	},
 	{
 		target: '#Gene2a',
-		title: 'View CAF Abundance',
-		subText: 'Left-side visualization',
-		body: 'The left panel shows spatial localization of the selected CAFs with their abundance levels mapped across the tissue image.',
+		title: 'Search for Gene 2',
+		subText: 'Analyze left panel expression',
+		body: 'Enter or select a gene (default: COL1A1) to visualize its expression on the second plot for direct comparison with Gene 1.',
 		onShow: async () => {
 			selectedGene2.value = 'COL1A1'
 			await handleSearchGene2('COL1A1')
@@ -200,21 +200,21 @@ const steps = [
 	},
 	{
 		target: '#Gene2b',
-		title: 'View Annotation Overlay',
-		subText: 'Right-side visualization',
-		body: 'The right panel displays spatial localization with the selected annotation, allowing you to compare structural and cellular patterns.',
+		title: 'Overlay Gene 2 Expression',
+		subText: 'Visualize gene activity',
+		body: 'This panel overlays the expression levels of Gene 2, helping you compare its spatial distribution against Gene 1.',
 	},
 	{
 		target: '#Gene3',
-		title: 'View Annotation Overlay',
-		subText: 'Right-side visualization',
-		body: 'The right panel displays spatial localization with the selected annotation, allowing you to compare structural and cellular patterns.',
+		title: 'Compare Gene 1 and Gene 2',
+		subText: 'Explore combined expression',
+		body: 'This visualization highlights the co-expression of Gene 1 and Gene 2. The color scheme is based on a combined heatmap to reveal overlaps and differences.',
 	},
 	{
 		target: '#heatmap',
-		title: 'View Annotation Overlay',
-		subText: 'Right-side visualization',
-		body: 'The right panel displays spatial localization with the selected annotation, allowing you to compare structural and cellular patterns.',
+		title: 'Explore the Expression Heatmap',
+		subText: 'Interactive gene filtering',
+		body: 'This heatmap shows gradients of expression for Gene 1, Gene 2, and their combinations. Click blocks to filter the dataset dynamically and reveal focused patterns.',
 		onNext: () => {
 			heatmapStore.toggleCell('4,7')
 			heatmapStore.toggleCell('3,7')
@@ -230,9 +230,9 @@ const steps = [
 	},
 	{
 		target: '#Gene3',
-		title: 'View Annotation Overlay',
-		subText: 'Right-side visualization',
-		body: 'The right panel displays spatial localization with the selected annotation, allowing you to compare structural and cellular patterns.',
+		title: 'View Filtered Results',
+		subText: 'Refine your analysis',
+		body: 'After selecting heatmap blocks, the filtered dataset is visualized here, allowing you to explore targeted gene expression patterns in detail.',
 	},
 ]
 
