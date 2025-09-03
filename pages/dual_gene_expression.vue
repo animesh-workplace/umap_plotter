@@ -71,6 +71,33 @@ const steps = [
 		title: 'Filter by Annotation',
 		subText: 'Focus on specific datasets',
 		body: 'Refine the visualization by selecting the source data and CAF clusters that are most relevant to your analysis.',
+		onNext: () => {
+			graph1.value.selectedFilterOption = 'Cluster'
+		},
+	},
+	{
+		target: '#GeneSearch',
+		title: 'Search for a Gene',
+		subText: 'Explore expression patterns',
+		body: 'Enter or select a gene to visualize its expression within the dataset. This helps you investigate specific biological markers or compare across different conditions.',
+	},
+	{
+		target: '#ClusterFilter',
+		title: 'Search for a Gene',
+		subText: 'Explore expression patterns',
+		body: 'Enter or select a gene to visualize its expression within the dataset. This helps you investigate specific biological markers or compare across different conditions.',
+	},
+	{
+		target: '#Graph1',
+		title: 'Left Panel Visualization',
+		subText: 'Gene expression overview',
+		body: 'This graph displays the expression of the selected gene using your chosen plot type and coloring scheme. Use it to explore spatial or cluster-level patterns across the dataset.',
+	},
+	{
+		target: '#Graph2',
+		title: 'Right Panel Visualization',
+		subText: 'Compare or customize results',
+		body: 'This panel can either mirror Graph 1 for side-by-side validation or display a completely different gene or coloring scheme. It is designed for flexible comparisons and deeper exploration.',
 	},
 ]
 
