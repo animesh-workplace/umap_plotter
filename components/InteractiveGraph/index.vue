@@ -536,6 +536,7 @@ defineExpose({
 	setFilterByCluster,
 	clearGeneSelection,
 	selectedColorOption,
+	selectedFilterOption,
 	updatePointColors: (colors) => {
 		viewer.value.updatePointColors(colors)
 	},
