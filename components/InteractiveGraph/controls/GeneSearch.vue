@@ -1,5 +1,5 @@
 <template>
-	<div class="mb-2 flex relative" v-if="geneSearch && selectedColorOption == 'Gene'">
+	<div class="mb-2 flex relative" v-if="geneSearch && selectedColorOption == 'Gene'" id="GeneSearch">
 		<AutoComplete
 			dropdown
 			class="w-full"
