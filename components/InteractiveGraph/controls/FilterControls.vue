@@ -1,6 +1,7 @@
 <template>
 	<div v-if="!noFilter" class="w-full">
 		<div
+			id="SourceFilter"
 			v-if="selectedFilterOption == 'Source'"
 			class="grid grid-cols-3 gap-3 items-center mb-4 mt-2 justify-center px-4"
 		>
@@ -28,7 +29,11 @@
 			v-if="selectedFilterOption == 'Cluster'"
 			class="flex gap-2 items-center mb-2 mt-2 justify-center px-4"
 		> -->
-		<div v-if="selectedFilterOption == 'Cluster'" class="grid grid-cols-3 lg:grid-cols-5 lg:max-w-4xl px-4">
+		<div
+			id="ClusterFilter"
+			v-if="selectedFilterOption == 'Cluster'"
+			class="grid grid-cols-3 lg:grid-cols-5 lg:max-w-4xl px-4"
+		>
 			<div v-for="(cluster, index) in clusters" :key="index">
 				<motion.div class="p-2" :while-hover="{ scale: 0.95 }">
 					<Tag
