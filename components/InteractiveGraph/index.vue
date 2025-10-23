@@ -25,8 +25,11 @@
 			:noFilter="noFilter"
 			:clusters="clusters"
 			:cellTypes="cellTypes"
+			:lineageTypes="lineageTypes"
 			@cluster-filtered="FilterCluster"
+			@lineage-selected="SelectLineage"
 			@cell-type-filtered="FilterCellType"
+			:selectedColorOption="selectedColorOption"
 			:selectedFilterOption="selectedFilterOption"
 		/>
 		<InteractiveGraphViewer
@@ -45,6 +48,7 @@
 </template>
 
 <script setup>
+import { map } from 'lodash-es'
 import { useGeneAPI } from '@/api/geneAPI'
 
 const props = defineProps({
@@ -69,6 +73,12 @@ const isLoading = ref(true)
 // Data for filters
 const clusters = ref([])
 const cellTypes = ref([])
+const lineageTypes = ref([
+	{ name: 'Lineage 1', index: 0, active: false },
+	{ name: 'Lineage 2', index: 1, active: false },
+	{ name: 'Lineage 3', index: 2, active: false },
+	{ name: 'Lineage 4', index: 3, active: false },
+])
 
 // Graph components references
 const viewer = ref(null)
@@ -88,6 +98,7 @@ const originalTsne3DEmbedding = ref([])
 watch(selectedColorOption, (newVal) => {
 	if (newVal !== 'Gene') {
 		clearGeneSelection()
+		lineageTypes.value.forEach((item) => (item.active = false))
 	}
 })
 
@@ -101,6 +112,27 @@ const handleVisualizationChange = (value) => {
 		}, 50)
 	} else {
 		isLoading.value = false
+	}
+}
+
+// Select Lineage using the existing gene expression logic to add the expression values
+const SelectLineage = async (index) => {
+	const { getLineageExpression } = useGeneAPI()
+	try {
+		isLoading.value = true
+		map(lineageTypes.value, (lineage) => (lineage.active = false))
+		lineageTypes.value[index].active = true
+		const lineage = lineageTypes.value[index].name
+		geneExpression.value = (await getLineageExpression(lineage)) || []
+
+		// Update both UMAP and t-SNE with expression values
+		updateEmbeddingsWithExpression()
+	} catch (err) {
+		console.error('Error fetching gene expression:', err)
+		geneExpression.value = []
+	} finally {
+		isLoading.value = false
+		emit('gene-fetched')
 	}
 }
 
