@@ -1,6 +1,31 @@
 <template>
 	<div v-if="!noFilter" class="w-full">
 		<div
+			id="LineageSelector"
+			v-if="selectedColorOption == 'Lineage'"
+			class="grid grid-cols-4 gap-3 items-center my-4 justify-center px-4"
+		>
+			<motion.div :index="lineage.index" :while-hover="{ scale: 0.97 }" v-for="lineage in lineageTypes">
+				<Tag
+					rounded
+					:value="lineage.name"
+					class="cursor-pointer w-full"
+					@click="SelectLineage(lineage.index)"
+					:severity="lineage.active ? 'success' : 'danger'"
+				>
+					<template #icon>
+						<Icon
+							v-if="lineage.active"
+							class="!w-4 !h-4 text-green-500"
+							name="akar-icons:tetragon-fill"
+						/>
+						<Icon v-else class="!w-4 !h-4 text-rose-500" name="akar-icons:tetragon" />
+					</template>
+				</Tag>
+			</motion.div>
+		</div>
+
+		<div
 			id="SourceFilter"
 			v-if="selectedFilterOption == 'Source'"
 			class="grid grid-cols-3 gap-3 items-center mb-4 mt-2 justify-center px-4"
@@ -25,10 +50,6 @@
 			</motion.div>
 		</div>
 
-		<!-- <div
-			v-if="selectedFilterOption == 'Cluster'"
-			class="flex gap-2 items-center mb-2 mt-2 justify-center px-4"
-		> -->
 		<div
 			id="ClusterFilter"
 			v-if="selectedFilterOption == 'Cluster'"
@@ -65,6 +86,8 @@ const props = defineProps({
 	noFilter: { type: Boolean, default: false },
 	clusters: { type: Array, default: () => [] },
 	cellTypes: { type: Array, default: () => [] },
+	lineageTypes: { type: Array, default: () => [] },
+	selectedColorOption: { type: String, default: null },
 	selectedFilterOption: { type: String, default: null },
 })
 
@@ -74,6 +97,10 @@ const FilterCellType = (index) => {
 
 const FilterCluster = (index) => {
 	emit('cluster-filtered', index)
+}
+
+const SelectLineage = (index) => {
+	emit('lineage-selected', index)
 }
 
 const emit = defineEmits(['cell-type-filtered', 'cluster-filtered'])
