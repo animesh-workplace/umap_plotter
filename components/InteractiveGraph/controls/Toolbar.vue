@@ -81,7 +81,7 @@ const props = defineProps({
 
 const filterMethods = ref(['Source', 'Cluster'])
 const visualizationTypes = ref(['UMAP', 't-SNE'])
-const colorMethods = ref(['Source', 'Cluster', 'Gene'])
+const colorMethods = ref(['Source', 'Cluster', 'Gene', 'Lineage'])
 
 const handleVisualizationChange = (value) => {
 	umami.track('plot-type', { plot: value, page: route.path })
