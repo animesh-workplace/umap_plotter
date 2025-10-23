@@ -39,6 +39,24 @@ export function useGeneAPI() {
 		}
 	}
 
+	const getLineageExpression = async (payload) => {
+		try {
+			const { data, error } = await useFetch(`${BASEURL}/lineage/single-expr/`, {
+				method: 'GET',
+				query: { lineage: payload },
+			})
+
+			if (error.value) {
+				throw new Error(error.value || 'An error occurred')
+			}
+
+			return data.value
+		} catch (err) {
+			console.error(err)
+			throw err
+		}
+	}
+
 	const get2DUmapEmbedding = async () => {
 		try {
 			const { data, error } = await useFetch(`${BASEURL}/umap/2d/`, {
@@ -163,6 +181,7 @@ export function useGeneAPI() {
 		get3DTsneEmbedding,
 		getSpatialPosition,
 		getGeneAutocomplete,
+		getLineageExpression,
 		getSpatialExpression,
 		getSingleGeneExpression,
 	}
