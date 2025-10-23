@@ -53,7 +53,7 @@ const getExpressionRange = () => {
 }
 
 const updateChart = () => {
-	if (props.colorBy == 'Gene') {
+	if (props.colorBy == 'Gene' || props.colorBy == 'Lineage') {
 		// Calculate expression range for visualMap
 		const [min, max] = getExpressionRange()
 		// Make sure min and max are valid numbers and not the same value
