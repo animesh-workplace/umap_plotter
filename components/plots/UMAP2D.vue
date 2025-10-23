@@ -71,7 +71,23 @@ const updateChart = () => {
 				calculable: true,
 				type: 'continuous',
 				orient: 'horizontal',
-				inRange: { color: ['#d3d3d3', props.colorScheme] },
+				inRange: {
+					color:
+						props.colorBy == 'Gene'
+							? ['#d3d3d3', props.colorScheme]
+							: [
+									'#000004',
+									'#1B0C41',
+									'#4F116F',
+									'#812581',
+									'#B5367A',
+									'#E55063',
+									'#FB8861',
+									'#FEC287',
+									'#F6F1B5',
+									'#FCFDBF',
+							  ],
+				},
 				textStyle: { fontFamily: 'Lexend Deca', fontWeight: 500 },
 			},
 		}
