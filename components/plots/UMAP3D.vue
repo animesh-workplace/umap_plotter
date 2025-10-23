@@ -73,7 +73,33 @@ const updateChart = () => {
 				calculable: true,
 				type: 'continuous',
 				orient: 'vertical',
-				inRange: { color: ['#d3d3d3', props.colorScheme] },
+				inRange: {
+					color:
+						props.colorBy == 'Gene'
+							? ['#d3d3d3', props.colorScheme]
+							: [
+									'#000004',
+									'#1B0C41',
+									'#4F116F',
+									'#812581',
+									'#B5367A',
+									'#E55063',
+									'#FB8861',
+									'#FEC287',
+									'#F6F1B5',
+									'#FCFDBF',
+									// '#FCFDBF',
+									// '#F6F1B5',
+									// '#FEC287',
+									// '#FB8861',
+									// '#E55063',
+									// '#B5367A',
+									// '#812581',
+									// '#4F116F',
+									// '#1B0C41',
+									// '#000004',
+							  ],
+				},
 				textStyle: { fontFamily: 'Lexend Deca', fontWeight: 500 },
 			},
 		}
