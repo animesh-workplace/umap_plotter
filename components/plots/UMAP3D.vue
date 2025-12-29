@@ -112,6 +112,26 @@ const updateChart = () => {
 
 // Chart options as a computed property
 const chartOption = ref({
+	// toolbox: {
+	// 	feature: {
+	// 		saveAsImage: {
+	// 			name: `plot-${new Date().toISOString().split('T')[0]}`,
+	// 			icon: 'path://M3 15c0 2.828 0 4.243.879 5.121C4.757 21 6.172 21 9 21h6c2.828 0 4.243 0 5.121-.879C21 19.243 21 17.828 21 15M12 3v13m0 0l4-4.375M12 16l-4-4.375',
+	// 			emphasis: {
+	// 				iconStyle: {
+	// 					opacity: 1,
+	// 				},
+	// 			},
+	// 			iconStyle: {
+	// 				opacity: 1,
+	// 				stroke: 'currentColor',
+	// 				strokeWidth: 2,
+	// 				strokeLinecap: 'round',
+	// 				strokeLinejoin: 'round',
+	// 			},
+	// 		},
+	// 	},
+	// },
 	xAxis3D: {
 		type: 'value',
 		axisLabel: { fontFamily: 'Lexend Deca', fontWeight: 500 },
