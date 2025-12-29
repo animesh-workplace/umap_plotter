@@ -72,7 +72,7 @@
 						</div>
 
 						<!-- Helpful links -->
-						<div>
+						<!-- <div>
 							<p class="font-medium text-white">Helpful Links</p>
 
 							<ul class="mt-6 space-y-4 text-sm">
@@ -82,7 +82,7 @@
 									</NuxtLink>
 								</li>
 							</ul>
-						</div>
+						</div> -->
 
 						<!-- NIBMG Links -->
 						<div>
