@@ -69,6 +69,30 @@
 			</div>
 		</section>
 
+		<!-- Tutorial Section -->
+		<section class="p-8 w-screen backdrop-blur-sm bg-slate-200/50" id="tutorial">
+			<h2 class="text-2xl font-bold text-gray-900 md:text-4xl max-w-4xl mx-auto text-center mt-4">
+				Get Started with FibroScape
+			</h2>
+
+			<h5 class="text-md font-semibold text-gray-600 mt-4 max-w-2xl mx-auto text-center">
+				Follow our step-by-step tutorial to explore your data
+			</h5>
+
+			<div class="flex gap-8 my-8 justify-center">
+				<!-- inline Video playback donot allow download-->
+				<video
+					controls
+					oncontextmenu="return false;"
+					controlsList="nodownload noplaybackrate"
+					class="rounded-2xl shadow-sm lg:h-[30rem]"
+				>
+					<source src="/assets/video/tutorial.mp4" type="video/mp4" />
+					Your browser does not support the video tag.
+				</video>
+			</div>
+		</section>
+
 		<!-- Benefits Section -->
 		<section
 			class="overflow-hidden bg-gray-50 grid lg:grid-cols-2 grid-cols-1 gap-1 lg:gap-12 items-center my-8"
