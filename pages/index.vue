@@ -87,7 +87,7 @@
 					controlsList="nodownload noplaybackrate"
 					class="rounded-2xl shadow-sm lg:h-[30rem]"
 				>
-					<source src="/assets/video/tutorial.mp4" type="video/mp4" />
+					<source src="/fibroscape/media/tutorial.mp4" type="video/mp4" />
 					Your browser does not support the video tag.
 				</video>
 			</div>
